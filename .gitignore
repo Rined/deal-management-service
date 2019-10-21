@@ -1,0 +1,12 @@
+.idea
+.DS_Store
+**/.idea
+**.iml
+**/target
+**/**.iml
+**/log/
+**/target/
+**/node/
+**/node_modules
+**/output
+**/package-lock.json
