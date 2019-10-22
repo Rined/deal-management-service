@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,17 +8,16 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import {MainListItems, secondaryListItems} from './listItems';
-import Deposits from './Deposits';
-import Orders from './Orders';
+import {makeStyles} from "@material-ui/core";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Dashboard from '../dashboard/Dashboard'
+import SignIn from '../SignIn'
 
-export default function Dashboard() {
+export default function MenuTemplate() {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(true);
@@ -36,8 +34,6 @@ export default function Dashboard() {
     const changeTitle = (str) => {
         setTitle(str);
     };
-
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>
@@ -75,29 +71,20 @@ export default function Dashboard() {
                 <Divider/>
                 <List>{secondaryListItems}</List>
             </Drawer>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer}/>
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <Deposits/>
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders/>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </main>
-        </div>
-    );
-}
 
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <Dashboard/>
+                    </Route>
+                    <Route exact path="/auth">
+                        <SignIn/>
+                    </Route>
+                </Switch>
+            </Router>
+        </div>
+    )
+}
 
 const drawerWidth = 240;
 

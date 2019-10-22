@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import SignIn from './components/SignIn'
 
-import {BrowserRouter as Router, Switch, Route, HashRouter} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import Dashboard from './components/dashboard/Dashboard'
 

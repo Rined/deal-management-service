@@ -9,9 +9,9 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import BackupIcon from '@material-ui/icons/Backup';
 import EmailIcon from '@material-ui/icons/Email';
 
-export const mainListItems = (
+export const MainListItems = (props) => (
   <div>
-    <ListItem button>
+    <ListItem button onClick={() => props.titleChange('test')}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
