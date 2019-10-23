@@ -1,45 +1,69 @@
-import React from 'react'
+import React from 'react';
+import clsx from 'clsx';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import {mainListItems, secondaryListItems} from './listItems';
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import SignIn from './SignIn'
+import Dashboard from './Dashboard'
+import Document from './Document'
+import NoMatch from "./NoMatch";
+import AppTitleHeader from "./AppTitleHeader";
+import {useStyles} from "./AppStyle"
+import {useOpen, useIsOpen} from "./contexts/OpenMenuContext"
 
-const Header = (props) => (
-    <h1>{props.title}</h1>
-);
+export default function App() {
+    const classes = useStyles();
+    const open = useIsOpen();
 
-export default class App extends React.Component {
+    const changeOpen = useOpen();
 
-    constructor() {
-        super();
-        this.state = {documents: []};
-    }
+    const closeMenu = () => {
+        changeOpen(false);
+    };
 
-    componentDidMount() {
-        fetch('/api/documents')
-            .then(response => response.json())
-            .then(documents => this.setState({documents}));
-    }
+    return (
+        <div className={classes.root}>
+            <Router>
 
-    render() {
-        return (
-            <React.Fragment>
-                <Header title={'Documents'}/>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Text</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.documents.map((document, i) => (
-                            <tr key={i}>
-                                <td>{document.id}</td>
-                                <td>{document.text}</td>
-                            </tr>
-                        ))
-                    }
-                    </tbody>
-                </table>
-            </React.Fragment>
-        )
-    }
-};
+                    <AppTitleHeader/>
+
+                    <Drawer variant="permanent"
+                            classes={{paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)}}
+                            open={open}>
+                        <div className={classes.toolbarIcon}>
+                            <IconButton onClick={closeMenu}>
+                                <ChevronLeftIcon/>
+                            </IconButton>
+                        </div>
+                        <List>{mainListItems}</List>
+                        <Divider/>
+                        <List>{secondaryListItems}</List>
+                    </Drawer>
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer}/>
+                    <Switch>
+                        <Route exact path="/">
+                            <Dashboard/>
+                        </Route>
+                        <Route exact path="/dashboard">
+                            <Dashboard/>
+                        </Route>
+                        <Route exact path="/document">
+                            <Document/>
+                        </Route>
+                        <Route exact path="/auth">
+                            <SignIn/>
+                        </Route>
+                        <Route path="*">
+                            <NoMatch/>
+                        </Route>
+                    </Switch>
+                </main>
+            </Router>
+        </div>
+    )
+}
