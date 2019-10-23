@@ -9,14 +9,16 @@ import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import {useTitle} from "./contexts/TitleContext";
 import {useStyles} from "./AppStyle"
-import {useIsOpen, useOpen} from "./contexts/OpenMenuContext";
+import {useIsOpen, useOpen} from "./contexts/OpenMenuContext"
+import {Link} from "react-router-dom";
+
 
 export default function AppTitleHeader() {
     const classes = useStyles();
     const title = useTitle();
     const open = useIsOpen();
-    const changeOpen = useOpen();
 
+    const changeOpen = useOpen();
     const openMenu = () => {
         changeOpen(true);
     };
@@ -35,7 +37,7 @@ export default function AppTitleHeader() {
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                     {title}
                 </Typography>
-                <IconButton color="inherit">
+                <IconButton component={Link} to="/notification" color="inherit">
                     <Badge badgeContent={5} color="secondary">
                         <NotificationsIcon/>
                     </Badge>
