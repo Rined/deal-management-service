@@ -1,11 +1,11 @@
 spring:
   data:
     mongodb:
-      port: 0
-      database: test
-#      uri: mongodb://localhost
-#      port: 27017
-#      database: blog
+#      port: 0
+#      database: test
+      uri: mongodb://localhost
+      port: 27017
+      database: client-service
 
 logging:
   level:
