@@ -25,7 +25,6 @@ public class User {
     @Field("documents")
     private Documents documents;
 
-
     public User(String username, UserInfo userInfo, Documents documents) {
         this.username = username;
         this.userInfo = userInfo;

@@ -22,9 +22,9 @@ public class DocumentTemplate {
     private String templateName;
 
     @Field("fields")
-    private List<TemplateData> fields;
+    private List<TemplateField> fields;
 
-    public DocumentTemplate(String templateName, List<TemplateData> fields) {
+    public DocumentTemplate(String templateName, List<TemplateField> fields) {
         this.templateName = templateName;
         this.fields = fields;
     }

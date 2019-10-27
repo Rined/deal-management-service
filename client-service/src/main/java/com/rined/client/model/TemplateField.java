@@ -1,19 +1,20 @@
 package com.rined.client.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Data
+@Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class TemplateData {
+public class TemplateField {
 
     @Field("name")
     private String fieldName;
 
-    @Field("value")
-    private String fieldValue;
-
+    @Field("description")
+    private String description;
 }

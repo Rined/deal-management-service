@@ -7,6 +7,7 @@ import com.rined.client.model.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -28,18 +29,29 @@ public class MongoDBChangeLog0 {
     @ChangeSet(order = "001", id = "initTemplates", author = "rined", runAlways = true)
     public void initTemplates(MongoTemplate mongoTemplate) {
         String templateName = "Room rent";
-        List<TemplateData> templateData = Arrays.asList(
-                new TemplateData("lastName", "Family Name"),
-                new TemplateData("firstName", "Name"),
-                new TemplateData("phone", "Phone number"),
-                new TemplateData("birthDate", "Your birthday date"),
-                new TemplateData("address", "Registration address")
+        List<TemplateField> templateData = Arrays.asList(
+                new TemplateField("lastName", "Family Name"),
+                new TemplateField("firstName", "Name"),
+                new TemplateField("phone", "Phone number"),
+                new TemplateField("birthDate", "Your birthday date"),
+                new TemplateField("address", "Registration address")
         );
         DocumentTemplate savedDocumentTemplate = mongoTemplate.save(new DocumentTemplate(templateName, templateData));
+        List<FilledTemplateData> filledTemplateData = Collections.singletonList(
+                new FilledTemplateData(savedDocumentTemplate,
+                        Arrays.asList(
+                                new TemplateData("lastName", "Petrov"),
+                                new TemplateData("firstName", "Anton"),
+                                new TemplateData("phone", "0000000000"),
+                                new TemplateData("birthDate", "29.11.1991"),
+                                new TemplateData("address", "GG WP Street")
+                        )
+                )
+        );
         documents = new Documents(
                 singletonList(savedDocumentTemplate),
                 emptyList(),
-                emptyList()
+                filledTemplateData
         );
     }
 
