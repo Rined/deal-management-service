@@ -7,19 +7,18 @@ import com.rined.client.model.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 @ChangeLog(order = "000")
 @SuppressWarnings({"unused"})
 public class MongoDBChangeLog0 {
 
-    private Documents documents;
+    private Documents documentsForFirstUser;
+    private Documents documentsForSecondUser;
 
     @ChangeSet(order = "000", id = "dropDB", author = "rined", runAlways = true)
     public void dropDB(MongoDatabase database) {
@@ -28,30 +27,44 @@ public class MongoDBChangeLog0 {
 
     @ChangeSet(order = "001", id = "initTemplates", author = "rined", runAlways = true)
     public void initTemplates(MongoTemplate mongoTemplate) {
-        String templateName = "Room rent";
-        List<TemplateField> templateData = Arrays.asList(
+        List<TemplateField> roomRentTemplateData = Arrays.asList(
                 new TemplateField("lastName", "Family Name"),
                 new TemplateField("firstName", "Name"),
                 new TemplateField("phone", "Phone number"),
                 new TemplateField("birthDate", "Your birthday date"),
                 new TemplateField("address", "Registration address")
         );
-        DocumentTemplate savedDocumentTemplate = mongoTemplate.save(new DocumentTemplate(templateName, templateData));
-        List<FilledTemplateData> filledTemplateData = Collections.singletonList(
-                new FilledTemplateData(savedDocumentTemplate,
-                        Arrays.asList(
-                                new TemplateData("lastName", "Petrov"),
-                                new TemplateData("firstName", "Anton"),
-                                new TemplateData("phone", "0000000000"),
-                                new TemplateData("birthDate", "29.11.1991"),
-                                new TemplateData("address", "GG WP Street")
-                        )
+        List<TemplateField> saleContractTemplateData = Arrays.asList(
+                new TemplateField("lastName", "Family Name"),
+                new TemplateField("firstName", "Name"),
+                new TemplateField("address", "Registration address")
+        );
+
+        DocumentTemplate roomRentTemplate
+                = mongoTemplate.save(new DocumentTemplate("Room rent", roomRentTemplateData));
+        DocumentTemplate saleContractTemplate
+                = mongoTemplate.save(new DocumentTemplate("Sale contract", saleContractTemplateData));
+        FilledTemplateData filledTemplateData = new FilledTemplateData(roomRentTemplate,
+                Arrays.asList(
+                        new TemplateData("lastName", "Petrov"),
+                        new TemplateData("firstName", "Anton"),
+                        new TemplateData("phone", "0000000000"),
+                        new TemplateData("birthDate", "29.11.1991"),
+                        new TemplateData("address", "GG WP Street")
                 )
         );
-        documents = new Documents(
-                singletonList(savedDocumentTemplate),
+        List<FilledTemplateData> filledTemplateDataList = Collections.singletonList(filledTemplateData);
+
+        documentsForFirstUser = new Documents(
+                Arrays.asList(roomRentTemplate, saleContractTemplate),
                 emptyList(),
-                filledTemplateData
+                Arrays.asList(filledTemplateData, filledTemplateData)
+        );
+
+        documentsForSecondUser = new Documents(
+                Collections.singletonList(saleContractTemplate),
+                filledTemplateDataList,
+                emptyList()
         );
     }
 
@@ -68,7 +81,21 @@ public class MongoDBChangeLog0 {
                                 LocalDate.of(1991, 11, 29),
                                 true
                         ),
-                        documents
+                        documentsForFirstUser
+                )
+        );
+
+        template.save(
+                new User(
+                        "NotRined",
+                        new UserInfo(
+                                "nottest@test.ru",
+                                "Rine",
+                                "Rined",
+                                LocalDate.of(1991, 11, 29),
+                                true
+                        ),
+                        documentsForSecondUser
                 )
         );
     }
