@@ -1,9 +1,10 @@
 package com.rined.client.services;
 
+import com.rined.client.dto.response.ResponseDataBrief;
 import com.rined.client.dto.response.ResponseTemplateNameDto;
 import com.rined.client.exceptions.NotFoundException;
-import com.rined.client.model.DocumentTemplate;
-import com.rined.client.model.FilledTemplateData;
+import com.rined.client.model.collections.Template;
+import com.rined.client.model.collections.Data;
 import com.rined.client.repositories.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,12 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateRepository templateRepository;
 
     @Override
-    public List<DocumentTemplate> templateList() {
+    public List<Template> templateList() {
         return templateRepository.findAll();
     }
 
     @Override
-    public DocumentTemplate templateById(String id) {
+    public Template templateById(String id) {
         return templateRepository.findById(id).orElseThrow(() -> new NotFoundException("Template not found"));
     }
 
@@ -37,17 +38,42 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public List<DocumentTemplate> userActiveTemplateList(String userId) {
+    public List<Template> userActiveTemplateList(String userId) {
         return templateRepository.userActiveTemplateList(userId);
     }
 
     @Override
-    public List<FilledTemplateData> userSentTemplateList(String userId) {
+    public List<Data> userSentTemplateList(String userId) {
         return templateRepository.sentFilledTemplates(userId);
     }
 
     @Override
-    public List<FilledTemplateData> userCompletedTemplateList(String userId) {
+    public List<Data> userCompletedTemplateList(String userId) {
         return templateRepository.completedFilledTemplates(userId);
+    }
+
+    @Override
+    public Template activeTemplateForUserById(String userId, String templateId) {
+        return templateRepository.getActiveTemplateForUser(userId, templateId);
+    }
+
+    @Override
+    public Data sentTemplateForUserById(String userId, String templateId) {
+        return null;
+    }
+
+    @Override
+    public List<ResponseDataBrief> userSentTemplateBriefList(String userId) {
+        return null;
+    }
+
+    @Override
+    public List<ResponseDataBrief> userCompletedTemplateBriefList(String userId) {
+        return null;
+    }
+
+    @Override
+    public Data completedTemplateListForUserById(String userId, String templateId) {
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.rined.client.repositories;
 
-import com.rined.client.model.User;
+import com.rined.client.model.collections.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, String>, UserRepositoryCustom {

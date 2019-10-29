@@ -1,23 +1,25 @@
 package com.rined.client.model;
 
+import com.rined.client.model.collections.Template;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FilledTemplateData {
+public class TemplateWide {
+
+    @Field("id")
+    private String id;
 
     @DBRef
-    @Field("templateRef")
-    private DocumentTemplate documentTemplate;
+    @Field("ref")
+    private Template template;
 
-    @Field("value")
-    private List<TemplateData> value;
-
+    public TemplateWide(Template template) {
+        this.template = template;
+    }
 }

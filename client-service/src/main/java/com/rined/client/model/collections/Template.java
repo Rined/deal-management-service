@@ -1,5 +1,6 @@
-package com.rined.client.model;
+package com.rined.client.model.collections;
 
+import com.rined.client.model.TemplateField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @Document("template")
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentTemplate {
+public class Template {
 
     @Id
     private String id;
@@ -24,7 +25,7 @@ public class DocumentTemplate {
     @Field("fields")
     private List<TemplateField> fields;
 
-    public DocumentTemplate(String templateName, List<TemplateField> fields) {
+    public Template(String templateName, List<TemplateField> fields) {
         this.templateName = templateName;
         this.fields = fields;
     }

@@ -1,5 +1,7 @@
-package com.rined.client.model;
+package com.rined.client.model.collections;
 
+import com.rined.client.model.Documents;
+import com.rined.client.model.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

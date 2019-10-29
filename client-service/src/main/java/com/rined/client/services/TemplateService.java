@@ -1,24 +1,35 @@
 package com.rined.client.services;
 
+import com.rined.client.dto.response.ResponseDataBrief;
 import com.rined.client.dto.response.ResponseTemplateNameDto;
-import com.rined.client.model.DocumentTemplate;
-import com.rined.client.model.FilledTemplateData;
+import com.rined.client.model.collections.Template;
+import com.rined.client.model.collections.Data;
 
 import java.util.List;
 
 public interface TemplateService {
 
-    List<DocumentTemplate> templateList();
+    List<Template> templateList();
 
-    DocumentTemplate templateById(String id);
+    Template templateById(String id);
 
     List<ResponseTemplateNameDto> templateBriefList();
 
     List<ResponseTemplateNameDto> userActiveTemplateNameList(String userId);
 
-    List<DocumentTemplate> userActiveTemplateList(String userId);
+    List<Template> userActiveTemplateList(String userId);
 
-    List<FilledTemplateData> userSentTemplateList(String userId);
+    List<Data> userSentTemplateList(String userId);
 
-    List<FilledTemplateData> userCompletedTemplateList(String userId);
+    List<Data> userCompletedTemplateList(String userId);
+
+    Template activeTemplateForUserById(String userId, String templateId);
+
+    Data sentTemplateForUserById(String userId, String templateId);
+
+    List<ResponseDataBrief> userSentTemplateBriefList(String userId);
+
+    List<ResponseDataBrief> userCompletedTemplateBriefList(String userId);
+
+    Data completedTemplateListForUserById(String userId, String templateId);
 }

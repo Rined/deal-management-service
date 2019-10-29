@@ -1,8 +1,9 @@
 package com.rined.client.controllers;
 
+import com.rined.client.dto.response.ResponseDataBrief;
 import com.rined.client.dto.response.ResponseTemplateNameDto;
-import com.rined.client.model.DocumentTemplate;
-import com.rined.client.model.FilledTemplateData;
+import com.rined.client.model.collections.Template;
+import com.rined.client.model.collections.Data;
 import com.rined.client.services.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +19,12 @@ public class TemplateController {
     private final TemplateService templateService;
 
     @GetMapping("/templates")
-    public List<DocumentTemplate> templateList() {
+    public List<Template> templateList() {
         return templateService.templateList();
     }
 
     @GetMapping("/templates/{id}")
-    public DocumentTemplate templateById(@PathVariable("id") String id) {
+    public Template templateById(@PathVariable("id") String id) {
         return templateService.templateById(id);
     }
 
@@ -32,23 +33,56 @@ public class TemplateController {
         return templateService.templateBriefList();
     }
 
-    @GetMapping("/users/{userId}/active/brief")
-    public List<ResponseTemplateNameDto> getActiveTemplatesNameForUser(@PathVariable("userId") String userId) {
-        return templateService.userActiveTemplateNameList(userId);
-    }
-
-    @GetMapping("/users/{userId}/active")
-    public List<DocumentTemplate> getActiveTemplatesForUser(@PathVariable("userId") String userId) {
+    @GetMapping("/users/{userId}/templates/active")
+    public List<Template> getActiveTemplatesForUser(@PathVariable("userId") String userId) {
         return templateService.userActiveTemplateList(userId);
     }
 
-    @GetMapping("/users/{userId}/sent")
-    public List<FilledTemplateData> getSentDocumentTemplatesForUser(@PathVariable("userId") String userId) {
+    //todo
+    @GetMapping("/users/{userId}/templates/active/{templateId}")
+    public Template getActiveTemplateForUserById(@PathVariable("userId") String userId,
+                                                 @PathVariable("templateId") String templateId) {
+        return templateService.activeTemplateForUserById(userId, templateId);
+    }
+
+    @GetMapping("/users/{userId}/templates/active/brief")
+    public List<ResponseTemplateNameDto> getActiveTemplatesBriefForUser(@PathVariable("userId") String userId) {
+        return templateService.userActiveTemplateNameList(userId);
+    }
+
+    @GetMapping("/users/{userId}/templates/sent")
+    public List<Data> getSentTemplatesForUser(@PathVariable("userId") String userId) {
         return templateService.userSentTemplateList(userId);
     }
 
-    @GetMapping("/users/{userId}/completed")
-    public List<FilledTemplateData> getCompletedDocumentTemplatesForUser(@PathVariable("userId") String userId) {
+    //todo
+    @GetMapping("/users/{userId}/templates/sent/{templateId}")
+    public Data getSentTemplateForUserById(@PathVariable("userId") String userId,
+                                           @PathVariable("templateId") String templateId) {
+        return templateService.sentTemplateForUserById(userId, templateId);
+    }
+
+    //todo
+    @GetMapping("/users/{userId}/templates/sent/brief")
+    public List<ResponseDataBrief> getSentTemplatesBriefForUser(@PathVariable("userId") String userId) {
+        return templateService.userSentTemplateBriefList(userId);
+    }
+
+    @GetMapping("/users/{userId}/templates/completed")
+    public List<Data> getCompletedTemplatesForUser(@PathVariable("userId") String userId) {
         return templateService.userCompletedTemplateList(userId);
+    }
+
+    //todo
+    @GetMapping("/users/{userId}/templates/completed/{templateId}")
+    public Data getCompletedTemplatesForUser(@PathVariable("userId") String userId,
+                                             @PathVariable("templateId") String templateId) {
+        return templateService.completedTemplateListForUserById(userId, templateId);
+    }
+
+    //todo
+    @GetMapping("/users/{userId}/templates/completed/brief")
+    public List<ResponseDataBrief> getCompletedTemplatesBriefForUser(@PathVariable("userId") String userId) {
+        return templateService.userCompletedTemplateBriefList(userId);
     }
 }

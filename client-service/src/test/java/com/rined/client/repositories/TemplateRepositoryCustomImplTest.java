@@ -2,7 +2,7 @@ package com.rined.client.repositories;
 
 import com.rined.client.AbstractMongoDBRepositoryTest;
 import com.rined.client.dto.response.ResponseTemplateNameDto;
-import com.rined.client.model.User;
+import com.rined.client.model.collections.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

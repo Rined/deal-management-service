@@ -4,6 +4,9 @@ import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoDatabase;
 import com.rined.client.model.*;
+import com.rined.client.model.collections.Data;
+import com.rined.client.model.collections.Template;
+import com.rined.client.model.collections.User;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDate;
@@ -40,11 +43,13 @@ public class MongoDBChangeLog0 {
                 new TemplateField("address", "Registration address")
         );
 
-        DocumentTemplate roomRentTemplate
-                = mongoTemplate.save(new DocumentTemplate("Room rent", roomRentTemplateData));
-        DocumentTemplate saleContractTemplate
-                = mongoTemplate.save(new DocumentTemplate("Sale contract", saleContractTemplateData));
-        FilledTemplateData filledTemplateData = new FilledTemplateData(roomRentTemplate,
+        Template roomRentTemplate
+                = mongoTemplate.save(new Template("Room rent", roomRentTemplateData));
+        Template saleContractTemplate
+                = mongoTemplate.save(new Template("Sale contract", saleContractTemplateData));
+        Data data = new Data(
+                "Alias 1",
+                roomRentTemplate,
                 Arrays.asList(
                         new TemplateData("lastName", "Petrov"),
                         new TemplateData("firstName", "Anton"),
@@ -53,17 +58,29 @@ public class MongoDBChangeLog0 {
                         new TemplateData("address", "GG WP Street")
                 )
         );
-        List<FilledTemplateData> filledTemplateDataList = Collections.singletonList(filledTemplateData);
+
+        Data dataSecond = new Data(
+                "Alias 2",
+                roomRentTemplate,
+                Arrays.asList(
+                        new TemplateData("lastName", "NotPetrov"),
+                        new TemplateData("firstName", "NotAnton"),
+                        new TemplateData("phone", "11111111"),
+                        new TemplateData("birthDate", "11.01.2001"),
+                        new TemplateData("address", "GG WP Street")
+                )
+        );
+        List<Data> dataList = Collections.singletonList(data);
 
         documentsForFirstUser = new Documents(
-                Arrays.asList(roomRentTemplate, saleContractTemplate),
+                Arrays.asList(new TemplateWide(roomRentTemplate), new TemplateWide(saleContractTemplate)),
                 emptyList(),
-                Arrays.asList(filledTemplateData, filledTemplateData)
+                Arrays.asList(data, dataSecond)
         );
 
         documentsForSecondUser = new Documents(
-                Collections.singletonList(saleContractTemplate),
-                filledTemplateDataList,
+                Collections.singletonList(new TemplateWide(saleContractTemplate)),
+                dataList,
                 emptyList()
         );
     }

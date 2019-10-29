@@ -1,5 +1,7 @@
 package com.rined.client.model;
 
+import com.rined.client.model.collections.Data;
+import com.rined.client.model.collections.Template;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +19,12 @@ public class Documents {
 
     @DBRef
     @Field("active")
-    List<DocumentTemplate> active;
+    List<TemplateWide> active;
 
     @Field("sent")
-    List<FilledTemplateData> sent;
+    List<Data> sent;
 
     @Field("completed")
-    List<FilledTemplateData> completed;
+    List<Data> completed;
 
 }
