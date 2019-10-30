@@ -1,12 +1,10 @@
 package com.rined.client.model;
 
 import com.rined.client.model.collections.Data;
-import com.rined.client.model.collections.Template;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Documents {
 
-    @DBRef
     @Field("active")
     List<TemplateWide> active;
 

@@ -4,6 +4,8 @@ import com.rined.client.model.collections.Template;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @AllArgsConstructor
 public class TemplateWide {
 
+    @Id
     @Field("id")
     private String id;
 
@@ -20,6 +23,7 @@ public class TemplateWide {
     private Template template;
 
     public TemplateWide(Template template) {
+        id = ObjectId.get().toHexString();
         this.template = template;
     }
 }

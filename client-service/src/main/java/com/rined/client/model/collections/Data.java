@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -15,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Data {
 
+    @Id
+    @Field("id")
     private String id;
 
     @Field("alias")
