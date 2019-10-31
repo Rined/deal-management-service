@@ -1,5 +1,6 @@
 package com.rined.client.controllers;
 
+import com.rined.client.dto.response.ResponseUserBrief;
 import com.rined.client.model.collections.User;
 import com.rined.client.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +21,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    //todo
     @GetMapping("/users/brief")
-    public List<User> getAllBriefUsers() {
-        return userService.getAllUsers();
+    public List<ResponseUserBrief> getAllBriefUsers() {
+        return userService.getAllUserBrief();
     }
 
     @GetMapping("/users/{userId}")
     public User getUserById(@PathVariable("userId") String userId) {
         return userService.getUserById(userId);
     }
-
-    //todo
-    @GetMapping("/users/{userId}/info")
-    public User getUserInfo(@PathVariable("userId") String userId) {
-        return userService.getUserById(userId);
-    }
-
 
 }

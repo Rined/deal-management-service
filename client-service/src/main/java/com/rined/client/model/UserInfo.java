@@ -22,6 +22,9 @@ public class UserInfo {
     @Field("secondName")
     private String secondName;
 
+    @Field("company")
+    private String company;
+
     @Field("birthDate")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate birthDate;

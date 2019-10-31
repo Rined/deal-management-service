@@ -18,18 +18,14 @@ public class User {
     @Id
     private String id;
 
-    @Field("username")
-    private String username;
-
     @Field("info")
-    private UserInfo userInfo;
+    private UserInfo info;
 
     @Field("documents")
     private Documents documents;
 
-    public User(String username, UserInfo userInfo, Documents documents) {
-        this.username = username;
-        this.userInfo = userInfo;
+    public User(UserInfo info, Documents documents) {
+        this.info = info;
         this.documents = documents;
     }
 }

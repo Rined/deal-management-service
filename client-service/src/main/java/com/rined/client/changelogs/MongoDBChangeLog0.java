@@ -16,8 +16,8 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-@ChangeLog(order = "000")
 @SuppressWarnings({"unused"})
+@ChangeLog(order = "000")
 public class MongoDBChangeLog0 {
 
     private Documents documentsForFirstUser;
@@ -90,11 +90,11 @@ public class MongoDBChangeLog0 {
     public void initUsers(MongoTemplate template) {
         template.save(
                 new User(
-                        "Rined",
                         new UserInfo(
                                 "test@test.ru",
                                 "Anton",
                                 "Petrov",
+                                "Rined Company",
                                 LocalDate.of(1991, 11, 29),
                                 true
                         ),
@@ -104,11 +104,11 @@ public class MongoDBChangeLog0 {
 
         template.save(
                 new User(
-                        "NotRined",
                         new UserInfo(
                                 "nottest@test.ru",
                                 "Rine",
                                 "Rined",
+                                "Company 1",
                                 LocalDate.of(1991, 11, 29),
                                 true
                         ),

@@ -11,6 +11,8 @@ public class ResponseTemplateNameDto {
 
     private String id;
 
-    private String name;
+    private String templateRefId;
+
+    private String templateName;
 
 }

@@ -33,10 +33,12 @@ public class TemplateRepositoryCustomImpl implements TemplateRepositoryCustom {
     public List<ResponseTemplateNameDto> userActiveTemplateNameList(String userId) {
         Aggregation aggregation = Aggregation.newAggregation(
                 match(Criteria.where("_id").is(userId)),
-                project().andExclude("_id").and("documents.active").as("active"),
+                project().andExclude("_id")
+                        .and("documents.active").as("active"),
                 unwind("active"),
                 project().and(valueOfToArray("active")).as("templateMap"),
-                project().and("templateMap.v").arrayElementAt(1).as("templateId"),
+                project().and("templateMap.v").arrayElementAt(1)
+                        .as("templateId"),
                 lookup("template", "templateId", "_id", "template"),
                 unwind("$template"),
                 project()

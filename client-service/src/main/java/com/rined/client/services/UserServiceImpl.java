@@ -1,5 +1,6 @@
 package com.rined.client.services;
 
+import com.rined.client.dto.response.ResponseUserBrief;
 import com.rined.client.exceptions.NotFoundException;
 import com.rined.client.model.collections.User;
 import com.rined.client.repositories.UserRepository;
@@ -17,6 +18,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<ResponseUserBrief> getAllUserBrief() {
+        return repository.getBriefUsers();
     }
 
     @Override
