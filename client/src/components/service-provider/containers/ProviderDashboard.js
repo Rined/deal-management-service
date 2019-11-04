@@ -1,9 +1,9 @@
 import React from 'react';
-import {useTitleSetter} from "./contexts/TitleContext";
+import {useTitleSetter} from "./../../contexts/TitleContext";
 
-const TITLE = 'Dashboard';
+const TITLE = 'Provider Dashboard';
 
-export default function Dashboard() {
+export default function ProviderDashboard() {
     const titleSetter = useTitleSetter();
     titleSetter(TITLE);
     return (
