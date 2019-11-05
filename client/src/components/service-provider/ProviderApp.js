@@ -9,8 +9,10 @@ import CreateDocuments from "./../CreateDocuments";
 import UploadDocuments from "./../UploadDocuments";
 import SendDocuments from "./../SendDocuments";
 import Notification from "./../Notification";
-import Templates from "./containers/Templates"
-import Formatter from "./containers/Formatter"
+import Template from "./containers/template/Template"
+import Formatter from "./containers/formatter/Formatter"
+import {FormatterProvider} from "./../contexts/FormatterContext";
+import {ActionProvider} from "../contexts/ActionContext";
 
 export default function App() {
     const classes = useStyles();
@@ -28,11 +30,15 @@ export default function App() {
                 </Route>
 
                 <Route exact path="/templates">
-                    <Templates/>
+                    <ActionProvider>
+                        <Template/>
+                    </ActionProvider>
                 </Route>
 
                 <Route exact path="/formatter">
-                    <Formatter/>
+                    <FormatterProvider>
+                        <Formatter/>
+                    </FormatterProvider>
                 </Route>
 
                 <Route exact path="/document">
