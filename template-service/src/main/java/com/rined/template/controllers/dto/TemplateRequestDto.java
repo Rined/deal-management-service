@@ -21,7 +21,7 @@ public class TemplateRequestDto {
     @JsonProperty("fields")
     private List<TemplateField> fields;
 
-    @JsonProperty("dataTemplate")
-    private List<String> dataTemplates;
+    @JsonProperty("format")
+    private String format;
 
 }

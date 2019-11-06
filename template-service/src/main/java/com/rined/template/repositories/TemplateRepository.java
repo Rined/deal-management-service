@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface TemplateRepository extends MongoRepository<Template, String>, TemplateRepositoryCustom {
+public interface TemplateRepository extends MongoRepository<Template, String> {
 
     @Query(value = "{}", fields = "{_id : 1, name : 1}")
     List<TemplateBrief> getAllBriefTemplates();

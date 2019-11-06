@@ -5,6 +5,7 @@ import com.rined.template.model.Template;
 import com.rined.template.model.TemplateBrief;
 import com.rined.template.services.TemplateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:9000")
 public class TemplateController {
 
     private final TemplateService service;
@@ -43,6 +45,7 @@ public class TemplateController {
     }
 
     @PostMapping("/templates")
+    @ResponseStatus(HttpStatus.CREATED)
     public void createTemplate(@Valid @RequestBody TemplateRequestDto templateDto){
         service.createTemplate(templateDto);
     }
