@@ -1,20 +1,40 @@
 import React, {useEffect, useState} from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import {useActionSetter} from "../../../contexts/ActionContext";
 import MaterialTable from 'material-table';
-import MdEditor from 'react-markdown-editor-lite'
-import MarkdownIt from 'markdown-it'
+import MarkdownIt from 'markdown-it';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import ReactHtmlParser from 'react-html-parser';
+import Paper from '@material-ui/core/Paper';
 
 const CURRENT_ACTION = 'view';
+const columns = [
+    {title: 'Field', field: 'name'},
+    {title: 'Description', field: 'description'}
+];
 
 export default function ViewTemplate(props) {
-    const mdParser = new MarkdownIt(/* Markdown-it options */);
-
+    const mdParser = new MarkdownIt();
+    const setAction = useActionSetter();
     const [state, setState] = useState();
 
-    const setAction = useActionSetter();
+    useEffect(() => {
+        const templateId = props.param.id;
+        fetch(`http://localhost:8080/templates/${templateId}`)
+            .then(response => response.json())
+            .then(template => setState(template));
+    }, []);
+
+
+    const setTitleState = (text) => {
+        setState(curState => {
+            curState.name = text;
+            return curState;
+        });
+    };
 
     const handleBack = () => {
         setAction({
@@ -23,92 +43,53 @@ export default function ViewTemplate(props) {
         });
     };
 
-    useEffect(() => {
-        fetch('http://localhost:8080/templates/' + props.param.id)
-            .then(response => response.json())
-            .then(template => setState(template));
-    }, []);
+    const customHtmlRender = (text) => {
+        const codeQuote = "```";
+        let templateArr = text.match(/\${.+}/g) || [];
+        templateArr.forEach(function (item) {
+            const data = state.fields;
+            if (data) {
+                const replaceObject = data.find(dataItem => dataItem.name === item.substring(2, item.length - 1));
+                const replacer = replaceObject ? replaceObject.description : "UNKNOWN!!!";
+                text = text.replace(item, replacer.length === 0 ? "" : `${codeQuote}${replacer}${codeQuote}`);
+            }
+        });
+        return mdParser.render(text);
+    };
 
     if (!state)
-        return (
-            <React.Fragment>
-                {back()}
-            </React.Fragment>
-        );
+        return <React.Fragment/>;
 
     return (
-        <React.Fragment>
-            <h1>{back()} {state.name}</h1>
-            <TemplateTable data={state.fields}/>
-            <MdEditor
-                value={state.format}
-                renderHTML={(text) => mdParser.render(text)}
+        <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
+            <Grid container direction="row" justify="space-between" alignItems="baseline">
+                <div>
+                    <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>View
+                        template </Typography>
+                </div>
+                <Fab onClick={() => handleBack()} color="primary" aria-label="add">
+                    <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
+                </Fab>
+            </Grid>
+            <TextField
+                id="standard-basic"
+                label="Template name"
+                margin="normal"
+                value={state.name}
+                style={{width: 300}}
+                onChange={(event) => setTitleState(event.target.value)}/>
+            {
+                state.format ?
+                    <Paper style={{padding: 7}}>
+                        {ReactHtmlParser(customHtmlRender(state.format))}
+                    </Paper>
+                    : <React.Fragment/>
+            }
+            <MaterialTable
+                title="Template fields"
+                columns={columns}
+                data={state.fields}
             />
-            <p>{ReactHtmlParser(state.format)}</p>
-
-        </React.Fragment>
-    );
-
-    function back() {
-        return (
-            <Fab onClick={() => handleBack()} color="primary" aria-label="add">
-                <ArrowBackIosIcon/>
-            </Fab>
-        );
-    }
-}
-
-function TemplateTable({data}) {
-    const [state, setState] = React.useState({
-        columns: [
-            {title: 'Field', field: 'name'},
-            {title: 'Description', field: 'description'}
-        ],
-        data: data,
-    });
-
-    return (
-        <MaterialTable
-            title="Template fields"
-            columns={state.columns}
-            data={state.data}
-            editable={{
-                onRowAdd: newData =>
-                    new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return {...prevState, data};
-                            });
-                        }, 600);
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve();
-                            if (oldData) {
-                                setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    return {...prevState, data};
-                                });
-                            }
-                        }, 600);
-                    }),
-                onRowDelete: oldData =>
-                    new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return {...prevState, data};
-                            });
-                        }, 600);
-                    }),
-            }}
-        />
+        </div>
     );
 }

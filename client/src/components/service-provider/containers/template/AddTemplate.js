@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -16,35 +16,31 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
 
-const CURRENT_ACTION = 'view';
+const CURRENT_ACTION = 'add';
 const columns = [
     {title: 'Field', field: 'name'},
     {title: 'Description', field: 'description'}
 ];
 
 //https://www.npmjs.com/package/react-markdown-editor-lite
-export default function EditTemplate(props) {
+export default function AddTemplate() {
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
-    const templateId = props.param.id;
     let mdEditor = null;
 
-    const [state, setState] = useState();
+    const [state, setState] = useState({
+        name: "",
+        fields: [],
+        format: ""
+    });
     const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [positive, setPositive] = React.useState(false);
 
-
-    useEffect(() => {
-        fetch(`http://localhost:8080/templates/${templateId}`)
-            .then(response => response.json())
-            .then(template => setState(template));
-    }, []);
-
     const save = () => {
         setLoading(true);
-        fetch(`http://localhost:8080/templates/${templateId}`, {
-            method: 'put',
+        fetch(`http://localhost:8080/templates`, {
+            method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -182,7 +178,7 @@ export default function EditTemplate(props) {
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
-                        <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>Edit
+                        <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>Create
                             template </Typography>
                         {loading && <CircularProgress size={30} style={{color: 'rgb(67, 160, 71)'}}/>}
                     </div>

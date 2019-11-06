@@ -4,6 +4,7 @@ import EditTemplate from "./EditTemplate"
 import {useAction} from "./../../../contexts/ActionContext";
 import ListTemplates from "./ListTemplates";
 import ViewTemplate from "./ViewTemplate";
+import AddTemplate from "./AddTemplate";
 
 const TITLE = 'Template';
 
@@ -25,9 +26,11 @@ function getActionContent(activeAction) {
         case 'list':
             return <ListTemplates />;
         case 'edit':
-            return <EditTemplate />;
+            return <EditTemplate param={activeAction}/>;
         case 'view':
             return <ViewTemplate param={activeAction}/>;
+        case 'add':
+            return <AddTemplate />;
         default:
             throw new Error('Unknown action');
     }
