@@ -162,7 +162,7 @@ export default function AddTemplate() {
                                     alignItems: 'center'
                                 }}>
                             <CheckCircleIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Template edited successfully! </span>}/>
+                            Template created successfully! </span>}/>
                         : <SnackbarContent
                             style={{backgroundColor: 'rgb(211, 47, 47)'}}
                             aria-describedby="client-snackbar"
@@ -170,7 +170,7 @@ export default function AddTemplate() {
                                 <span id="client-snackbar"
                                       style={{backgroundColor: 'rgb(211, 47, 47)', display: 'flex', alignItems: 'center'}}>
                             <ErrorIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Edit template error!</span>}/>
+                            Create template error!</span>}/>
                 }
             </Snackbar>
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
