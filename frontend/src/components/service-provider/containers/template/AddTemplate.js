@@ -137,11 +137,8 @@ export default function AddTemplate() {
         return mdParser.render(text);
     };
 
-    if (!state)
-        return <React.Fragment/>;
-
-    return (
-        <React.Fragment>
+    const snackNotification = () => {
+        return (
             <Snackbar
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -173,6 +170,15 @@ export default function AddTemplate() {
                             Create template error!</span>}/>
                 }
             </Snackbar>
+        )
+    };
+
+    if (!state)
+        return <React.Fragment/>;
+
+    return (
+        <React.Fragment>
+            {snackNotification()}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>

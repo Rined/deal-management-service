@@ -104,7 +104,7 @@ export default function ListTemplates() {
         });
     };
 
-    const dialog = () => {
+    const removeDialog = () => {
         return (
             <Dialog
                 open={dialogState.open}
@@ -132,7 +132,7 @@ export default function ListTemplates() {
         );
     };
 
-    const snack = () => {
+    const snackNotification = () => {
         return (<Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
@@ -168,8 +168,8 @@ export default function ListTemplates() {
 
     return (
         <React.Fragment>
-            {snack()}
-            {dialog()}
+            {snackNotification()}
+            {removeDialog()}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
