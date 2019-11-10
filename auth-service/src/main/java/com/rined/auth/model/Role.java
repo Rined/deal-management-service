@@ -1,4 +1,12 @@
 package com.rined.auth.model;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+    PROVIDER, CONSUMER, ADMIN;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

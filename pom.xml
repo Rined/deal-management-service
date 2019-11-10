@@ -23,6 +23,7 @@
         <module>template-service</module>
         <module>deal-service</module>
         <module>proposal-service</module>
+        <module>auth-service</module>
     </modules>
 
 </project>
