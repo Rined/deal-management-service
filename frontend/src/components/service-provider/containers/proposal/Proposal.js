@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import {useTitleSetter} from "../../../contexts/TitleContext";
 import {useAction} from "./../../../contexts/ProposalContext";
 import EditProposal from "./EditProposal"
