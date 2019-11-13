@@ -17,6 +17,7 @@ import java.util.List;
 public class Template {
 
     @Id
+    @JsonProperty("id")
     private String id;
 
     @Field("name")

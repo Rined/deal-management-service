@@ -1,4 +1,4 @@
-package com.rined.template.model;
+package com.rined.proposal.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TemplateBrief {
+public class ProposalBrief {
 
     @JsonProperty("id")
     private String id;

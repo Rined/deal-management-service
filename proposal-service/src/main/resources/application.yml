@@ -5,7 +5,7 @@ spring:
 #      database: test
       uri: mongodb://localhost
       port: 27017
-      database: template-service
+      database: proposal-service
 
 logging:
   level:
