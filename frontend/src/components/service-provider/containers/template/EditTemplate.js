@@ -16,7 +16,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-const CURRENT_ACTION = 'view';
+const CURRENT_ACTION = 'edit';
 const columns = [
     {title: 'Field', field: 'name'},
     {title: 'Description', field: 'description'}

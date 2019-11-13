@@ -24,5 +24,7 @@ public class ProposalRequestDto {
 
     @Field("format")
     @JsonProperty("format")
+    @NotNull(message = "Proposal format is mandatory")
+    @NotBlank(message = "Proposal format is mandatory")
     private String templateFormat;
 }

@@ -28,13 +28,6 @@ export default function ViewTemplate(props) {
     }, []);
 
 
-    const setTitleState = (text) => {
-        setState(curState => {
-            curState.name = text;
-            return curState;
-        });
-    };
-
     const handleBack = () => {
         setAction({
             action: 'list',
@@ -75,8 +68,7 @@ export default function ViewTemplate(props) {
                 label="Template name"
                 margin="normal"
                 value={state.name}
-                style={{width: 300}}
-                onChange={(event) => setTitleState(event.target.value)}/>
+                style={{width: 300}}/>
             {
                 state.format ?
                     <Paper style={{padding: 7}}>

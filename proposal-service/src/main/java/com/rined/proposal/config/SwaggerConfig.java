@@ -1,5 +1,6 @@
 package com.rined.proposal.config;
 
+import com.rined.proposal.controllers.ProposalController;
 import com.rined.proposal.model.Proposal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(Proposal.class.getPackage().getName()))
+                .apis(RequestHandlerSelectors.basePackage(ProposalController.class.getPackage().getName()))
                 .build();
     }
 }

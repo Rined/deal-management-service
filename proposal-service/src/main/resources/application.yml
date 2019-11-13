@@ -1,13 +1,15 @@
 spring:
   data:
     mongodb:
-#      port: 0
-#      database: test
-      uri: mongodb://localhost
-      port: 27017
+      port: 0
       database: proposal-service
+#      uri: mongodb://localhost
+#      port: 27017
+#      database: proposal-service
 
 logging:
   level:
     root: info
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+server:
+  port: 8090

@@ -31,7 +31,7 @@ export default function ListTemplates() {
     const [positiveSnack, setPositiveSnack] = React.useState(false);
 
 
-    const openEditTemplateView = (id) => {
+    const openEditTemplate = (id) => {
         setAction({
             action: 'edit',
             id: id,
@@ -39,7 +39,7 @@ export default function ListTemplates() {
         });
     };
 
-    const openViewTemplateView = (id) => {
+    const openViewTemplate = (id) => {
         setAction({
             action: 'view',
             id: id,
@@ -47,19 +47,19 @@ export default function ListTemplates() {
         });
     };
 
-    const openCreateTemplateView = () => {
+    const openCreateTemplate = () => {
         setAction({
             action: 'add',
             previousAction: CURRENT_ACTION
         });
     };
 
-    const handleHideSnack = () => {
+    const hideSnack = () => {
         setOpenSnack(false);
     };
 
-    const handleOpenDeleteDialog = (templateId, templateName) => {
-        handleHideSnack();
+    const openDeleteDialog = (templateId, templateName) => {
+        hideSnack();
         setDialogState({
             id: templateId,
             name: templateName,
@@ -139,7 +139,7 @@ export default function ListTemplates() {
                 horizontal: 'left',
             }}
             open={openSnack}
-            onClose={handleHideSnack}
+            onClose={hideSnack}
             autoHideDuration={3000}>
             {
                 positiveSnack
@@ -176,21 +176,24 @@ export default function ListTemplates() {
                         <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>Template
                             list </Typography>
                     </div>
-                    <Fab style={{backgroundColor: 'rgb(67, 160, 71)'}} onClick={() => openCreateTemplateView()} aria-label="add">
+                    <Fab style={{backgroundColor: 'rgb(67, 160, 71)'}} onClick={() => openCreateTemplate()}
+                         aria-label="add">
                         <AddIcon style={{color: 'white'}}/>
                     </Fab>
                 </Grid>
-                {templates && <Paper style={{marginTop: 10}}>
+                {templates &&
+                <Paper style={{marginTop: 10}}>
                     <List component="nav">
                         {templates && templates.map((template, i) => (
-                            <ListItem key={i} onClick={() => openViewTemplateView(template.id)} button>
+                            <ListItem key={i} onClick={() => openViewTemplate(template.id)} button>
                                 <ListItemText primary={template.name}/>
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" onClick={() => openEditTemplateView(template.id)} aria-label="edit">
+                                    <IconButton edge="end" onClick={() => openEditTemplate(template.id)}
+                                                aria-label="edit">
                                         <EditIcon color="primary"/>
                                     </IconButton>
                                     <IconButton edge="end"
-                                                onClick={() => handleOpenDeleteDialog(template.id, template.name)}
+                                                onClick={() => openDeleteDialog(template.id, template.name)}
                                                 aria-label="delete">
                                         <DeleteIcon/>
                                     </IconButton>
