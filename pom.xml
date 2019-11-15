@@ -19,7 +19,6 @@
     </properties>
 
     <modules>
-        <module>client-service</module>
         <module>template-service</module>
         <module>deal-service</module>
         <module>proposal-service</module>
