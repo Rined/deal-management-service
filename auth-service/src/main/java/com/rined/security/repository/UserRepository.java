@@ -1,6 +1,6 @@
-package com.rined.auth.repositories;
+package com.rined.security.repository;
 
-import com.rined.auth.model.User;
+import com.rined.security.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

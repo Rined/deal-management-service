@@ -1,6 +1,6 @@
-package com.rined.auth.service;
+package com.rined.security.service;
 
-import com.rined.auth.repositories.UserRepository;
+import com.rined.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+
     private final UserRepository repository;
 
     @Override
