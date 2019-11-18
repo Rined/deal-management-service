@@ -1,4 +1,4 @@
-package com.rined.gateway;
+package com.rined.gateway.security.model;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +40,7 @@ public final class TokenAuthentication extends AbstractAuthenticationToken {
     public Optional<String> getPrincipal() {
         return Optional.ofNullable(principal);
     }
+
 
     public Optional<String> getToken() {
         return Optional.ofNullable(token);

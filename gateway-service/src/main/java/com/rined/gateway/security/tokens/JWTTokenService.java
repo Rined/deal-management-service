@@ -1,11 +1,14 @@
-package com.rined.gateway;
+package com.rined.gateway.security.tokens;
 
+import com.rined.gateway.security.model.TokenAuthentication;
+import com.rined.gateway.security.model.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
 @Service
-public class TokenProviderImpl implements TokenProvider {
+public class JWTTokenService implements TokenService {
+
     @Override
     public boolean validate(String token) {
         return true;
@@ -17,7 +20,7 @@ public class TokenProviderImpl implements TokenProvider {
                 token,
                 "credentials",
                 "principal",
-                Arrays.asList(Role.values())
+                Arrays.asList(Role.USER)
         );
     }
 }

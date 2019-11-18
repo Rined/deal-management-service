@@ -1,4 +1,4 @@
-package com.rined.gateway;
+package com.rined.gateway.security.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

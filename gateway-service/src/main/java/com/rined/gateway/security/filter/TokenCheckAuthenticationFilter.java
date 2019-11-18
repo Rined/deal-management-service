@@ -1,5 +1,6 @@
-package com.rined.gateway;
+package com.rined.gateway.security.filter;
 
+import com.rined.gateway.security.model.TokenAuthentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,6 @@ public class TokenCheckAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request,
                          ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
-        System.err.println("filter");
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authHeader = httpServletRequest.getHeader(header);
         if (Objects.nonNull(authHeader)) {
