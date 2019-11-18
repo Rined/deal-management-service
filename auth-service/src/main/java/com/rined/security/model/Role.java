@@ -3,7 +3,7 @@ package com.rined.security.model;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    USER, ADMIN;
+    PROVIDER, CONSUMER, ADMIN;
 
     @Override
     public String getAuthority() {

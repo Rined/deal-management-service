@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDto {
+public class RegistrationDto {
 
     @NotNull
     @NotEmpty
@@ -25,7 +25,8 @@ public class LoginRequestDto {
     private String password;
 
     @Email
-    @JsonProperty("mail")
-    private String mail;
+    @JsonProperty("email")
+    private String email;
 
 }
+

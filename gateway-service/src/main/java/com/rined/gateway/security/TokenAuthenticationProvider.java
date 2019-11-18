@@ -17,6 +17,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         TokenAuthentication tokenAuthentication = (TokenAuthentication) authentication;
         return tokenAuthentication.getToken()
+                .map(tokenService::transform)
                 .filter(tokenService::validate)
                 .map(tokenService::extractAuthentication)
                 .orElse(tokenAuthentication);

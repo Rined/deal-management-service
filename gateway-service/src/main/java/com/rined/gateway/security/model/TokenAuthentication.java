@@ -8,39 +8,34 @@ import java.util.Collections;
 import java.util.Optional;
 
 public final class TokenAuthentication extends AbstractAuthenticationToken {
-    private final String credentials;
-    private final String principal;
     private final String token;
+    private final User principal;
 
     public TokenAuthentication(String token) {
         super(Collections.emptyList());
         this.token = token;
-        this.credentials = null;
         this.principal = null;
         setAuthenticated(false);
     }
 
     public TokenAuthentication(String token,
-                               String credentials,
-                               String principal,
+                               User principal,
                                Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.token = token;
-        this.credentials = credentials;
         this.principal = principal;
         setAuthenticated(true);
     }
 
     @Override
-    public Optional<String> getCredentials() {
-        return Optional.ofNullable(credentials);
+    public User getPrincipal() {
+        return principal;
     }
 
     @Override
-    public Optional<String> getPrincipal() {
-        return Optional.ofNullable(principal);
+    public Optional<String> getCredentials() {
+        return Optional.empty();
     }
-
 
     public Optional<String> getToken() {
         return Optional.ofNullable(token);

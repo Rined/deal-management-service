@@ -4,8 +4,10 @@ import com.rined.gateway.security.model.TokenAuthentication;
 
 public interface TokenService {
 
-    boolean validate(String token);
+    TokenObject transform(String token);
 
-    TokenAuthentication extractAuthentication(String token);
+    boolean validate(TokenObject tokenObject);
+
+    TokenAuthentication extractAuthentication(TokenObject tokenObject);
 
 }

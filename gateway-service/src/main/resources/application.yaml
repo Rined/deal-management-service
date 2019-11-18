@@ -5,6 +5,8 @@ spring:
   application:
     name: "gateway-service"
 
+jwt:
+  secret: incorrect
 
 zuul:
   routes:
