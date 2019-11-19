@@ -1,23 +1,26 @@
 package com.rined.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.rined.security.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
-    @JsonProperty("user")
-    private String name;
+//
+//    @JsonProperty("user")
+//    private String name;
+//
+//    @JsonProperty("roles")
+//    private Set<Role> roles;
 
-    @JsonProperty("roles")
-    private Set<Role> roles;
-
+    @NotNull
+    @NotEmpty
     @JsonProperty("token")
     private String token;
 }

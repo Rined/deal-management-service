@@ -1,12 +1,12 @@
 package com.rined.security.config;
 
 import com.rined.security.filter.LoginAuthenticationFilter;
+import com.rined.security.service.TokenService;
 import com.rined.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,7 +22,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService service;
+    private final UserService userService;
+    private final TokenService tokenService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,12 +52,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(service)
+        auth.userDetailsService(userService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 
     public UsernamePasswordAuthenticationFilter loginAuthenticationFilter() throws Exception {
-        UsernamePasswordAuthenticationFilter authenticationFilter = new LoginAuthenticationFilter();
+        UsernamePasswordAuthenticationFilter authenticationFilter = new LoginAuthenticationFilter(tokenService);
         authenticationFilter.setAuthenticationSuccessHandler(
                 (req, resp, exc) -> resp.setStatus(HttpStatus.OK.value()));
         authenticationFilter.setAuthenticationFailureHandler(

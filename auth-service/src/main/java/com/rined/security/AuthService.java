@@ -6,12 +6,14 @@ import com.rined.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableConfigurationProperties
 public class AuthService {
     private final UserRepository repository;
 
@@ -21,7 +23,7 @@ public class AuthService {
 
     @PostConstruct
     void init(){
-        repository.save(new User("user", "password", Collections.singleton(Role.USER)));
-        repository.save(new User("admin", "password", Collections.singleton(Role.ADMIN)));
+        repository.save(new User("provider", "password", Collections.singleton(Role.PROVIDER)));
+        repository.save(new User("consumer", "password", Collections.singleton(Role.CONSUMER)));
     }
 }

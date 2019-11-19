@@ -24,8 +24,4 @@ public class LoginRequestDto {
     @JsonProperty("password")
     private String password;
 
-    @Email
-    @JsonProperty("mail")
-    private String mail;
-
 }

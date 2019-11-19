@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rined.security.dto.LoginRequestDto;
 import com.rined.security.dto.LoginResponseDto;
 import com.rined.security.model.User;
+import com.rined.security.service.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,9 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String tokenPrefix = "Bearer ";
+
+    private final TokenService tokenService;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -38,8 +42,9 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                                             FilterChain chain,
                                             Authentication authResult) throws IOException {
         User user = (User) authResult.getPrincipal();
-        final String token = tokenPrefix + user.getUsername();
-        LoginResponseDto responseDto = new LoginResponseDto(user.getUsername(), user.getRoles(), token);
+        final String token = tokenService.transform(user);
+//        LoginResponseDto responseDto = new LoginResponseDto(user.getUsername(), user.getRoles(), token);
+        LoginResponseDto responseDto = new LoginResponseDto(token);
         objectMapper.writeValue(response.getWriter(), responseDto);
         response.getWriter().flush();
     }

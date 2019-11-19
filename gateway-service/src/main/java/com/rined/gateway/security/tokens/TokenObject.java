@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Builder
@@ -13,6 +13,7 @@ public class TokenObject {
     private String token;
     private String id;
     private String username;
-    private Set<Role> roles;
+    private String email;
+    private List<Role> roles;
     private Date expire;
 }

@@ -4,6 +4,8 @@ import com.rined.proposal.controllers.dto.ProposalRequestDto;
 import com.rined.proposal.controllers.dto.ProposalRequestUpdateDto;
 import com.rined.proposal.model.Proposal;
 import com.rined.proposal.model.ProposalBrief;
+import com.rined.proposal.controllers.dto.UserDto;
+import com.rined.proposal.resolver.User;
 import com.rined.proposal.service.ProposalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,8 @@ public class ProposalController {
     private final ProposalService service;
 
     @GetMapping("/proposals")
-    public List<Proposal> getAllTemplates() {
+    public List<Proposal> getAllTemplates(@User UserDto userDto) {
+        System.err.println(userDto);
         return service.getAllProposals();
     }
 

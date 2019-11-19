@@ -1,11 +1,13 @@
-package com.rined.gateway.security.model;
+package com.rined.proposal.controllers.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @RequiredArgsConstructor
-public class User {
+public class UserDto {
     private final String id;
     private final String username;
     private final String email;
