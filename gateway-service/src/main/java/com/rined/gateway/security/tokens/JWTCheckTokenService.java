@@ -1,18 +1,17 @@
 package com.rined.gateway.security.tokens;
 
 import com.rined.gateway.properties.JWTProperties;
-import com.rined.gateway.security.exception.JWTException;
 import com.rined.gateway.security.model.Role;
 import com.rined.gateway.security.model.TokenAuthentication;
 import com.rined.gateway.security.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +29,11 @@ public class JWTCheckTokenService implements TokenService {
 
             return new TokenObject.TokenObjectBuilder()
                     .token(token)
-                    .id(body.getId())
+                    .tokenId(body.getId())
                     .username(body.getSubject())
                     .expire(body.getExpiration())
-                    .email(String.valueOf(body.get("email")))
+                    .userId(body.get("userId", String.class))
+                    .email(body.get("email", String.class))
                     .roles(conversionToRole(body.get("roles", List.class)))
                     .build();
         } catch (Exception e) {
@@ -51,7 +51,9 @@ public class JWTCheckTokenService implements TokenService {
     public TokenAuthentication extractAuthentication(TokenObject tokenObject) {
         return new TokenAuthentication(
                 tokenObject.getToken(),
-                new User(tokenObject.getId(), tokenObject.getUsername(), tokenObject.getEmail()),
+                new User(tokenObject.getUserId(),
+                        tokenObject.getUsername(),
+                        tokenObject.getEmail()),
                 tokenObject.getRoles()
         );
     }

@@ -8,3 +8,7 @@ server:
 jwt:
   secret: "incorrect"
   expire: 9999999
+
+logging:
+  level:
+    root: info

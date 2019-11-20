@@ -1,8 +1,8 @@
 package com.rined.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rined.security.dto.LoginRequestDto;
-import com.rined.security.dto.LoginResponseDto;
+import com.rined.security.dto.request.LoginRequestDto;
+import com.rined.security.dto.response.LoginResponseDto;
 import com.rined.security.model.User;
 import com.rined.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                                             Authentication authResult) throws IOException {
         User user = (User) authResult.getPrincipal();
         final String token = tokenService.transform(user);
-//        LoginResponseDto responseDto = new LoginResponseDto(user.getUsername(), user.getRoles(), token);
         LoginResponseDto responseDto = new LoginResponseDto(token);
         objectMapper.writeValue(response.getWriter(), responseDto);
         response.getWriter().flush();

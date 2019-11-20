@@ -1,4 +1,4 @@
-package com.rined.security.dto;
+package com.rined.security.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

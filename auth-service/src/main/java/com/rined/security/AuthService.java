@@ -23,7 +23,7 @@ public class AuthService {
 
     @PostConstruct
     void init(){
-        repository.save(new User("provider", "password", Collections.singleton(Role.PROVIDER)));
-        repository.save(new User("consumer", "password", Collections.singleton(Role.CONSUMER)));
+        repository.save(new User("provider", "password", "antoxa-ac@list.ru",  Collections.singleton(Role.PROVIDER)));
+        repository.save(new User("consumer", "password", "antoxa-ac@list.ru", Collections.singleton(Role.CONSUMER)));
     }
 }

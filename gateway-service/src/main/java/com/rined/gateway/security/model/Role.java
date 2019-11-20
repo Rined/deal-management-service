@@ -2,8 +2,9 @@ package com.rined.gateway.security.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
+@SuppressWarnings("unused")
 public enum Role implements GrantedAuthority {
-    PROVIDER, CONSUMER, ADMIN;
+    PROVIDER, CONSUMER;
 
     @Override
     public String getAuthority() {

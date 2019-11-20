@@ -1,10 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -16,13 +14,23 @@ import {useAuthSetter} from "./contexts/AuthContext";
 export default function SignIn() {
     const classes = useStyles();
     const authenticate = useAuthSetter();
+    const [credential, setCredential] = useState({
+        username: '',
+        password: ''
+    });
 
 
-    const auth = () => {
-        localStorage.setItem("token", "some-token");
-        authenticate({
-            isAuth: true
-        });
+    const loginHandler = (event) => {
+        event.preventDefault();
+        console.log(credential);
+        // localStorage.setItem("token", "some-token");
+        // authenticate({
+        //     isAuth: true
+        // });
+    };
+
+    const validate = () => {
+
     };
 
     return (
@@ -41,10 +49,15 @@ export default function SignIn() {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        defaultValue={credential.username}
+                        onChange={(event) => setCredential(curState => {
+                            curState.username = event.target.value;
+                            return curState;
+                        })}
                         autoFocus/>
                     <TextField
                         variant="outlined"
@@ -55,17 +68,19 @@ export default function SignIn() {
                         label="Password"
                         type="password"
                         id="password"
+                        defaultValue={credential.password}
+                        onChange={(event) => setCredential(curState => {
+                            curState.password = event.target.value;
+                            return curState;
+                        })}
                         autoComplete="current-password"/>
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary"/>}
-                        label="Remember me"/>
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={auth}>
+                        onClick={loginHandler}>
                         Sign In
                     </Button>
                     <Grid container>
@@ -103,7 +118,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {

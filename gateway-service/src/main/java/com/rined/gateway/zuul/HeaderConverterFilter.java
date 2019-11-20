@@ -20,7 +20,7 @@ public class HeaderConverterFilter extends ZuulFilter {
         final String authHeader = request.getHeader(header);
         if (Objects.nonNull(authHeader)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            // hystrix если есть ошибки!
+            // hystrix если есть ошибки, формировать, что неверный запрос
             if (authentication.isAuthenticated()) {
                 User user = (User) authentication.getPrincipal();
                 ctx.addZuulRequestHeader("userId",

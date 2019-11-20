@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +19,10 @@ public class JWTTokenService implements TokenService {
     @Override
     public String transform(User user) {
         return Jwts.builder()
-                .setId(user.getId())
+                .setId(UUID.randomUUID().toString())
                 .setSubject(user.getUsername())
                 .setExpiration(generateExpireTime())
+                .claim("userId", user.getId())
                 .claim("roles", user.getRoles())
                 .claim("email", user.getEmail())
                 .signWith(SignatureAlgorithm.HS512, properties.getSecret())

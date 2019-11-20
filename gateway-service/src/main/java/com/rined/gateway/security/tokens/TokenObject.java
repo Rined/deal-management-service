@@ -11,7 +11,8 @@ import java.util.List;
 @Builder
 public class TokenObject {
     private String token;
-    private String id;
+    private String tokenId;
+    private String userId;
     private String username;
     private String email;
     private List<Role> roles;

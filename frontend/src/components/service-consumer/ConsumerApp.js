@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Switch} from "react-router-dom";
-import SignIn from './../SignIn'
 import ConsumerDashboard from './containers/ConsumerDashboard'
 import NoMatch from "./../NoMatch";
 import {useStyles} from "./../AppStyle"
@@ -24,9 +23,6 @@ export default function ConsumerApp() {
                 </Route>
                 <Route path="*">
                     <NoMatch/>
-                </Route>
-                <Route exact path="/auth">
-                    <SignIn/>
                 </Route>
             </Switch>
         </main>

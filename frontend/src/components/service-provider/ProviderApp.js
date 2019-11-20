@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Switch} from "react-router-dom";
-import SignIn from './../SignIn'
 import ProviderDashboard from './containers/ProviderDashboard'
 import NoMatch from "./../NoMatch";
 import {useStyles} from "./../AppStyle"
@@ -47,10 +46,6 @@ export default function App() {
 
                 <Route exact path="/notification">
                     <Notification/>
-                </Route>
-
-                <Route exact path="/auth">
-                    <SignIn/>
                 </Route>
 
                 <Route path="*">
