@@ -27,9 +27,17 @@ export default function App() {
                         <Router>
                             <OpenMenuProvider>
                                 <AppTitleHeader/>
-                                {isProvider() ? <ProviderMenu/> : <ConsumerMenu/>}
+                                {
+                                    isProvider()
+                                        ? <ProviderMenu/>
+                                        : <ConsumerMenu/>
+                                }
                             </OpenMenuProvider>
-                            {isProvider() ? <ProviderApp/> : <ConsumerApp/>}
+                            {
+                                isProvider()
+                                    ? <ProviderApp/>
+                                    : <ConsumerApp/>
+                            }
                         </Router>
                     </TitleProvider>
                     : <SignIn/>

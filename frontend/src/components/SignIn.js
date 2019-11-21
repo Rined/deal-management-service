@@ -14,90 +14,167 @@ import {useAuthSetter} from "./contexts/AuthContext";
 export default function SignIn() {
     const classes = useStyles();
     const authenticate = useAuthSetter();
+
+    const [globalError, setGlobalError] = useState('');
+    const [errorTextUsername, setErrorTextUsername] = useState('');
+    const [errorTextPassword, setErrorTextPassword] = useState('');
     const [credential, setCredential] = useState({
-        username: '',
+        user: '',
         password: ''
     });
 
 
+    function parseJSON(response) {
+        return new Promise((resolve) => response.json()
+            .then((json) => resolve({
+                status: response.status,
+                ok: response.ok,
+                json,
+            })));
+    }
+
+    function request(url, options) {
+        return new Promise((resolve, reject) => {
+            fetch(url, options)
+                .then(parseJSON)
+                .then((response) => {
+                    if (response.ok) {
+                        return resolve(response);
+                    }
+                    return reject(response);
+                });
+        });
+    }
+
     const loginHandler = (event) => {
         event.preventDefault();
+        setGlobalError('');
         console.log(credential);
-        // localStorage.setItem("token", "some-token");
-        // authenticate({
-        //     isAuth: true
-        // });
+        if (validate(credential.user, credential.password)) {
+            const options = {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(credential)
+            };
+            request('http://localhost:8081/login', options)
+                .then(response => {
+                    console.log('good', response);
+                    authenticate({
+                        isAuth: true
+                    });
+                })
+                .catch(response => {
+                    console.log('bad', response);
+                    setGlobalError(response.json.description);
+                });
+            // fetch('http://localhost:8081/login', {
+            //     method: 'post',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(credential)
+            // }).then(function (data) {
+            //     console.log(data);
+            // }).catch(function (error) {
+            //     console.log('Request failed', error);
+            // });
+        }
     };
 
-    const validate = () => {
-
+    const validate = (username, password) => {
+        let isValid = true;
+        if (username.length === 0) {
+            setErrorTextUsername('Username is mandatory');
+            isValid = false;
+        }
+        if (password.length === 0) {
+            setErrorTextPassword('Password is mandatory');
+            isValid = false;
+        }
+        return isValid;
     };
+
+    const clear = (text, clearFunc) => {
+        if (text.length !== 0) {
+            clearFunc('');
+        }
+    };
+
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="username"
-                        label="Username"
-                        name="username"
-                        autoComplete="username"
-                        defaultValue={credential.username}
-                        onChange={(event) => setCredential(curState => {
-                            curState.username = event.target.value;
-                            return curState;
-                        })}
-                        autoFocus/>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        defaultValue={credential.password}
-                        onChange={(event) => setCredential(curState => {
-                            curState.password = event.target.value;
-                            return curState;
-                        })}
-                        autoComplete="current-password"/>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={loginHandler}>
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
+        <React.Fragment>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form className={classes.form} noValidate>
+                        <TextField
+                            required
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Username"
+                            error={errorTextUsername.length !== 0}
+                            helperText={errorTextUsername}
+                            defaultValue={credential.user}
+                            onChange={(event) => {
+                                const eventValue = event.target.value;
+                                clear(errorTextUsername, setErrorTextUsername);
+                                setCredential(curState => {
+                                    curState.user = eventValue;
+                                    return curState;
+                                })
+                            }}
+                            autoFocus/>
+                        <TextField
+                            required
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            error={errorTextPassword.length !== 0}
+                            helperText={errorTextPassword}
+                            defaultValue={credential.password}
+                            onChange={(event) => {
+                                const eventValue = event.target.value;
+                                clear(errorTextPassword, setErrorTextPassword);
+                                setCredential(curState => {
+                                    curState.password = eventValue;
+                                    return curState;
+                                })
+                            }}
+                            autoComplete="current-password"/>
+                        {
+                            globalError.length !== 0
+                                ? <div style={{color: 'red'}}>{globalError}</div>
+                                : ''
+                        }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={loginHandler}>
+                            Sign In
+                        </Button>
+                        <Grid container>
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Container>
+                    </form>
+                </div>
+            </Container>
+        </React.Fragment>
     );
 }
 
