@@ -1,13 +1,13 @@
 import Authentication from "./Authentication";
 
-export const authentication = {
-    isAuth: false,
-    auth: null
+export let authentication;
+
+export const getAuthentication = () => {
+    return authentication;
 };
 
 export const logout = () => {
-    authentication.isAuth = false;
-    authentication.auth = null;
+    authentication = null;
     localStorage.removeItem('user');
 };
 
@@ -23,8 +23,7 @@ const getToken = () => {
 export const authenticate = (token) => {
     const payload = token.split('.')[1];
     const payloadJson = window.atob(payload);
-    authentication.isAuth = true;
-    authentication.auth = new Authentication(JSON.parse(payloadJson), token);
+    authentication = new Authentication(JSON.parse(payloadJson), token);
 };
 
 if (hasToken()) {

@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {authenticate, authentication} from "./auth/AuthenticationManager";
+import {authenticate, getAuthentication} from "./auth/AuthenticationManager";
 import {useAuthSetter} from "./contexts/AuthContext";
 
 export default function SignIn() {
@@ -60,7 +60,7 @@ export default function SignIn() {
             request('http://localhost:8081/login', options)
                 .then(response => {
                     authenticate(response.json.token);
-                    setAuth(authentication);
+                    setAuth(getAuthentication());
                 })
                 .catch(response => {
                     setGlobalError(response.json.description);

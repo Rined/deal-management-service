@@ -19,12 +19,11 @@ export default function App() {
     const classes = useStyles();
     const auth = useAuth();
 
-
     return (
         <div className={classes.root}>
             {
-                auth.isAuth
-                    ? <TitleProvider>
+                auth ?
+                    <TitleProvider>
                         <Router>
                             <OpenMenuProvider>
                                 <AppTitleHeader/>

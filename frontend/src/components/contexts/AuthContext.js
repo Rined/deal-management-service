@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {authentication} from "../auth/AuthenticationManager";
+import {getAuthentication} from "../auth/AuthenticationManager";
 
 const AuthContext = React.createContext('');
 
 export const AuthProvider = ({children}) => {
-    const [auth, setAuth] = useState(Object.assign({}, authentication));
+    const [auth, setAuth] = useState(getAuthentication());
     return <AuthContext.Provider value={{auth, setAuth}}>{children}</AuthContext.Provider>
 };
 
