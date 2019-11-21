@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "userName": "frontend",
   "version": "1.0.0",
   "description": "frontend for deal management system",
   "main": "src/index.js",

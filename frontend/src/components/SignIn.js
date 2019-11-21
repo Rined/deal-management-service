@@ -9,11 +9,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {authenticate, authentication} from "./auth/AuthenticationManager";
 import {useAuthSetter} from "./contexts/AuthContext";
 
 export default function SignIn() {
     const classes = useStyles();
-    const authenticate = useAuthSetter();
+    const setAuth = useAuthSetter();
 
     const [globalError, setGlobalError] = useState('');
     const [errorTextUsername, setErrorTextUsername] = useState('');
@@ -58,29 +59,14 @@ export default function SignIn() {
             };
             request('http://localhost:8081/login', options)
                 .then(response => {
-                    console.log('good', response);
-                    authenticate({
-                        isAuth: true
-                    });
+                    authenticate(response.json.token);
+                    setAuth(authentication);
                 })
                 .catch(response => {
-                    console.log('bad', response);
                     setGlobalError(response.json.description);
                 });
-            // fetch('http://localhost:8081/login', {
-            //     method: 'post',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(credential)
-            // }).then(function (data) {
-            //     console.log(data);
-            // }).catch(function (error) {
-            //     console.log('Request failed', error);
-            // });
         }
     };
-
     const validate = (username, password) => {
         let isValid = true;
         if (username.length === 0) {

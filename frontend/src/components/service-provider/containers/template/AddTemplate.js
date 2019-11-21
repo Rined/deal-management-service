@@ -96,7 +96,7 @@ export default function AddTemplate() {
 
     const setTitleState = (text) => {
         setState(curState => {
-            curState.name = text;
+            curState.userName = text;
             return curState;
         });
     };

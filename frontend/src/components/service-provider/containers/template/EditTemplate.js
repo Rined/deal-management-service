@@ -100,7 +100,7 @@ export default function EditTemplate(props) {
 
     const setTitleState = (text) => {
         setState(curState => {
-            curState.name = text;
+            curState.userName = text;
             return curState;
         });
     };

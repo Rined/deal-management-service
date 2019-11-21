@@ -114,7 +114,7 @@ export default function AddProposal() {
 
     const setTitleState = (text) => {
         setProposal(curState => {
-            curState.name = text;
+            curState.userName = text;
             return curState;
         });
     };
