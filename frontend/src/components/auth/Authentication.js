@@ -25,5 +25,15 @@ export default class Authentication {
         return this.userEmail;
     }
 
+    isConsumer() {
+        // return this.userRoles.includes('CONSUMER');
+        return true;
+    }
+
+    isProvider() {
+        // return this.userRoles.includes('PROVIDER');
+        return true;
+    }
+
 }
 

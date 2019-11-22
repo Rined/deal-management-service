@@ -1,30 +1,13 @@
 import React from 'react';
-import {Route, Switch} from "react-router-dom";
+import {Route} from "react-router-dom";
 import ConsumerDashboard from './containers/ConsumerDashboard'
-import NoMatch from "./../NoMatch";
-import {useStyles} from "./../AppStyle"
-import Notification from "./../Notification";
 
 export default function ConsumerApp() {
-    const classes = useStyles();
-
     return (
-        <main className={classes.content}>
-            <div className={classes.appBarSpacer}/>
-            <Switch>
-                <Route exact path="/">
-                    <ConsumerDashboard/>
-                </Route>
-                <Route exact path="/dashboard">
-                    <ConsumerDashboard/>
-                </Route>
-                <Route exact path="/notification">
-                    <Notification/>
-                </Route>
-                <Route path="*">
-                    <NoMatch/>
-                </Route>
-            </Switch>
-        </main>
+        <React.Fragment>
+            <Route exact path="/dashboard">
+                <ConsumerDashboard/>
+            </Route>
+        </React.Fragment>
     )
 }

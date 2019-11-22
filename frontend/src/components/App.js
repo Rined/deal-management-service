@@ -1,19 +1,17 @@
 import React from 'react';
-import {BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import AppTitleHeader from "./AppTitleHeader";
 import {useStyles} from "./AppStyle"
 import {TitleProvider} from "./contexts/TitleContext";
 import {OpenMenuProvider} from "./contexts/OpenMenuContext";
-import ProviderMenu from "./service-provider/ProviderMenu"
-import ConsumerMenu from "./service-consumer/ConumerMenu"
-import ProviderApp from "./service-provider/ProviderApp"
-import ConsumerApp from "./service-consumer/ConsumerApp"
 import SignIn from "./SignIn";
 import {useAuth} from "./contexts/AuthContext";
-
-function isProvider() {
-    return true;
-}
+import Menu from "./Menu";
+import AppSwitcher from "./AppSwitcher";
+import ProviderApp from "./service-provider/ProviderApp"
+import ConsumerApp from "./service-consumer/ConsumerApp"
+import ProviderMenu from "./service-provider/ProviderMenu"
+import ConsumerMenu from "./service-consumer/ConumerMenu"
 
 export default function App() {
     const classes = useStyles();
@@ -24,21 +22,19 @@ export default function App() {
             {
                 auth ?
                     <TitleProvider>
-                        <Router>
+                        <BrowserRouter>
                             <OpenMenuProvider>
                                 <AppTitleHeader/>
-                                {
-                                    isProvider()
-                                        ? <ProviderMenu/>
-                                        : <ConsumerMenu/>
-                                }
+                                <Menu>
+                                    {auth.isConsumer() ? <ConsumerMenu/> : null}
+                                    {auth.isProvider() ? <ProviderMenu/> : null}
+                                </Menu>
                             </OpenMenuProvider>
-                            {
-                                isProvider()
-                                    ? <ProviderApp/>
-                                    : <ConsumerApp/>
-                            }
-                        </Router>
+                            <AppSwitcher>
+                                {auth.isConsumer() ? <ConsumerApp/> : null}
+                                {auth.isProvider() ? <ProviderApp/> : null}
+                            </AppSwitcher>
+                        </BrowserRouter>
                     </TitleProvider>
                     : <SignIn/>
             }
