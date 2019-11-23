@@ -6,10 +6,14 @@ import Proposal from "./containers/proposal/Proposal";
 import {TemplateProvider} from "../contexts/TemplateContext";
 import {DealProvider} from "../contexts/DealContext";
 import {ProposalProvider} from "../contexts/ProposalContext";
+import ProviderDashboard from "./containers/ProviderDashboard";
 
 export default function ProviderApp() {
     return (
         <React.Fragment>
+            <Route exact path="/">
+                <ProviderDashboard/>
+            </Route>
             <Route exact path="/templates">
                 <TemplateProvider>
                     <Template/>

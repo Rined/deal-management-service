@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import ReactHtmlParser from 'react-html-parser';
 import Paper from '@material-ui/core/Paper';
+import request from "./../../../request/request";
 
 const CURRENT_ACTION = 'view';
 const columns = [
@@ -22,9 +23,8 @@ export default function ViewTemplate(props) {
 
     useEffect(() => {
         const templateId = props.param.id;
-        fetch(`http://localhost:8080/templates/${templateId}`)
-            .then(response => response.json())
-            .then(template => setState(template));
+        request(`/templates/${templateId}`)
+            .then(response => setState(response.json));
     }, []);
 
 

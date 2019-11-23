@@ -7,55 +7,67 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {authenticate, getAuthentication} from "./auth/AuthenticationManager";
-import {useAuthSetter} from "./contexts/AuthContext";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {makeStyles} from '@material-ui/core/styles';
 import request from "./request/request"
 
-export default function SignIn() {
+export default function SignUp() {
     const classes = useStyles();
-    const setAuth = useAuthSetter();
 
+    const [role, setRole] = useState('PROVIDER');
     const [globalError, setGlobalError] = useState('');
+    const [showComplete, setComplete] = useState(false);
     const [errorTextUsername, setErrorTextUsername] = useState('');
     const [errorTextPassword, setErrorTextPassword] = useState('');
+    const [errorTextEmail, setErrorTextEmail] = useState('');
     const [credential, setCredential] = useState({
         user: '',
-        password: ''
+        password: '',
+        email: ''
     });
 
     const loginHandler = (event) => {
+        setComplete(false);
         event.preventDefault();
         setGlobalError('');
-        console.log(credential);
-        if (validate(credential.user, credential.password)) {
+        if (validate(credential.user, credential.password, credential.email)) {
+            credential.roles = [role];
+            const json = JSON.stringify(credential);
+            console.log(credential);
+            console.log(json);
             const options = {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(credential)
+                body: json
             };
-            request('/auth/login', options)
+            request('/auth/registration', options)
                 .then(response => {
-                    authenticate(response.json.token);
-                    setAuth(getAuthentication());
+                    if (response.ok)
+                        setComplete(true);
                 })
                 .catch(response => {
                     setGlobalError(response.json.description);
                 });
         }
     };
-    const validate = (username, password) => {
+
+    const validate = (username, password, email) => {
         let isValid = true;
-        if (username.length === 0) {
-            setErrorTextUsername('Username is mandatory');
-            isValid = false;
-        }
-        if (password.length === 0) {
-            setErrorTextPassword('Password is mandatory');
-            isValid = false;
-        }
+        isValid &= checkField(username, setErrorTextUsername, 'Username is mandatory');
+        isValid &= checkField(password, setErrorTextPassword, 'Password is mandatory');
+        isValid &= checkField(email, setErrorTextEmail, 'Email is mandatory');
         return isValid;
+    };
+
+    const checkField = (val, showError, errorText) => {
+        if (val.length === 0) {
+            showError(errorText);
+            return false;
+        }
+        return true;
     };
 
     const clear = (text, clearFunc) => {
@@ -63,7 +75,6 @@ export default function SignIn() {
             clearFunc('');
         }
     };
-
 
     return (
         <React.Fragment>
@@ -74,7 +85,7 @@ export default function SignIn() {
                         <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Sign up
                     </Typography>
                     <form className={classes.form} noValidate>
                         <TextField
@@ -100,6 +111,23 @@ export default function SignIn() {
                             variant="outlined"
                             margin="normal"
                             fullWidth
+                            label="Email"
+                            error={errorTextEmail.length !== 0}
+                            helperText={errorTextEmail}
+                            defaultValue={credential.email}
+                            onChange={(event) => {
+                                const eventValue = event.target.value;
+                                clear(errorTextEmail, setErrorTextEmail);
+                                setCredential(curState => {
+                                    curState.email = eventValue;
+                                    return curState;
+                                })
+                            }}/>
+                        <TextField
+                            required
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
                             label="Password"
                             type="password"
                             error={errorTextPassword.length !== 0}
@@ -114,9 +142,38 @@ export default function SignIn() {
                                 })
                             }}
                             autoComplete="current-password"/>
+                        <Grid container justify="center">
+                            <RadioGroup aria-label="role"
+                                        name="role"
+                                        value={role}
+                                        onChange={(event) => {
+                                            const eventValue = event.target.value;
+                                            clear(errorTextPassword, setErrorTextPassword);
+                                            setRole(eventValue);
+                                        }}
+                                        row>
+                                <FormControlLabel
+                                    value="PROVIDER"
+                                    control={<Radio/>}
+                                    label="Provider"
+                                    labelPlacement="end"
+                                />
+                                <FormControlLabel
+                                    value="CONSUMER"
+                                    control={<Radio/>}
+                                    label="Consumer"
+                                    labelPlacement="end"
+                                />
+                            </RadioGroup>
+                        </Grid>
                         {
                             (globalError && globalError.length !== 0)
                                 ? <div style={{color: 'red'}}>{globalError}</div>
+                                : ''
+                        }
+                        {
+                            showComplete
+                                ? <div style={{color: 'green'}}>Registration successfully completed</div>
                                 : ''
                         }
                         <Button
@@ -126,12 +183,12 @@ export default function SignIn() {
                             color="primary"
                             className={classes.submit}
                             onClick={loginHandler}>
-                            Sign In
+                            Sign Up
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link href="/signup" variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                <Link href="/" variant="body2">
+                                    {"Already have account? Sign In"}
                                 </Link>
                             </Grid>
                         </Grid>

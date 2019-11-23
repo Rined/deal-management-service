@@ -14,7 +14,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-
+import request from "./../../../request/request";
 
 const CURRENT_ACTION = 'add';
 const columns = [
@@ -26,38 +26,41 @@ export default function AddTemplate() {
     const setAction = useActionSetter();
     let mdEditor = null;
 
+    const [loading, setLoading] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const [positive, setPositive] = React.useState(false);
     const [state, setState] = useState({
         name: "",
         fields: [],
         format: ""
     });
-    const [loading, setLoading] = React.useState(false);
-    const [open, setOpen] = React.useState(false);
-    const [positive, setPositive] = React.useState(false);
 
     const save = () => {
         setLoading(true);
-        fetch(`http://localhost:8080/templates`, {
+        const options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(state)
-        }).then(function (response) {
-            setTimeout(() => {
-                setPositive(response.ok);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(response.status);
-        }).catch((error) => {
-            setTimeout(() => {
-                setPositive(false);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(error);
-        });
+        };
+        request(`/templates`, options)
+            .then((response) => {
+                setTimeout(() => {
+                    setPositive(true);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(response.status);
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    setPositive(false);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(error);
+            });
     };
 
     const updateStateOnAdd = (newData) => {

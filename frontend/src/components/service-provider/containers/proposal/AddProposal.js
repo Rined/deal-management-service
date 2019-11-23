@@ -17,6 +17,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import request from "./../../../request/request"
 
 const CURRENT_ACTION = 'add';
 const columns = [
@@ -40,41 +41,39 @@ export default function AddProposal() {
     });
 
     useEffect(() => {
-        fetch('http://localhost:8080/templates/brief')
-            .then(response => response.json())
-            .then(templates => setTemplates(templates));
+        request('/templates/brief')
+            .then(response => setTemplates(response.json));
     }, []);
 
     const save = () => {
-        // if (proposal
-        //     && proposal.fields
-        //     && proposal.fields.some((row) => !row.hasOwnProperty('value'))) {
-        // }
         setLoading(true);
         const proposalDto = JSON.parse(JSON.stringify(proposal));
         proposalDto.format = proposal.template.format;
         delete proposalDto.template;
-        fetch(`http://localhost:8090/proposals`, {
+        const options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(proposalDto)
-        }).then(function (response) {
-            setTimeout(() => {
-                setPositive(response.ok);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(response.status);
-        }).catch((error) => {
-            setTimeout(() => {
-                setPositive(false);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(error);
-        });
+        };
+        request(`/proposals`, options)
+            .then((response) => {
+                setTimeout(() => {
+                    setPositive(true);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(response.status);
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    setPositive(false);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(error);
+            });
         console.log(proposal);
     };
 
@@ -91,9 +90,9 @@ export default function AddProposal() {
 
     const handleChange = event => {
         const templateId = event.target.value;
-        fetch(`http://localhost:8080/templates/${templateId}`)
-            .then(response => response.json())
-            .then(backendTemplate => {
+        request(`/templates/${templateId}`)
+            .then(response => {
+                const backendTemplate = response.json;
                 const fields = backendTemplate.fields;
                 delete backendTemplate.fields;
                 setProposal({

@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ReactHtmlParser from "react-html-parser";
 import Paper from '@material-ui/core/Paper';
 import {makeStyles} from "@material-ui/core/styles";
+import request from "./../../../request/request";
 
 const CURRENT_ACTION = 'edit';
 const columns = [
@@ -35,12 +36,12 @@ export default function EditProposal(props) {
 
 
     useEffect(() => {
-        fetch(`http://localhost:8090/proposals/${proposalId}`)
-            .then(response => response.json())
-            .then(proposal => {
+        request(`/proposals/${proposalId}`)
+            .then(response => {
+                const proposal = response.json;
                 if (proposal.fields) {
                     for (let i = 0; i < proposal.fields.length; i++) {
-                        if(!proposal.fields[i].value || proposal.fields[i].value.length === 0){
+                        if (!proposal.fields[i].value || proposal.fields[i].value.length === 0) {
                             delete proposal.fields[i].value;
                         }
                     }
@@ -53,27 +54,30 @@ export default function EditProposal(props) {
         setLoading(true);
         const proposalDto = JSON.parse(JSON.stringify(state));
         delete proposalDto.format;
-        fetch(`http://localhost:8090/proposals/${proposalId}`, {
+        const options = {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(proposalDto)
-        }).then(function (response) {
-            setTimeout(() => {
-                setPositive(response.ok);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(response.status);
-        }).catch((error) => {
-            setTimeout(() => {
-                setPositive(false);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(error);
-        });
+        };
+        request(`/proposals/${proposalId}`, options)
+            .then((response) => {
+                setTimeout(() => {
+                    setPositive(true);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(response.status);
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    setPositive(false);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(error);
+            });
     };
 
     const updateStateOnUpdate = (newData, oldData) => {

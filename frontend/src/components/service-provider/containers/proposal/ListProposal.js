@@ -21,6 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
+import request from "./../../../request/request"
 
 
 const CURRENT_ACTION = 'list';
@@ -80,20 +81,20 @@ export default function ListProposal() {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8090/proposals/brief')
-            .then(response => response.json())
-            .then(proposals => setProposals(proposals));
+        request('/proposals/brief')
+            .then(response => setProposals(response.json));
     }, []);
 
 
     const handleAgreeDeleteDialog = () => {
         const proposalId = dialogState.id;
         setDialogState({open: false});
-        fetch(`http://localhost:8090/proposals/${proposalId}`, {
+        const options = {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},
-        }).then(function (response) {
-            setPositiveSnack(response.ok);
+        };
+        request(`/proposals/${proposalId}`, options).then((response) => {
+            setPositiveSnack(true);
             removeProposalById(proposalId);
             setOpenSnack(true);
             console.log(response.status);
@@ -188,7 +189,8 @@ export default function ListProposal() {
                             <ListItem key={i} onClick={() => openViewProposal(proposal.id)} button>
                                 <ListItemText primary={proposal.name}/>
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" onClick={() => openEditProposal(proposal.id)} aria-label="edit">
+                                    <IconButton edge="end" onClick={() => openEditProposal(proposal.id)}
+                                                aria-label="edit">
                                         <EditIcon color="primary"/>
                                     </IconButton>
                                     <IconButton edge="end"

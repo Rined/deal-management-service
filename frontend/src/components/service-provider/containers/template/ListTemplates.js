@@ -21,6 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
+import request from "./../../../request/request"
 
 const CURRENT_ACTION = 'list';
 export default function ListTemplates() {
@@ -80,28 +81,30 @@ export default function ListTemplates() {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8080/templates/brief')
-            .then(response => response.json())
-            .then(templates => setTemplates(templates));
+        request('/templates/brief')
+            .then(response => setTemplates(response.json));
     }, []);
 
 
     const handleAgreeDeleteDialog = () => {
         const templateId = dialogState.id;
         setDialogState({open: false});
-        fetch(`http://localhost:8080/templates/${templateId}`, {
+        const options = {
             method: 'delete',
             headers: {'Content-Type': 'application/json'},
-        }).then(function (response) {
-            setPositiveSnack(response.ok);
-            removeTemplateById(templateId);
-            setOpenSnack(true);
-            console.log(response.status);
-        }).catch((error) => {
-            setPositiveSnack(false);
-            setOpenSnack(true);
-            console.log(error);
-        });
+        };
+        request(`/templates/${templateId}`, options)
+            .then((response) => {
+                setPositiveSnack(true);
+                removeTemplateById(templateId);
+                setOpenSnack(true);
+                console.log(response.status);
+            })
+            .catch((error) => {
+                setPositiveSnack(false);
+                setOpenSnack(true);
+                console.log(error);
+            });
     };
 
     const removeDialog = () => {

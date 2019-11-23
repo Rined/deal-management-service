@@ -6,7 +6,7 @@ export default class Authentication {
         this.userId = payload.userId;
         this.userRoles = payload.roles;
         this.userEmail = payload.email;
-        localStorage.setItem('user', jwt);
+        localStorage.setItem('token', jwt);
     }
 
     get name() {
@@ -26,13 +26,11 @@ export default class Authentication {
     }
 
     isConsumer() {
-        // return this.userRoles.includes('CONSUMER');
-        return true;
+        return this.userRoles.includes('CONSUMER');
     }
 
     isProvider() {
-        // return this.userRoles.includes('PROVIDER');
-        return true;
+        return this.userRoles.includes('PROVIDER');
     }
 
 }

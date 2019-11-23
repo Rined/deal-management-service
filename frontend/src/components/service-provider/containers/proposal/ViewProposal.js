@@ -9,6 +9,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import {useActionSetter} from "../../../contexts/ProposalContext";
+import request from "./../../../request/request"
 
 const CURRENT_ACTION = 'view';
 const columns = [
@@ -23,9 +24,8 @@ export default function ViewProposal(props) {
 
     useEffect(() => {
         const proposalId = props.param.id;
-        fetch(`http://localhost:8090/proposals/${proposalId}`)
-            .then(response => response.json())
-            .then(proposal => setState(proposal));
+        request(`/proposals/${proposalId}`)
+            .then(response => setState(response.json));
     }, []);
 
 

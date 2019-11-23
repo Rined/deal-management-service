@@ -8,7 +8,7 @@ export const getAuthentication = () => {
 
 export const logout = () => {
     authentication = null;
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
 };
 
 const hasToken = () => {
@@ -17,7 +17,7 @@ const hasToken = () => {
 };
 
 const getToken = () => {
-    return localStorage.getItem('user');
+    return localStorage.getItem('token');
 };
 
 export const authenticate = (token) => {

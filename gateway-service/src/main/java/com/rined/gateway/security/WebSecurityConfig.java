@@ -3,6 +3,7 @@ package com.rined.gateway.security;
 import com.rined.gateway.security.filter.TokenCheckAuthenticationFilter;
 import com.rined.gateway.security.tokens.JWTCheckTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
+        http.cors().configurationSource(corsConfiguration())
+
+                .and()
+                .csrf()
                 .disable()
 
                 .sessionManagement()
@@ -48,7 +55,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(new TokenAuthenticationProvider(provider));
     }
 
-    public TokenCheckAuthenticationFilter tokenAuthenticationFilter() throws Exception {
+    private TokenCheckAuthenticationFilter tokenAuthenticationFilter() throws Exception {
         return new TokenCheckAuthenticationFilter(authenticationManagerBean());
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfiguration() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

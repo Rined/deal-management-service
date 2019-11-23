@@ -5,7 +5,7 @@ import ConsumerDashboard from './containers/ConsumerDashboard'
 export default function ConsumerApp() {
     return (
         <React.Fragment>
-            <Route exact path="/dashboard">
+            <Route exact path="/">
                 <ConsumerDashboard/>
             </Route>
         </React.Fragment>

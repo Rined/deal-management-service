@@ -14,6 +14,10 @@ zuul:
       path: /auth/**
       url: http://localhost:8081
     proposal:
-      sensitiveHeaders: Cookie,Set-Cookie, Authorization
-      path: /proposal/**
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /proposals/**
       url: http://localhost:8082
+    template:
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /templates/**
+      url: http://localhost:8083

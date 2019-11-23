@@ -11,10 +11,6 @@ export default function AppSwitcher({children}) {
     return (
         <main className={classes.content}>
             <div className={classes.appBarSpacer}/>
-            <Route exact path="/">
-                <ConsumerDashboard/>
-                <ProviderDashboard/>
-            </Route>
             {children}
             <Route exact path="/notification">
                 <Notification/>

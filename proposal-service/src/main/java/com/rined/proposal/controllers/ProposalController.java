@@ -16,38 +16,37 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:9000")
 public class ProposalController {
     private final ProposalService service;
 
-    @GetMapping("/proposals")
+    @GetMapping("/")
     public List<Proposal> getAllTemplates(@User UserDto userDto) {
         System.err.println(userDto);
         return service.getAllProposals();
     }
 
-    @GetMapping("/proposals/brief")
+    @GetMapping("/brief")
     public List<ProposalBrief> getAllBriefTemplates() {
         return service.getAllBriefProposals();
     }
 
-    @GetMapping("/proposals/{proposalId}")
+    @GetMapping("/{proposalId}")
     public Proposal getTemplateById(@PathVariable("proposalId") String proposalId) {
         return service.getProposalById(proposalId);
     }
 
-    @DeleteMapping("/proposals/{proposalId}")
+    @DeleteMapping("/{proposalId}")
     public void deleteById(@PathVariable("proposalId") String proposalId) {
         service.deleteById(proposalId);
     }
 
-    @PutMapping("/proposals/{proposalId}")
+    @PutMapping("/{proposalId}")
     public void updateTemplate(@PathVariable("proposalId") String proposalId,
                                @Valid @RequestBody ProposalRequestUpdateDto proposalDto) {
         service.updateProposal(proposalId, proposalDto);
     }
 
-    @PostMapping("/proposals")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public void createTemplate(@Valid @RequestBody ProposalRequestDto proposalDto) {
         service.createProposal(proposalDto);

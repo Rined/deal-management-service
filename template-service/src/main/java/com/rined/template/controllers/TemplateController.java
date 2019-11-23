@@ -13,38 +13,37 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:9000")
 public class TemplateController {
 
     private final TemplateService service;
 
-    @GetMapping("/templates")
+    @GetMapping("/")
     public List<Template> getAllTemplates() {
         return service.getAllTemplates();
     }
 
-    @GetMapping("/templates/brief")
+    @GetMapping("/brief")
     public List<TemplateBrief> getAllBriefTemplates() {
         return service.getAllBriefTemplates();
     }
 
-    @GetMapping("/templates/{templateId}")
+    @GetMapping("/{templateId}")
     public Template getTemplateById(@PathVariable("templateId") String templateId) {
         return service.getTemplateById(templateId);
     }
 
-    @DeleteMapping("/templates/{templateId}")
+    @DeleteMapping("/{templateId}")
     public void deleteById(@PathVariable("templateId") String templateId) {
         service.deleteById(templateId);
     }
 
-    @PutMapping("/templates/{templateId}")
+    @PutMapping("/{templateId}")
     public void updateTemplate(@PathVariable("templateId") String templateId,
                                @Valid @RequestBody TemplateRequestDto templateDto) {
         service.updateTemplate(templateId, templateDto);
     }
 
-    @PostMapping("/templates")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public void createTemplate(@Valid @RequestBody TemplateRequestDto templateDto){
         service.createTemplate(templateDto);

@@ -14,7 +14,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import request from "./../../../request/request"
 
 const CURRENT_ACTION = 'edit';
 const columns = [
@@ -34,27 +34,28 @@ export default function EditTemplate(props) {
 
 
     useEffect(() => {
-        fetch(`http://localhost:8080/templates/${templateId}`)
-            .then(response => response.json())
-            .then(template => setState(template));
+        request(`/templates/${templateId}`)
+            .then(response => setState(response.json));
     }, []);
 
     const save = () => {
         setLoading(true);
-        fetch(`http://localhost:8080/templates/${templateId}`, {
+        const options = {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(state)
-        }).then(function (response) {
-            setTimeout(() => {
-                setPositive(response.ok);
-                setLoading(false);
-                setOpen(true);
-            }, 500);
-            console.log(response.status);
-        }).catch((error) => {
+        };
+        request(`/templates/${templateId}`, options)
+            .then((response) => {
+                setTimeout(() => {
+                    setPositive(true);
+                    setLoading(false);
+                    setOpen(true);
+                }, 500);
+                console.log(response.status);
+            }).catch((error) => {
             setTimeout(() => {
                 setPositive(false);
                 setLoading(false);

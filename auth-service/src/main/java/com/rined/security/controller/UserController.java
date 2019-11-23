@@ -21,5 +21,4 @@ public class UserController {
     public void registration(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) {
         service.save(registrationRequestDto);
     }
-
 }
