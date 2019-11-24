@@ -3,11 +3,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import BackupIcon from '@material-ui/icons/Backup';
-import EmailIcon from '@material-ui/icons/Email';
 import {Link} from "react-router-dom";
+import ForumIcon from '@material-ui/icons/Forum';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 export default function ConsumerMenu() {
 
@@ -20,32 +18,18 @@ export default function ConsumerMenu() {
                 <ListItemText primary="Dashboard"/>
             </ListItem>
 
-            <ListItem component={Link} to="/document" button>
+            <ListItem component={Link} to="/proposals" button>
+                <ListItemIcon>
+                    <ForumIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Proposals"/>
+            </ListItem>
+
+            <ListItem component={Link} to="/deals" button>
                 <ListItemIcon>
                     <AssignmentIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Documents"/>
-            </ListItem>
-
-            <ListItem component={Link} to="/create" button>
-                <ListItemIcon>
-                    <NoteAddIcon/>
-                </ListItemIcon>
-                <ListItemText primary="Create document"/>
-            </ListItem>
-
-            <ListItem component={Link} to="/upload" button>
-                <ListItemIcon>
-                    <BackupIcon/>
-                </ListItemIcon>
-                <ListItemText primary="Upload document"/>
-            </ListItem>
-
-            <ListItem component={Link} to="/send" button>
-                <ListItemIcon>
-                    <EmailIcon/>
-                </ListItemIcon>
-                <ListItemText primary="Send documents"/>
+                <ListItemText primary="Deals"/>
             </ListItem>
         </React.Fragment>
     );

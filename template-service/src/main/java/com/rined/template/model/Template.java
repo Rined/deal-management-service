@@ -1,5 +1,6 @@
 package com.rined.template.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,9 +33,20 @@ public class Template {
     @JsonProperty("format")
     private String format;
 
+    @JsonIgnore
+    @Field("authorId")
+    private String authorId;
+
     public Template(String templateName, List<TemplateField> fields, String format) {
         this.templateName = templateName;
         this.fields = fields;
         this.format = format;
+    }
+
+    public Template(String templateName, List<TemplateField> fields, String format, String authorId) {
+        this.templateName = templateName;
+        this.fields = fields;
+        this.format = format;
+        this.authorId = authorId;
     }
 }

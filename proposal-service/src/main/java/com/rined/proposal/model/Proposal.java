@@ -1,5 +1,6 @@
 package com.rined.proposal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,9 +33,20 @@ public class Proposal {
     @JsonProperty("format")
     private String templateFormat;
 
+    @JsonIgnore
+    @Field("authorId")
+    private String authorId;
+
     public Proposal(String proposalName, List<ProposalField> fields, String templateFormat) {
         this.proposalName = proposalName;
         this.fields = fields;
         this.templateFormat = templateFormat;
+    }
+
+    public Proposal(String proposalName, List<ProposalField> fields, String templateFormat, String authorId) {
+        this.proposalName = proposalName;
+        this.fields = fields;
+        this.templateFormat = templateFormat;
+        this.authorId = authorId;
     }
 }

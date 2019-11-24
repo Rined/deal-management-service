@@ -21,7 +21,8 @@ const columns = [
     {title: 'Field', field: 'name'},
     {title: 'Description', field: 'description'}
 ];
-export default function AddTemplate() {
+export default function AddTemplate(props) {
+    const token = props.auth.jwt;
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
     let mdEditor = null;
@@ -40,7 +41,8 @@ export default function AddTemplate() {
         const options = {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify(state)
         };
@@ -99,7 +101,7 @@ export default function AddTemplate() {
 
     const setTitleState = (text) => {
         setState(curState => {
-            curState.userName = text;
+            curState.name = text;
             return curState;
         });
     };

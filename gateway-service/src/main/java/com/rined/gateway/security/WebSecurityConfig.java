@@ -1,6 +1,7 @@
 package com.rined.gateway.security;
 
 import com.rined.gateway.security.filter.TokenCheckAuthenticationFilter;
+import com.rined.gateway.security.model.Role;
 import com.rined.gateway.security.tokens.JWTCheckTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/proposal/**").hasAnyAuthority("PROVIDER", "ADMIN")
+                .antMatchers("/proposals/consumer/**").hasAnyAuthority(Role.CONSUMER.name())
+                .antMatchers("/proposals/**").hasAnyAuthority(Role.PROVIDER.name())
+                .antMatchers("/templates/**").hasAnyAuthority(Role.PROVIDER.name())
 
                 .and()
                 .formLogin().disable()
@@ -63,6 +66,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfiguration() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("OPTIONS");
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

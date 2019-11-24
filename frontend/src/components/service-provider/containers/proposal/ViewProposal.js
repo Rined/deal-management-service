@@ -18,13 +18,19 @@ const columns = [
 ];
 export default function ViewProposal(props) {
     const mdParser = new MarkdownIt();
+    const token = props.auth.jwt;
 
     const [state, setState] = useState();
     const setAction = useActionSetter();
 
     useEffect(() => {
         const proposalId = props.param.id;
-        request(`/proposals/${proposalId}`)
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/proposals/${proposalId}`, options)
             .then(response => setState(response.json));
     }, []);
 

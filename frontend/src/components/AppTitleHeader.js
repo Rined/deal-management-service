@@ -11,12 +11,17 @@ import {useTitle} from "./contexts/TitleContext";
 import {useStyles} from "./AppStyle"
 import {useIsOpen, useOpen} from "./contexts/OpenMenuContext"
 import {Link} from "react-router-dom";
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import {useAuth, useAuthSetter} from "./contexts/AuthContext";
+import {logout} from "./auth/AuthenticationManager";
 
 
 export default function AppTitleHeader() {
     const classes = useStyles();
     const title = useTitle();
     const open = useIsOpen();
+    const authentication = useAuth();
+    const authenticationSetter = useAuthSetter();
 
     const changeOpen = useOpen();
     const openMenu = () => {
@@ -37,10 +42,17 @@ export default function AppTitleHeader() {
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                     {title}
                 </Typography>
+
+                <Typography component="h6" variant="h6" color="inherit" noWrap>
+                    {authentication.name}
+                </Typography>
                 <IconButton component={Link} to="/notification" color="inherit">
                     <Badge badgeContent={5} color="secondary">
                         <NotificationsIcon/>
                     </Badge>
+                </IconButton>
+                <IconButton onClick={() => {logout(); authenticationSetter(null);}} color="inherit">
+                    <MeetingRoomIcon/>
                 </IconButton>
             </Toolbar>
         </AppBar>

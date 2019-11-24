@@ -24,6 +24,7 @@ const columns = [
 export default function EditTemplate(props) {
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
+    const token = props.auth.jwt;
     const templateId = props.param.id;
     let mdEditor = null;
 
@@ -34,7 +35,12 @@ export default function EditTemplate(props) {
 
 
     useEffect(() => {
-        request(`/templates/${templateId}`)
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/templates/${templateId}`, options)
             .then(response => setState(response.json));
     }, []);
 
@@ -43,7 +49,8 @@ export default function EditTemplate(props) {
         const options = {
             method: 'put',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify(state)
         };
@@ -101,7 +108,7 @@ export default function EditTemplate(props) {
 
     const setTitleState = (text) => {
         setState(curState => {
-            curState.userName = text;
+            curState.name = text;
             return curState;
         });
     };

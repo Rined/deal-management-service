@@ -24,8 +24,9 @@ import ErrorIcon from '@material-ui/icons/Error';
 import request from "./../../../request/request"
 
 const CURRENT_ACTION = 'list';
-export default function ListTemplates() {
+export default function ListTemplates(props) {
     const setAction = useActionSetter();
+    const token = props.auth.jwt;
     const [templates, setTemplates] = useState();
     const [dialogState, setDialogState] = React.useState({open: false});
     const [openSnack, setOpenSnack] = React.useState(false);
@@ -81,8 +82,16 @@ export default function ListTemplates() {
     };
 
     useEffect(() => {
-        request('/templates/brief')
-            .then(response => setTemplates(response.json));
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request('/templates/brief', options)
+            .then(response => setTemplates(response.json))
+            .catch(response => {
+                console.log('!!!', response);
+            });
     }, []);
 
 
@@ -91,7 +100,10 @@ export default function ListTemplates() {
         setDialogState({open: false});
         const options = {
             method: 'delete',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
         };
         request(`/templates/${templateId}`, options)
             .then((response) => {
@@ -184,7 +196,7 @@ export default function ListTemplates() {
                         <AddIcon style={{color: 'white'}}/>
                     </Fab>
                 </Grid>
-                {templates &&
+                {templates && templates.length !== 0 &&
                 <Paper style={{marginTop: 10}}>
                     <List component="nav">
                         {templates && templates.map((template, i) => (

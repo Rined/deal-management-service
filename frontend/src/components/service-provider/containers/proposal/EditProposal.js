@@ -26,6 +26,7 @@ const columns = [
 export default function EditProposal(props) {
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
+    const token = props.auth.jwt;
     const proposalId = props.param.id;
     const classes = useStyles();
 
@@ -36,7 +37,12 @@ export default function EditProposal(props) {
 
 
     useEffect(() => {
-        request(`/proposals/${proposalId}`)
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/proposals/${proposalId}`, options)
             .then(response => {
                 const proposal = response.json;
                 if (proposal.fields) {
@@ -57,7 +63,8 @@ export default function EditProposal(props) {
         const options = {
             method: 'put',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify(proposalDto)
         };
@@ -90,7 +97,7 @@ export default function EditProposal(props) {
 
     const setTitleState = (text) => {
         setState(curState => {
-            curState.userName = text;
+            curState.name = text;
             return curState;
         });
     };

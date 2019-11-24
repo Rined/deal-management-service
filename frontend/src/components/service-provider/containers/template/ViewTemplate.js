@@ -17,13 +17,19 @@ const columns = [
     {title: 'Description', field: 'description'}
 ];
 export default function ViewTemplate(props) {
+    const token = props.auth.jwt;
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
     const [state, setState] = useState();
 
     useEffect(() => {
         const templateId = props.param.id;
-        request(`/templates/${templateId}`)
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/templates/${templateId}`, options)
             .then(response => setState(response.json));
     }, []);
 

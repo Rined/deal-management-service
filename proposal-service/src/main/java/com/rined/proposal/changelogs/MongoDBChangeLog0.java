@@ -22,12 +22,12 @@ public class MongoDBChangeLog0 {
     public void initTemplates(MongoTemplate mongoTemplate) {
         mongoTemplate.save(
                 new Proposal(
-                        "Пространство в жерле вулкана",
+                        "Дом в центре леса",
                         Arrays.asList(
-                                new ProposalField("object", "объект аренды", "Жерло вулкана"),
-                                new ProposalField("description", "описание", "Теплая, уютная"),
+                                new ProposalField("object", "объект аренды", "Дом"),
+                                new ProposalField("description", "описание", "Теплый, уютный"),
                                 new ProposalField("type", "тип аренды", "Краткосрочная"),
-                                new ProposalField("address", "адрес объекта аренды", "Юг Италии"),
+                                new ProposalField("address", "адрес объекта аренды", "Центр леса"),
                                 new ProposalField("price", "цена аренды", "1000")
                         ),
                         "## Аренда ${object}\r\n\r\n" +

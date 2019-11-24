@@ -25,7 +25,8 @@ import request from "./../../../request/request"
 
 
 const CURRENT_ACTION = 'list';
-export default function ListProposal() {
+export default function ListProposal(props) {
+    const token = props.auth.jwt;
     const setAction = useActionSetter();
     const [proposals, setProposals] = useState();
     const [dialogState, setDialogState] = React.useState({open: false});
@@ -81,7 +82,12 @@ export default function ListProposal() {
     };
 
     useEffect(() => {
-        request('/proposals/brief')
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request('/proposals/brief', options)
             .then(response => setProposals(response.json));
     }, []);
 
@@ -91,7 +97,10 @@ export default function ListProposal() {
         setDialogState({open: false});
         const options = {
             method: 'delete',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
         };
         request(`/proposals/${proposalId}`, options).then((response) => {
             setPositiveSnack(true);
@@ -182,7 +191,7 @@ export default function ListProposal() {
                         <AddIcon style={{color: 'white'}}/>
                     </Fab>
                 </Grid>
-                {proposals &&
+                {proposals && proposals.length !== 0 &&
                 <Paper style={{marginTop: 10}}>
                     <List component="nav">
                         {proposals && proposals.map((proposal, i) => (

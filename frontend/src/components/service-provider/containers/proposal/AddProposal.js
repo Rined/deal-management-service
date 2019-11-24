@@ -24,8 +24,9 @@ const columns = [
     {title: 'Description', field: 'description', editable: 'never'},
     {title: 'Value', field: 'value'}
 ];
-export default function AddProposal() {
+export default function AddProposal(props) {
     const mdParser = new MarkdownIt();
+    const token = props.auth.jwt;
     const classes = useStyles();
     const setAction = useActionSetter();
 
@@ -41,7 +42,12 @@ export default function AddProposal() {
     });
 
     useEffect(() => {
-        request('/templates/brief')
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request('/templates/brief', options)
             .then(response => setTemplates(response.json));
     }, []);
 
@@ -53,7 +59,8 @@ export default function AddProposal() {
         const options = {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify(proposalDto)
         };
@@ -90,7 +97,12 @@ export default function AddProposal() {
 
     const handleChange = event => {
         const templateId = event.target.value;
-        request(`/templates/${templateId}`)
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/templates/${templateId}`, options)
             .then(response => {
                 const backendTemplate = response.json;
                 const fields = backendTemplate.fields;
@@ -113,7 +125,7 @@ export default function AddProposal() {
 
     const setTitleState = (text) => {
         setProposal(curState => {
-            curState.userName = text;
+            curState.name = text;
             return curState;
         });
     };
