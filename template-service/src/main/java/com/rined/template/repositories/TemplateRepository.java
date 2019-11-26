@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface TemplateRepository extends MongoRepository<Template, String> {
+public interface TemplateRepository extends MongoRepository<Template, String>, TemplateRepositoryCustom {
 
     @Query(value = "{'authorId': :#{#authorId}}", fields = "{_id : 1, name : 1}")
     List<TemplateBrief> getAllBriefTemplates(@Param("authorId") String authorId);

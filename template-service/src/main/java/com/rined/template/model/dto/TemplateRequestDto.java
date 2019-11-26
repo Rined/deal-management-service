@@ -1,4 +1,4 @@
-package com.rined.template.controllers.dto;
+package com.rined.template.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rined.template.model.TemplateField;

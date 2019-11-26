@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProposalRepository extends MongoRepository<Proposal, String> {
+public interface ProposalRepository extends MongoRepository<Proposal, String>, ProposalRepositoryCustom {
 
     @Query(value = "{}", fields = "{_id : 1, name : 1}")
     List<ProposalBrief> getAllBriefProposalsForConsumer();

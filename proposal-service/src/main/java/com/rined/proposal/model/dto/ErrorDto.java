@@ -1,8 +1,7 @@
-package com.rined.template.controllers.dto;
+package com.rined.proposal.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

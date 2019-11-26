@@ -1,6 +1,6 @@
 package com.rined.template.controllers;
 
-import com.rined.template.controllers.dto.ErrorDto;
+import com.rined.template.model.dto.ErrorDto;
 import com.rined.template.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

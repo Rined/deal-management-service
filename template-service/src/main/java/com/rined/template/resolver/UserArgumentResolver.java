@@ -1,6 +1,6 @@
 package com.rined.template.resolver;
 
-import com.rined.template.controllers.dto.UserDto;
+import com.rined.template.model.dto.UserDto;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

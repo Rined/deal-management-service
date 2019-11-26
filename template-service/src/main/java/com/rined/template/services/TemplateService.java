@@ -1,8 +1,8 @@
 package com.rined.template.services;
 
 
-import com.rined.template.controllers.dto.TemplateRequestDto;
-import com.rined.template.controllers.dto.UserDto;
+import com.rined.template.model.dto.TemplateRequestDto;
+import com.rined.template.model.dto.UserDto;
 import com.rined.template.model.Template;
 import com.rined.template.model.TemplateBrief;
 

@@ -1,4 +1,4 @@
-package com.rined.template.controllers.dto;
+package com.rined.template.model.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

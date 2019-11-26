@@ -1,4 +1,4 @@
-package com.rined.proposal.controllers.dto;
+package com.rined.template.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

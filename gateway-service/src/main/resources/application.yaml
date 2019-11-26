@@ -21,3 +21,26 @@ zuul:
       sensitiveHeaders: Cookie, Set-Cookie, Authorization
       path: /templates/**
       url: http://localhost:8083
+
+logging:
+  file: 'logs/@project.artifactId@/log.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
+  level:
+    root: info
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    logfile:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'

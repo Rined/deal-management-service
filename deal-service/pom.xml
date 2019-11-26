@@ -17,7 +17,6 @@
 
     <properties>
         <swagger.version>2.8.0</swagger.version>
-        <sping.version>5.1.5.RELEASE</sping.version>
         <logback.version>1.2.3</logback.version>
         <lombok.version>1.18.6</lombok.version>
         <slf4j.version>1.7.26</slf4j.version>

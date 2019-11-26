@@ -1,8 +1,8 @@
 package com.rined.proposal.service;
 
-import com.rined.proposal.controllers.dto.ProposalRequestDto;
-import com.rined.proposal.controllers.dto.ProposalRequestUpdateDto;
-import com.rined.proposal.controllers.dto.UserDto;
+import com.rined.proposal.model.dto.ProposalRequestDto;
+import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
+import com.rined.proposal.model.dto.UserDto;
 import com.rined.proposal.model.Proposal;
 import com.rined.proposal.model.ProposalBrief;
 
