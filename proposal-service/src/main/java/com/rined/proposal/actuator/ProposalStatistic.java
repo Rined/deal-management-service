@@ -15,7 +15,7 @@ public class ProposalStatistic {
 
     @ReadOperation
     public Statistic getStatistic() {
-        final Statistic statistic = repository.countOfUsersThatCreateProposal();
+        final Statistic statistic = repository.countOfProvidersThatCreateProposal();
         statistic.setProposalCount(repository.count());
         return statistic;
     }

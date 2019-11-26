@@ -4,6 +4,6 @@ import com.rined.template.model.statistic.Statistic;
 
 public interface TemplateRepositoryCustom {
 
-    Statistic countOfUsersThatCreateTemplate();
+    Statistic countOfProvidersThatCreateTemplate();
 
 }

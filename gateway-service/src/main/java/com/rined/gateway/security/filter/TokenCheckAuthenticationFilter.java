@@ -11,12 +11,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
 public class TokenCheckAuthenticationFilter extends GenericFilterBean {
-    private static final String header = "Authorization";
+    private static final String HEADER = "Authorization";
 
     private final AuthenticationManager manager;
 
@@ -29,7 +28,7 @@ public class TokenCheckAuthenticationFilter extends GenericFilterBean {
                          ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authHeader = httpServletRequest.getHeader(header);
+        String authHeader = httpServletRequest.getHeader(HEADER);
         if (Objects.nonNull(authHeader)) {
             Authentication authenticate = manager.authenticate(new TokenAuthentication(authHeader));
             if (authenticate.isAuthenticated()) {

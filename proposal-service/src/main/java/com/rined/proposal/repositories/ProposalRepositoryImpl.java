@@ -11,12 +11,11 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 public class ProposalRepositoryImpl implements ProposalRepositoryCustom {
     private final MongoTemplate template;
 
-
     @Override
-    public Statistic countOfUsersThatCreateProposal() {
+    public Statistic countOfProvidersThatCreateProposal() {
         Aggregation aggregation = Aggregation.newAggregation(
-                group("authorId"),
-                group().count().as("userCount")
+                group("providerId"),
+                group().count().as("providerCount")
         );
         return template.aggregate(aggregation, "proposal", Statistic.class)
                 .getUniqueMappedResult();

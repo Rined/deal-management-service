@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.StringJoiner;
 
+@SuppressWarnings("Duplicates")
 @ResponseBody
 @ControllerAdvice
 @RequiredArgsConstructor

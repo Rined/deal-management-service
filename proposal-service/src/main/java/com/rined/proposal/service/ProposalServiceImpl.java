@@ -2,7 +2,7 @@ package com.rined.proposal.service;
 
 import com.rined.proposal.model.dto.ProposalRequestDto;
 import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
-import com.rined.proposal.model.dto.UserDto;
+import com.rined.proposal.model.dto.ProviderDto;
 import com.rined.proposal.converter.ProposalConverter;
 import com.rined.proposal.exception.NotFoundException;
 import com.rined.proposal.model.Proposal;
@@ -20,30 +20,30 @@ public class ProposalServiceImpl implements ProposalService {
     private final ProposalConverter converter;
 
     @Override
-    public List<Proposal> getAllProposals(UserDto userDto) {
-        return repository.findAllByAuthorId(userDto.getId());
+    public List<Proposal> getAllProposals(ProviderDto providerDto) {
+        return repository.findAllByProviderId(providerDto.getId());
     }
 
     @Override
-    public Proposal getProposalById(String proposalId, UserDto userDto) {
-        return repository.findByIdAndAuthorId(proposalId, userDto.getId())
+    public Proposal getProposalById(String proposalId, ProviderDto providerDto) {
+        return repository.findByIdAndProviderId(proposalId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", proposalId));
     }
 
     @Override
-    public void deleteById(String proposalId, UserDto userDto) {
-        repository.deleteByIdAndAuthorId(proposalId, userDto.getId());
+    public void deleteById(String proposalId, ProviderDto providerDto) {
+        repository.deleteByIdAndProviderId(proposalId, providerDto.getId());
     }
 
     @Override
-    public void createProposal(ProposalRequestDto proposalDto, UserDto userDto) {
-        Proposal proposal = converter.requestDtoToBean(proposalDto, userDto);
+    public void createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto) {
+        Proposal proposal = converter.requestDtoToBean(proposalDto, providerDto);
         repository.save(proposal);
     }
 
     @Override
-    public void updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, UserDto userDto) {
-        Proposal proposal = repository.findByIdAndAuthorId(proposalId, userDto.getId())
+    public void updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto) {
+        Proposal proposal = repository.findByIdAndProviderId(proposalId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", proposalId));
         proposal.setProposalName(proposalDto.getProposalName());
         proposal.setFields(proposalDto.getFields());
@@ -51,7 +51,7 @@ public class ProposalServiceImpl implements ProposalService {
     }
 
     @Override
-    public List<ProposalBrief> getAllBriefProposals(UserDto userDto) {
-        return repository.getAllBriefProposals(userDto.getId());
+    public List<ProposalBrief> getAllBriefProposals(ProviderDto providerDto) {
+        return repository.getAllBriefProposals(providerDto.getId());
     }
 }

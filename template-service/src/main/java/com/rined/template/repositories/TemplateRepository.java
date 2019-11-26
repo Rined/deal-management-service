@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface TemplateRepository extends MongoRepository<Template, String>, TemplateRepositoryCustom {
 
-    @Query(value = "{'authorId': :#{#authorId}}", fields = "{_id : 1, name : 1}")
-    List<TemplateBrief> getAllBriefTemplates(@Param("authorId") String authorId);
+    @Query(value = "{'providerId': :#{#providerId}}", fields = "{_id : 1, name : 1}")
+    List<TemplateBrief> getAllBriefTemplates(@Param("providerId") String providerId);
 
-    List<Template> findAllByAuthorId(String authorId);
+    List<Template> findAllByProviderId(String providerId);
 
-    Optional<Template> findByIdAndAuthorId(String id, String authorId);
+    Optional<Template> findByIdAndProviderId(String id, String providerId);
 
-    void deleteByIdAndAuthorId(String id, String authorId);
+    void deleteByIdAndProviderId(String id, String providerId);
 }

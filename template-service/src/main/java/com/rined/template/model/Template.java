@@ -34,8 +34,8 @@ public class Template {
     private String format;
 
     @JsonIgnore
-    @Field("authorId")
-    private String authorId;
+    @Field("providerId")
+    private String providerId;
 
     public Template(String templateName, List<TemplateField> fields, String format) {
         this.templateName = templateName;
@@ -43,10 +43,10 @@ public class Template {
         this.format = format;
     }
 
-    public Template(String templateName, List<TemplateField> fields, String format, String authorId) {
+    public Template(String templateName, List<TemplateField> fields, String format, String providerId) {
         this.templateName = templateName;
         this.fields = fields;
         this.format = format;
-        this.authorId = authorId;
+        this.providerId = providerId;
     }
 }

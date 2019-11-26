@@ -1,7 +1,7 @@
 package com.rined.template.services;
 
 import com.rined.template.model.dto.TemplateRequestDto;
-import com.rined.template.model.dto.UserDto;
+import com.rined.template.model.dto.ProviderDto;
 import com.rined.template.converter.TemplateConverter;
 import com.rined.template.exception.NotFoundException;
 import com.rined.template.model.Template;
@@ -19,30 +19,30 @@ public class TemplateServiceImpl implements TemplateService {
     private final TemplateConverter converter;
 
     @Override
-    public List<Template> getAllTemplates(UserDto userDto) {
-        return repository.findAllByAuthorId(userDto.getId());
+    public List<Template> getAllTemplates(ProviderDto providerDto) {
+        return repository.findAllByProviderId(providerDto.getId());
     }
 
     @Override
-    public Template getTemplateById(String templateId, UserDto userDto) {
-        return repository.findByIdAndAuthorId(templateId, userDto.getId())
+    public Template getTemplateById(String templateId, ProviderDto providerDto) {
+        return repository.findByIdAndProviderId(templateId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Template with id %s not found!", templateId));
     }
 
     @Override
-    public void deleteById(String templateId, UserDto userDto) {
-        repository.deleteByIdAndAuthorId(templateId, userDto.getId());
+    public void deleteById(String templateId, ProviderDto providerDto) {
+        repository.deleteByIdAndProviderId(templateId, providerDto.getId());
     }
 
     @Override
-    public void createTemplate(TemplateRequestDto templateDto, UserDto userDto) {
-        Template template = converter.requestDtoToBean(templateDto, userDto);
+    public void createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto) {
+        Template template = converter.requestDtoToBean(templateDto, providerDto);
         repository.save(template);
     }
 
     @Override
-    public void updateTemplate(String templateId, TemplateRequestDto templateDto, UserDto userDto) {
-        Template template = repository.findByIdAndAuthorId(templateId, userDto.getId())
+    public void updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto) {
+        Template template = repository.findByIdAndProviderId(templateId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", templateId));
         template.setFields(templateDto.getFields());
         template.setFormat(templateDto.getFormat());
@@ -51,7 +51,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public List<TemplateBrief> getAllBriefTemplates(UserDto userDto) {
-        return repository.getAllBriefTemplates(userDto.getId());
+    public List<TemplateBrief> getAllBriefTemplates(ProviderDto providerDto) {
+        return repository.getAllBriefTemplates(providerDto.getId());
     }
 }

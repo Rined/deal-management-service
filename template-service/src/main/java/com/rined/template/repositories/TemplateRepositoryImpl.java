@@ -12,10 +12,10 @@ public class TemplateRepositoryImpl implements TemplateRepositoryCustom {
     private final MongoTemplate template;
 
     @Override
-    public Statistic countOfUsersThatCreateTemplate() {
+    public Statistic countOfProvidersThatCreateTemplate() {
         Aggregation aggregation = Aggregation.newAggregation(
-                group("authorId"),
-                group().count().as("userCount")
+                group("providerId"),
+                group().count().as("providerCount")
         );
         return template.aggregate(aggregation, "template", Statistic.class)
                 .getUniqueMappedResult();

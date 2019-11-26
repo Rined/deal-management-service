@@ -1,6 +1,6 @@
 package com.rined.proposal.resolver;
 
-import com.rined.proposal.model.dto.UserDto;
+import com.rined.proposal.model.dto.ProviderDto;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -10,11 +10,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.Objects;
 
 @SuppressWarnings("NullableProblems")
-public class UserArgumentResolver implements HandlerMethodArgumentResolver {
+public class ProviderArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterAnnotation(User.class) != null;
+        return parameter.getParameterAnnotation(Provider.class) != null;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
-        return new UserDto(
+        return new ProviderDto(
                 Objects.requireNonNull(webRequest.getHeader("userId")),
                 Objects.requireNonNull(webRequest.getHeader("username")),
                 Objects.requireNonNull(webRequest.getHeader("userEmail"))

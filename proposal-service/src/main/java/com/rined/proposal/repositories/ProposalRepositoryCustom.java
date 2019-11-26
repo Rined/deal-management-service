@@ -4,6 +4,6 @@ import com.rined.proposal.model.statistic.Statistic;
 
 public interface ProposalRepositoryCustom {
 
-    Statistic countOfUsersThatCreateProposal();
+    Statistic countOfProvidersThatCreateProposal();
 
 }

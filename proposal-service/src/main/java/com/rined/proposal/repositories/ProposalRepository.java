@@ -14,13 +14,13 @@ public interface ProposalRepository extends MongoRepository<Proposal, String>, P
     @Query(value = "{}", fields = "{_id : 1, name : 1}")
     List<ProposalBrief> getAllBriefProposalsForConsumer();
 
-    @Query(value = "{'authorId': :#{#authorId}}", fields = "{_id : 1, name : 1}")
-    List<ProposalBrief> getAllBriefProposals(@Param("authorId") String authorId);
+    @Query(value = "{'providerId': :#{#providerId}}", fields = "{_id : 1, name : 1}")
+    List<ProposalBrief> getAllBriefProposals(@Param("providerId") String providerId);
 
-    Optional<Proposal> findByIdAndAuthorId(String id, String authorId);
+    Optional<Proposal> findByIdAndProviderId(String id, String providerId);
 
-    void deleteByIdAndAuthorId(String id, String authorId);
+    void deleteByIdAndProviderId(String id, String providerId);
 
-    List<Proposal> findAllByAuthorId(String authorId);
+    List<Proposal> findAllByProviderId(String providerId);
 
 }

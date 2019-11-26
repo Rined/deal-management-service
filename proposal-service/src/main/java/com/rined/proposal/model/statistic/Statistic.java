@@ -13,7 +13,7 @@ public class Statistic {
     @JsonProperty(value = "count")
     private long proposalCount;
 
-    @JsonProperty(value = "userCount")
-    private long userCount;
+    @JsonProperty(value = "providerCount")
+    private long providerCount;
 
 }
