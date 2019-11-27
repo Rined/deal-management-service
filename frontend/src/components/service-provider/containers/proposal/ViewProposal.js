@@ -30,7 +30,7 @@ export default function ViewProposal(props) {
                 'Authorization': token
             }
         };
-        request(`/proposals/${proposalId}`, options)
+        request(`/proposals/api/proposals/${proposalId}`, options)
             .then(response => setState(response.json));
     }, []);
 

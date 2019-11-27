@@ -18,7 +18,7 @@ export default function ListProposal(props) {
                 'Authorization': token
             }
         };
-        request('/proposals/consumer/brief', options)
+        request('/proposals/api/proposals/consumer/brief', options)
             .then(response => setProposals(response.json));
     }, []);
 

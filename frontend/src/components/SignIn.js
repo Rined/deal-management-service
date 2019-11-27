@@ -36,13 +36,15 @@ export default function SignIn() {
                 body: JSON.stringify(credential)
             };
             request('/auth/login', options)
-                .then(response => {
-                    authenticate(response.json.token);
-                    setAuth(getAuthentication());
-                })
-                .catch(response => {
-                    setGlobalError(response.json.description);
-                });
+                .then(
+                    (response) => {
+                        authenticate(response.json.token);
+                        setAuth(getAuthentication());
+                    },
+                    (response) => {
+                        setGlobalError(response.json.description);
+                    }
+                );
         }
     };
     const validate = (username, password) => {

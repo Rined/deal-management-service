@@ -42,7 +42,7 @@ export default function EditProposal(props) {
                 'Authorization': token
             }
         };
-        request(`/proposals/${proposalId}`, options)
+        request(`/proposals/api/proposals/${proposalId}`, options)
             .then(response => {
                 const proposal = response.json;
                 if (proposal.fields) {
@@ -68,7 +68,7 @@ export default function EditProposal(props) {
             },
             body: JSON.stringify(proposalDto)
         };
-        request(`/proposals/${proposalId}`, options)
+        request(`/proposals/api/proposals/${proposalId}`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);

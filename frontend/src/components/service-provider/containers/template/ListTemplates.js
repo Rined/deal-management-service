@@ -87,7 +87,7 @@ export default function ListTemplates(props) {
                 'Authorization': token
             }
         };
-        request('/templates/brief', options)
+        request('/templates/api/templates/brief', options)
             .then(response => setTemplates(response.json))
             .catch(response => {
                 console.log('!!!', response);
@@ -105,7 +105,7 @@ export default function ListTemplates(props) {
                 'Authorization': token
             },
         };
-        request(`/templates/${templateId}`, options)
+        request(`/templates/api/templates/${templateId}`, options)
             .then((response) => {
                 setPositiveSnack(true);
                 removeTemplateById(templateId);

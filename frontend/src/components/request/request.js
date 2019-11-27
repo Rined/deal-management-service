@@ -26,5 +26,15 @@ export default function request(url, options) {
                 }
                 return reject(response);
             })
+            .catch((response) => {
+                console.log('!@#', response);
+                return reject({
+                    status: 404,
+                    ok: false,
+                    json: {
+                        description: 'Connection problem!'
+                    }
+                });
+            })
     });
 }

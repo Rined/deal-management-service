@@ -42,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/proposals/consumer/**").hasAnyAuthority(Role.CONSUMER.name())
-                .antMatchers("/proposals/**").hasAnyAuthority(Role.PROVIDER.name())
-                .antMatchers("/templates/**").hasAnyAuthority(Role.PROVIDER.name())
+                .antMatchers("/proposals/api/proposals/consumer/**").hasAnyAuthority(Role.CONSUMER.name())
+                .antMatchers("/proposals/api/proposals/**").hasAnyAuthority(Role.PROVIDER.name())
+                .antMatchers("/templates/api/templates/**").hasAnyAuthority(Role.PROVIDER.name())
 
                 .and()
                 .formLogin().disable()

@@ -47,8 +47,11 @@ export default function AddProposal(props) {
                 'Authorization': token
             }
         };
-        request('/templates/brief', options)
-            .then(response => setTemplates(response.json));
+        request('/templates/api/templates/brief', options)
+            .then(response => {
+                console.log(response);
+                setTemplates(response.json);
+            });
     }, []);
 
     const save = () => {
@@ -64,7 +67,7 @@ export default function AddProposal(props) {
             },
             body: JSON.stringify(proposalDto)
         };
-        request(`/proposals`, options)
+        request(`/proposals/api/proposals`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);
@@ -102,7 +105,7 @@ export default function AddProposal(props) {
                 'Authorization': token
             }
         };
-        request(`/templates/${templateId}`, options)
+        request(`/templates/api/templates/${templateId}`, options)
             .then(response => {
                 const backendTemplate = response.json;
                 const fields = backendTemplate.fields;
@@ -232,9 +235,10 @@ export default function AddProposal(props) {
                         )) : <MenuItem/>}
                 </TextField>
 
-                {
-                    proposal.template && proposal.template.format
-                        ? <div style={{width: "100%"}}>
+                <div style={{width: "100%"}}>
+                    {
+                        proposal.template && proposal.template.id &&
+                        <React.Fragment>
                             <TextField
                                 autoComplete="off"
                                 id="standard-basic"
@@ -262,9 +266,9 @@ export default function AddProposal(props) {
                                         }),
                                 }}
                             />
-                        </div>
-                        : <React.Fragment/>
-                }
+                        </React.Fragment>
+                    }
+                </div>
             </div>
         </React.Fragment>
     );

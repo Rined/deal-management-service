@@ -40,7 +40,7 @@ export default function EditTemplate(props) {
                 'Authorization': token
             }
         };
-        request(`/templates/${templateId}`, options)
+        request(`/templates/api/templates/${templateId}`, options)
             .then(response => setState(response.json));
     }, []);
 
@@ -54,7 +54,7 @@ export default function EditTemplate(props) {
             },
             body: JSON.stringify(state)
         };
-        request(`/templates/${templateId}`, options)
+        request(`/templates/api/templates/${templateId}`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);

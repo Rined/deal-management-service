@@ -29,7 +29,7 @@ export default function ViewTemplate(props) {
                 'Authorization': token
             }
         };
-        request(`/templates/${templateId}`, options)
+        request(`/templates/api/templates/${templateId}`, options)
             .then(response => setState(response.json));
     }, []);
 

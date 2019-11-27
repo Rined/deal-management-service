@@ -87,7 +87,7 @@ export default function ListProposal(props) {
                 'Authorization': token
             }
         };
-        request('/proposals/brief', options)
+        request('/proposals/api/proposals/brief', options)
             .then(response => setProposals(response.json));
     }, []);
 
@@ -102,7 +102,7 @@ export default function ListProposal(props) {
                 'Authorization': token
             },
         };
-        request(`/proposals/${proposalId}`, options).then((response) => {
+        request(`/proposals/api/proposals/${proposalId}`, options).then((response) => {
             setPositiveSnack(true);
             removeProposalById(proposalId);
             setOpenSnack(true);

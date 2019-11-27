@@ -46,7 +46,7 @@ export default function AddTemplate(props) {
             },
             body: JSON.stringify(state)
         };
-        request(`/templates`, options)
+        request(`/templates/api/templates`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);

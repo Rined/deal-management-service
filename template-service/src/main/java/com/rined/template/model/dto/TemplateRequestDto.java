@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class TemplateRequestDto {
 
-    @NotNull
     @JsonProperty("name")
+    @NotNull(message = "Template name is mandatory")
     @NotBlank(message = "Template name is mandatory")
     private String templateName;
 
@@ -22,6 +22,8 @@ public class TemplateRequestDto {
     private List<TemplateField> fields;
 
     @JsonProperty("format")
+    @NotNull(message = "Template text is mandatory")
+    @NotBlank(message = "Template text is mandatory")
     private String format;
 
 }
