@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  template:
+    image: template-service
+    container_name: template-container
+    build:
+      context: .
+      dockerfile: ./docker/template/Dockerfile
+    ports:
+      - 8083:8083
