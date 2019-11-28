@@ -4,11 +4,12 @@ server:
 spring:
   data:
     mongodb:
-      port: 0
+      host: template-mongo-container
+      port: 27017
       database: template-service
-#      uri: mongodb://localhost
-#      port: 27017
+#      port: 0
 #      database: template-service
+#      uri: mongodb://localhost
 
 logging:
   file: 'logs/@project.artifactId@/log.log'

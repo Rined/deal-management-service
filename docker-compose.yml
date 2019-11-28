@@ -2,10 +2,18 @@ version: '3'
 
 services:
   template:
-    image: template-service
-    container_name: template-container
+    image: template-image
+    container_name: template-service-container
+    ports:
+      - 8083:8083
     build:
       context: .
       dockerfile: ./docker/template/Dockerfile
+    depends_on:
+      - template-mongo
+  template-mongo:
+    image: mongo:latest
+    container_name: template-mongo-container
+    restart: always
     ports:
-      - 8083:8083
+      - 27017:27017
