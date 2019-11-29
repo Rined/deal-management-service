@@ -1,10 +1,12 @@
 package com.rined.proposal.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.rined.proposal.model.dto.ProposalRequestDto;
 import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
 import com.rined.proposal.model.dto.ProviderDto;
 import com.rined.proposal.model.Proposal;
 import com.rined.proposal.model.ProposalBrief;
+import com.rined.proposal.model.dto.Views;
 import com.rined.proposal.resolver.Provider;
 import com.rined.proposal.service.ProposalConsumerService;
 import com.rined.proposal.service.ProposalService;
@@ -27,6 +29,7 @@ public class ProposalController {
     private final ProposalConsumerService consumerService;
 
     @GetMapping("/proposals")
+    @JsonView(Views.Provider.class)
     @ApiOperation(value = "Получить предложения поставщика")
     public List<Proposal> getAllProviderProposals(@ApiIgnore @Provider ProviderDto providerDto) {
         return service.getAllProposals(providerDto);
@@ -38,6 +41,13 @@ public class ProposalController {
         return consumerService.getBriefProposals();
     }
 
+    @JsonView(Views.Consumer.class)
+    @GetMapping("/proposals/consumer/{proposalId}")
+    @ApiOperation(value = "Получить предложение поставщика по id для потребителя")
+    public Proposal getProposal(@PathVariable("proposalId") String proposalId) {
+        return service.getProposalById(proposalId);
+    }
+
     @GetMapping("/proposals/brief")
     @ApiOperation(value = "Получить сокращенные предложения поставщика")
     public List<ProposalBrief> getAllBriefProviderProposals(@ApiIgnore @Provider ProviderDto providerDto) {
@@ -45,6 +55,7 @@ public class ProposalController {
     }
 
     @GetMapping("/proposals/{proposalId}")
+    @JsonView(Views.Provider.class)
     @ApiOperation(value = "Получить предложение поставщика по id")
     public Proposal getProviderProposal(@PathVariable("proposalId") String proposalId,
                                         @ApiIgnore @Provider ProviderDto providerDto) {

@@ -1,7 +1,8 @@
 package com.rined.proposal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.rined.proposal.model.dto.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,22 +20,26 @@ public class Proposal {
 
     @Id
     @JsonProperty("id")
+    @JsonView(Views.Provider.class)
     private String id;
 
     @Field("name")
     @JsonProperty("name")
+    @JsonView(Views.Provider.class)
     private String proposalName;
 
     @Field("fields")
     @JsonProperty("fields")
+    @JsonView(Views.Provider.class)
     private List<ProposalField> fields;
 
     @Field("format")
     @JsonProperty("format")
+    @JsonView(Views.Provider.class)
     private String templateFormat;
 
-    @JsonIgnore
     @Field("providerId")
+    @JsonView(Views.Consumer.class)
     private String providerId;
 
     public Proposal(String proposalName, List<ProposalField> fields, String templateFormat) {

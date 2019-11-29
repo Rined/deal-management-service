@@ -31,6 +31,12 @@ public class ProposalServiceImpl implements ProposalService {
     }
 
     @Override
+    public Proposal getProposalById(String proposalId) {
+        return repository.findById(proposalId)
+                .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", proposalId));
+    }
+
+    @Override
     public void deleteById(String proposalId, ProviderDto providerDto) {
         repository.deleteByIdAndProviderId(proposalId, providerDto.getId());
     }

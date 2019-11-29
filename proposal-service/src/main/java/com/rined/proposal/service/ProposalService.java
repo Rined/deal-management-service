@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ProposalService {
 
+    Proposal getProposalById(String proposalId);
+
     List<Proposal> getAllProposals(ProviderDto providerDto);
 
     Proposal getProposalById(String proposalId, ProviderDto providerDto);

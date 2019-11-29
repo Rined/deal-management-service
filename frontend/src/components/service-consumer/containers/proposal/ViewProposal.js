@@ -1,0 +1,109 @@
+import React, {useEffect, useState} from 'react';
+import {useActionSetter} from "./../../../contexts/ProposalConsumerContext";
+import request from "./../../../request/request"
+import MarkdownIt from "markdown-it";
+import ReactHtmlParser from 'react-html-parser';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+
+const CURRENT_ACTION = 'view';
+export default function ViewProposal(props) {
+    const mdParser = new MarkdownIt();
+
+    const token = props.auth.jwt;
+    const setAction = useActionSetter();
+    const [state, setState] = useState();
+
+    useEffect(() => {
+        const proposalId = props.param.id;
+        const options = {
+            headers: {
+                'Authorization': token
+            }
+        };
+        request(`/proposals/api/proposals/consumer/${proposalId}`, options)
+            .then(response => {
+                let data = response.json;
+                console.log(data);
+                const htmlText = customHtmlRender(data.format, data.fields);
+                setState({
+                    id: data.id,
+                    name: data.name,
+                    dealSubject: htmlText,
+                    providerId: data.providerId
+                });
+            });
+    }, []);
+
+    const handleBack = () => {
+        setAction({
+            action: 'list',
+            previousAction: CURRENT_ACTION
+        });
+    };
+
+    const customHtmlRender = (text, data) => {
+        if (!text)
+            return "";
+        const codeQuote = "```";
+        let templateArr = text.match(/\${.+}/g) || [];
+        templateArr.forEach(function (item) {
+            if (data) {
+                const replaceObject = data.find(dataItem => dataItem.name === item.substring(2, item.length - 1));
+                let replacer;
+                let isValue = false;
+                if (replaceObject) {
+                    if (replaceObject.value) {
+                        replacer = replaceObject.value;
+                        isValue = true;
+                    } else {
+                        replacer = replaceObject.description;
+                    }
+                } else replacer = "UNKNOWN!!!";
+                text = text.replace(item, replacer.length === 0 ? "" :
+                    (isValue ? `${replacer}` : `${codeQuote}${replacer}${codeQuote}`));
+            }
+        });
+        return mdParser.render(text);
+    };
+
+
+    return (
+        <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
+            <Grid container direction="row" justify="space-between" alignItems="baseline">
+                {state && state.name &&
+                <div>
+                    <Typography component="h1" display="inline" variant="h4" color="inherit">
+                        {state.name}
+                    </Typography>
+                </div>
+                }
+            </Grid>
+            {
+                state && state.dealSubject ?
+                    <Paper style={{padding: 7, marginTop: 10, marginBottom: 10}}>
+                        {ReactHtmlParser(state.dealSubject)}
+                    </Paper>
+                    : <React.Fragment/>
+            }
+            <div>
+                <Button style={{marginRight: 10}}
+                        variant="contained"
+                        size="large"
+                        onClick={() => console.log(state)}
+                        color="primary">
+                    DEAL
+                </Button>
+                <Button style={{marginLeft: 10}}
+                        variant="contained"
+                        onClick={() => handleBack()}
+                        size="large">
+                    BACK
+                </Button>
+            </div>
+        </div>
+    );
+
+}

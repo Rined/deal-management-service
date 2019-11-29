@@ -3,6 +3,7 @@ import {useTitleSetter} from "../../../contexts/TitleContext";
 import {useAction} from "./../../../contexts/ProposalConsumerContext";
 import {useAuth} from "../../../contexts/AuthContext";
 import ListProposal from "./ListProposal";
+import ViewProposal from "./ViewProposal";
 
 const TITLE = 'Proposals';
 export default function Proposal() {
@@ -23,6 +24,8 @@ function getActionContent(activeAction, auth) {
     switch (activeAction.action) {
         case 'list':
             return <ListProposal auth={auth}/>;
+        case 'view':
+            return <ViewProposal auth={auth} param={activeAction}/>;
         default:
             throw new Error('Unknown action');
     }
