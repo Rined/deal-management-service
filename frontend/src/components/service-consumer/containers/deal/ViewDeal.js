@@ -13,7 +13,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 
 const CURRENT_ACTION = 'view';
-export default function ViewProposal(props) {
+export default function ViewDeal(props) {
     const mdParser = new MarkdownIt();
 
     const token = props.auth.jwt;

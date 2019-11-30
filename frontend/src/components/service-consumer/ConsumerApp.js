@@ -3,6 +3,8 @@ import {Route} from "react-router-dom";
 import ConsumerDashboard from './containers/ConsumerDashboard'
 import {ProposalConsumerProvider} from "../contexts/ProposalConsumerContext";
 import Proposal from "./containers/proposal/Proposal";
+import {DealConsumerProvider} from "../contexts/DealConsumerContext";
+import Deal from "./containers/deal/Deal";
 
 export default function ConsumerApp() {
     return (
@@ -14,6 +16,11 @@ export default function ConsumerApp() {
                 <ProposalConsumerProvider>
                     <Proposal />
                 </ProposalConsumerProvider>
+            </Route>
+            <Route exact path="/deals">
+                <DealConsumerProvider>
+                    <Deal />
+                </DealConsumerProvider>
             </Route>
         </React.Fragment>
     )

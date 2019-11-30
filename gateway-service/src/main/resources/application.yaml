@@ -21,6 +21,10 @@ zuul:
       sensitiveHeaders: Cookie, Set-Cookie, Authorization
       path: /templates/**
       url: http://localhost:8083
+    deal:
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /deals/**
+      url: http://localhost:8084
 
 logging:
   file: 'logs/@project.artifactId@/log.log'
