@@ -1,5 +1,7 @@
 package com.rined.deal.services;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.rined.deal.converter.DealConverter;
 import com.rined.deal.exception.InvalidStateChange;
 import com.rined.deal.exception.NotFoundException;
@@ -27,16 +29,25 @@ public class DealStateServiceImpl implements DealStateService {
     private final DealConverter converter;
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal declineConsumer(String dealId, ConsumerDto consumer) {
         return changeConsumerState(dealId, consumer.getId(), CONSUMER_DECLINE);
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal acceptConsumer(String dealId, ConsumerDto consumerDto) {
         return changeConsumerState(dealId, consumerDto.getId(), PROVIDER_REQUEST_INFO);
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal requestInfoProvider(String dealId, ProviderDto providerDto, DealRequestInfoDto dealRequestInfoDto) {
         Deal deal = repository.findByIdAndProviderId(dealId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
@@ -51,6 +62,9 @@ public class DealStateServiceImpl implements DealStateService {
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal requestInfoConsumer(String dealId, ConsumerDto consumerDto, DealConsumerRequestInfoDto requestInfo) {
         Deal deal = repository.findByIdAndConsumerId(dealId, consumerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
@@ -68,16 +82,25 @@ public class DealStateServiceImpl implements DealStateService {
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal declineProvider(String dealId, ProviderDto provider) {
         return changeProviderState(dealId, provider.getId(), PROVIDER_DECLINE);
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal acceptProvider(String dealId, ProviderDto providerDto) {
         return changeProviderState(dealId, providerDto.getId(), CONSUMER_ACCEPT);
     }
 
     @Override
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+    })
     public Deal doneProvider(String dealId, ProviderDto providerDto) {
         return changeProviderState(dealId, providerDto.getId(), DONE);
     }
