@@ -5,9 +5,41 @@ spring:
   data:
     mongodb:
       database: deal-service
+      host: localhost
       port: 27017
 
 logging:
+  file: 'logs/@project.artifactId@/log.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
   level:
     root: info
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    logfile:
+      enabled: true
+    env:
+      enabled: true
+    deal-statistic:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'
+
+info:
+  app:
+    name: @project.artifactId@
+    description: @project.description@
+    version: @project.version@

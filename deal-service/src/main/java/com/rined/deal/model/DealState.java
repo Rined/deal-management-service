@@ -11,22 +11,20 @@ public enum DealState {
     DONE(null),
 
     // в процессе выполнения
-    IN_PROGRESS(DONE),
+    IN_WORK(DONE),
 
     // согласовано - здесь становится доступна инфа о поставщике и потребителе
-    AGREED(IN_PROGRESS),
+    CONSUMER_PROVIDE_INFO(IN_WORK),
 
     // ожидается заполнение информации от потребителя и поставщика
-    WAIT_INFO(AGREED),
+    PROVIDER_REQUEST_INFO(CONSUMER_PROVIDE_INFO),
 
     // согласны обе стороны
-    ACCEPTED(WAIT_INFO),
+    CONSUMER_ACCEPT(PROVIDER_REQUEST_INFO),
 
     // провайдер согласился на сделку
-    PROVIDER_ACCEPT(ACCEPTED),
+    PROVIDER_ACCEPT(CONSUMER_ACCEPT);
 
-    // первая стадия, когда consumer согласился на предложение
-    WAIT_PROVIDER(PROVIDER_ACCEPT);
 
     private final DealState nextState;
 

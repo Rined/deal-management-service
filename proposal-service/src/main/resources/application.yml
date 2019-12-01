@@ -6,7 +6,8 @@ spring:
     name: "proposal"
   data:
     mongodb:
-      port: 0
+      host: localhost
+      port: 27017
       database: proposal-service
 #      uri: mongodb://localhost
 #      port: 27017

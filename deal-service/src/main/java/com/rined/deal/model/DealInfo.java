@@ -3,7 +3,10 @@ package com.rined.deal.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,5 +21,9 @@ public class DealInfo {
 
     @Field("subject")
     private String dealSubject;
+
+    @Setter
+    @Field("fields")
+    private List<FieldInfo> info;
 
 }

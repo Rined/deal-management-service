@@ -1,6 +1,6 @@
 package com.rined.deal.services;
 
-import com.rined.deal.converter.DealConveter;
+import com.rined.deal.converter.DealConverter;
 import com.rined.deal.exception.NotFoundException;
 import com.rined.deal.model.Deal;
 import com.rined.deal.model.DealBrief;
@@ -12,13 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DealServiceImpl implements DealService {
     private final DealRepository repository;
-    private final DealConveter converter;
+    private final DealConverter converter;
 
     @Override
     public void createDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {

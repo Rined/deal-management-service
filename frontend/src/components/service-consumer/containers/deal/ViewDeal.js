@@ -13,47 +13,56 @@ import ErrorIcon from '@material-ui/icons/Error';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Fab from '@material-ui/core/Fab';
+import MaterialTable from 'material-table';
 
 const CURRENT_ACTION = 'view';
+const columns = [
+    {title: 'Description', field: 'description', editable: 'never'},
+    {title: 'Value', field: 'value'}
+];
 export default function ViewDeal(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = [
-        'Wait provider',
-        'Provider accept',
-        'Accepter',
-        'Wait info',
-        'Agreed',
-        'In progress',
+        'Wait provider accept',
+        'Wait consumer accept',
+        'Wait provider info request',
+        'Wait consumer provide info',
+        'In work',
         'Done'
     ];
     const token = props.auth.jwt;
     const setAction = useActionSetter();
     const role = 'consumer';
     const [deal, setDeal] = useState();
+    const [table, setTable] = useState({});
 
     const [positive, setPositive] = React.useState(false);
     const [open, setOpen] = React.useState(false);
 
     const getStepNumber = (state) => {
         switch (state) {
-            case 'WAIT_PROVIDER':
-                return 0;
             case 'PROVIDER_ACCEPT':
+                return 0;
+            case 'CONSUMER_ACCEPT':
                 return 1;
-            case 'ACCEPTED':
+            case 'PROVIDER_REQUEST_INFO':
                 return 2;
-            case 'WAIT_INFO':
+            case 'CONSUMER_PROVIDE_INFO':
                 return 3;
-            case 'AGREED':
+            case 'IN_WORK':
                 return 4;
-            case 'IN_PROGRESS':
-                return 5;
             case 'DONE':
-                return 7;
+                return 6;
         }
     };
 
     useEffect(() => {
+        load();
+    }, []);
+
+    const load = () => {
         const dealId = props.param.id;
         const options = {
             headers: {
@@ -67,13 +76,17 @@ export default function ViewDeal(props) {
                 setDeal(response.json);
                 setActiveStep(getStepNumber(response.json.state));
             });
-    }, []);
+    };
 
     const handleBack = () => {
         setAction({
             action: 'list',
             previousAction: CURRENT_ACTION
         });
+    };
+
+    const handleRefresh = () => {
+        load();
     };
 
     const handleDecline = () => {
@@ -97,8 +110,114 @@ export default function ViewDeal(props) {
             });
     };
 
+    const handleAccept = () => {
+        const options = {
+            method: 'post',
+            headers: {
+                'Authorization': token
+            },
+        };
+        request(`/deals/api/deals/${role}/${props.param.id}/accept`, options)
+            .then((response) => {
+                console.log(response);
+                setPositive(true);
+                setOpen(true);
+                setDeal(response.json);
+                setActiveStep(getStepNumber(response.json.state));
+            })
+            .catch((error) => {
+                setPositive(false);
+                setOpen(true);
+                console.log(error);
+            });
+    };
+
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleSend = () => {
+        for (let i = 0; i < table.fields.length; i++) {
+            if (!table.fields[i].value || table.fields[i].value.length === 0) {
+                setPositive(false);
+                setOpen(true);
+                return;
+            }
+        }
+        console.log(table);
+        const options = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(table)
+        };
+        request(`/deals/api/deals/${role}/${props.param.id}/request`, options)
+            .then((response) => {
+                console.log(response);
+                setPositive(true);
+                setOpen(true);
+                setDeal(response.json);
+                setActiveStep(getStepNumber(response.json.state));
+            })
+            .catch((error) => {
+                setPositive(false);
+                setOpen(true);
+                console.log(error);
+            });
+    };
+
+    const needButton = (btnName, state) => {
+        switch (btnName) {
+            case 'DECLINE':
+                return state !== 'DONE'
+                    && state !== 'PROVIDER_DECLINE'
+                    && state !== 'CONSUMER_DECLINE';
+            case 'ACCEPT':
+                return state === 'CONSUMER_ACCEPT';
+            case 'SEND':
+                return state === 'CONSUMER_PROVIDE_INFO';
+
+        }
+    };
+
+    const buttons = (state) => {
+        return (
+            <React.Fragment>
+                {
+                    needButton('SEND', state) &&
+                    <Button style={{margin: 10}}
+                            variant="contained"
+                            size="large"
+                            onClick={() => handleSend()}
+                            color="primary">
+                        SEND
+                    </Button>
+                }
+                {
+                    needButton('ACCEPT', state) &&
+                    <Button style={{margin: 10}}
+                            variant="contained"
+                            size="large"
+                            onClick={() => handleAccept()}
+                            color="primary">
+                        ACCEPT
+                    </Button>
+                }
+                {
+                    needButton('DECLINE', state) &&
+                    <Button
+                        style={{margin: 10}}
+                        variant="contained"
+                        size="large"
+                        onClick={() => handleDecline()}
+                        color="secondary">
+                        DECLINE
+                    </Button>
+                }
+            </React.Fragment>
+        );
     };
 
     const snackNotification = () => {
@@ -137,31 +256,98 @@ export default function ViewDeal(props) {
         )
     };
 
+    const updateStateOnUpdate = (newData, oldData) => {
+        setTable(prevState => {
+            const fields = [...prevState.fields];
+            fields[fields.indexOf(oldData)] = newData;
+            return {...prevState, fields};
+        });
+    };
+
+    const fillTableState = () => {
+        if (!deal.dealInfo.info)
+            return false;
+        if (table.fields)
+            return true;
+        const info = deal.dealInfo.info;
+        for (let i = 0; i < info.length; i++) {
+            if (!info[i].value || info[i].value.length === 0) {
+                info[i].value = '';
+            }
+        }
+        setTable({fields: info});
+        return true;
+    };
+
+    const currentStateStatus = () => {
+        switch (getStepNumber(deal.state)) {
+            case 0:
+                return 'Please wait while provider accept deal';
+            case 1:
+                return 'Please accept with deal';
+            case 2:
+                return 'Please wait while provider request necessary information for deal';
+            case 3:
+                return 'Please provide information for deal';
+            case 4:
+                return 'Deal in work';
+            case 5:
+            case 6:
+                return 'Done';
+            default:
+                return 'DECLINE';
+        }
+    };
+
     return (
         <React.Fragment>
             {snackNotification()}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     {deal && deal.dealInfo &&
-                    <div>
-                        <Typography component="h1" display="inline" variant="h4" color="inherit">
-                            {deal.dealInfo.dealTitle}
-                        </Typography>
-                    </div>
+                    <React.Fragment>
+                        <Grid item>
+                            <Typography component="h1" display="inline" variant="h4" color="inherit">
+                                {deal.dealInfo.dealTitle}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Fab onClick={() => handleRefresh()} color="primary" aria-label="add">
+                                <RefreshIcon style={{color: 'white'}}/>
+                            </Fab>
+                        </Grid>
+                    </React.Fragment>
                     }
                 </Grid>
-                <Stepper activeStep={activeStep} alternativeLabel>
-                    {steps.map(label => (
-                        <Step key={label}>
-                            <StepLabel>{label}</StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
+                {
+                    deal && currentStateStatus() !== 'DECLINE' &&
+                    <Stepper activeStep={activeStep} alternativeLabel>
+                        {steps.map(label => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
+                }
+                <Typography component="h1" display="inline" variant="h5" color="inherit">
+                    Deal info:
+                </Typography>
                 {
                     deal && deal.state &&
                     <Typography variant="subtitle1" gutterBottom>
-                        Deal state: {deal.state}
+                        Status: {currentStateStatus()}
                     </Typography>
+                }
+                {
+                    activeStep > 3
+                    && deal
+                    && deal.dealInfo
+                    && deal.dealInfo.info
+                    && deal.dealInfo.info.map((info, i) => (
+                        <Typography key={i} variant="subtitle1" gutterBottom>
+                            {`${info.description}:`} {info.value}
+                        </Typography>
+                    ))
                 }
                 {
                     deal && deal.dealInfo.dealSubject ?
@@ -170,30 +356,37 @@ export default function ViewDeal(props) {
                         </Paper>
                         : <React.Fragment/>
                 }
+                {
+                    activeStep === 3 && fillTableState() && table.fields && table.fields.length !== 0 &&
+                    <MaterialTable
+                        title="Fill info for deal"
+                        columns={columns}
+                        data={table.fields}
+                        editable={{
+                            onRowUpdate: (newData, oldData) =>
+                                new Promise(resolve => {
+                                    setTimeout(() => {
+                                        if (oldData) {
+                                            resolve();
+                                            updateStateOnUpdate(newData, oldData);
+                                        }
+                                    }, 600);
+                                }),
+                        }}
+                    />
+                }
                 <div>
-                    <Button style={{margin: 10}}
-                            variant="contained"
-                            size="large"
-                            onClick={() => console.log(deal)}
-                            color="primary">
-                        DEAL
-                    </Button>
+                    {
+                        deal && deal.state && buttons(deal.state)
+                    }
                     <Button style={{margin: 10}}
                             variant="contained"
                             onClick={() => handleBack()}
                             size="large">
                         BACK
                     </Button>
-                    <Button style={{margin: 10}}
-                            variant="contained"
-                            size="large"
-                            onClick={() => handleDecline()}
-                            color="secondary">
-                        DECLINE
-                    </Button>
                 </div>
             </div>
         </React.Fragment>
     );
-
 }
