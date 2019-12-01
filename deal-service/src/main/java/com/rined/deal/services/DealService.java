@@ -1,36 +1,22 @@
 package com.rined.deal.services;
 
-import com.rined.deal.converter.DealConveter;
 import com.rined.deal.model.Deal;
 import com.rined.deal.model.DealBrief;
 import com.rined.deal.model.dto.ConsumerDto;
 import com.rined.deal.model.dto.DealRequestDto;
 import com.rined.deal.model.dto.ProviderDto;
-import com.rined.deal.repositories.DealRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class DealService {
-    private final DealRepository repository;
-    private final DealConveter converter;
+public interface DealService {
 
-    @Transactional
-    public void createDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        Deal deal = converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto);
-        repository.save(deal);
-    }
+    void createDeal(DealRequestDto dealDto, ConsumerDto consumerDto);
 
-    public List<DealBrief> consumerDeals(ConsumerDto consumerDto){
-        return repository.getAllBriefDealsForConsumer(consumerDto.getId());
-    }
+    List<DealBrief> consumerDeals(ConsumerDto consumerDto);
 
-    public List<DealBrief> providerDeals(ProviderDto providerDto){
-        return repository.getAllBriefDealsForProvider(providerDto.getId());
-    }
+    List<DealBrief> providerDeals(ProviderDto providerDto);
 
+    Deal getConsumerDealById(String dealId, ConsumerDto consumerDto);
+
+    Deal getProviderDealById(String dealId, ProviderDto providerDto);
 }

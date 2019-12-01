@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useActionSetter} from "./../../../contexts/ProposalConsumerContext";
+import {useActionSetter} from "./../../../contexts/DealConsumerContext";
 import request from "./../../../request/request"
-import MarkdownIt from "markdown-it";
 import ReactHtmlParser from 'react-html-parser';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -11,36 +10,62 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 
 const CURRENT_ACTION = 'view';
 export default function ViewDeal(props) {
-    const mdParser = new MarkdownIt();
-
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = [
+        'Wait provider',
+        'Provider accept',
+        'Accepter',
+        'Wait info',
+        'Agreed',
+        'In progress',
+        'Done'
+    ];
     const token = props.auth.jwt;
     const setAction = useActionSetter();
-    const [state, setState] = useState();
+    const role = 'consumer';
+    const [deal, setDeal] = useState();
 
     const [positive, setPositive] = React.useState(false);
     const [open, setOpen] = React.useState(false);
 
+    const getStepNumber = (state) => {
+        switch (state) {
+            case 'WAIT_PROVIDER':
+                return 0;
+            case 'PROVIDER_ACCEPT':
+                return 1;
+            case 'ACCEPTED':
+                return 2;
+            case 'WAIT_INFO':
+                return 3;
+            case 'AGREED':
+                return 4;
+            case 'IN_PROGRESS':
+                return 5;
+            case 'DONE':
+                return 7;
+        }
+    };
+
     useEffect(() => {
-        const proposalId = props.param.id;
+        const dealId = props.param.id;
         const options = {
             headers: {
                 'Authorization': token
             }
         };
-        request(`/proposals/api/proposals/consumer/${proposalId}`, options)
+        request(`/deals/api/deals/${role}/${dealId}`, options)
             .then(response => {
                 let data = response.json;
                 console.log(data);
-                const htmlText = customHtmlRender(data.format, data.fields);
-                setState({
-                    proposalId: data.id,
-                    proposalTitle: data.name,
-                    dealSubject: htmlText,
-                    providerId: data.providerId
-                });
+                setDeal(response.json);
+                setActiveStep(getStepNumber(response.json.state));
             });
     }, []);
 
@@ -51,24 +76,24 @@ export default function ViewDeal(props) {
         });
     };
 
-    const handleDeal = () => {
+    const handleDecline = () => {
         const options = {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify(state)
         };
-        request(`/deals/api/deals`, options)
+        request(`/deals/api/deals/${role}/${props.param.id}/decline`, options)
             .then((response) => {
+                console.log(response);
                 setPositive(true);
                 setOpen(true);
-                console.log(response);
+                setDeal(response.json);
             })
             .catch((error) => {
                 setPositive(false);
                 setOpen(true);
+                console.log(error);
             });
     };
 
@@ -98,7 +123,7 @@ export default function ViewDeal(props) {
                                     alignItems: 'center'
                                 }}>
                             <CheckCircleIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Deal created successfully! </span>}/>
+                            Operation completed successfully! </span>}/>
                         : <SnackbarContent
                             style={{backgroundColor: 'rgb(211, 47, 47)'}}
                             aria-describedby="client-snackbar"
@@ -106,71 +131,65 @@ export default function ViewDeal(props) {
                                 <span id="client-snackbar"
                                       style={{backgroundColor: 'rgb(211, 47, 47)', display: 'flex', alignItems: 'center'}}>
                             <ErrorIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Create deal error!</span>}/>
+                            Operation fail!</span>}/>
                 }
             </Snackbar>
         )
     };
-
-    const customHtmlRender = (text, data) => {
-        if (!text)
-            return "";
-        const codeQuote = "```";
-        let templateArr = text.match(/\${.+}/g) || [];
-        templateArr.forEach(function (item) {
-            if (data) {
-                const replaceObject = data.find(dataItem => dataItem.name === item.substring(2, item.length - 1));
-                let replacer;
-                let isValue = false;
-                if (replaceObject) {
-                    if (replaceObject.value) {
-                        replacer = replaceObject.value;
-                        isValue = true;
-                    } else {
-                        replacer = replaceObject.description;
-                    }
-                } else replacer = "UNKNOWN!!!";
-                text = text.replace(item, replacer.length === 0 ? "" :
-                    (isValue ? `${replacer}` : `${codeQuote}${replacer}${codeQuote}`));
-            }
-        });
-        return mdParser.render(text);
-    };
-
 
     return (
         <React.Fragment>
             {snackNotification()}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
-                    {state && state.proposalTitle &&
+                    {deal && deal.dealInfo &&
                     <div>
                         <Typography component="h1" display="inline" variant="h4" color="inherit">
-                            {state.proposalTitle}
+                            {deal.dealInfo.dealTitle}
                         </Typography>
                     </div>
                     }
                 </Grid>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                    {steps.map(label => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
                 {
-                    state && state.dealSubject ?
+                    deal && deal.state &&
+                    <Typography variant="subtitle1" gutterBottom>
+                        Deal state: {deal.state}
+                    </Typography>
+                }
+                {
+                    deal && deal.dealInfo.dealSubject ?
                         <Paper style={{padding: 7, marginTop: 10, marginBottom: 10}}>
-                            {ReactHtmlParser(state.dealSubject)}
+                            {ReactHtmlParser(deal.dealInfo.dealSubject)}
                         </Paper>
                         : <React.Fragment/>
                 }
                 <div>
-                    <Button style={{marginRight: 10}}
+                    <Button style={{margin: 10}}
                             variant="contained"
                             size="large"
-                            onClick={() => handleDeal()}
+                            onClick={() => console.log(deal)}
                             color="primary">
                         DEAL
                     </Button>
-                    <Button style={{marginLeft: 10}}
+                    <Button style={{margin: 10}}
                             variant="contained"
                             onClick={() => handleBack()}
                             size="large">
                         BACK
+                    </Button>
+                    <Button style={{margin: 10}}
+                            variant="contained"
+                            size="large"
+                            onClick={() => handleDecline()}
+                            color="secondary">
+                        DECLINE
                     </Button>
                 </div>
             </div>

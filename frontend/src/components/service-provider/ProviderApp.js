@@ -4,9 +4,9 @@ import Template from "./containers/template/Template"
 import Deal from "./containers/deal/Deal"
 import Proposal from "./containers/proposal/Proposal";
 import {TemplateProvider} from "../contexts/TemplateContext";
-import {DealProvider} from "../contexts/DealContext";
 import {ProposalProvider} from "../contexts/ProposalContext";
 import ProviderDashboard from "./containers/ProviderDashboard";
+import {DealProviderProvider} from "../contexts/DealProviderContext";
 
 export default function ProviderApp() {
     return (
@@ -21,9 +21,9 @@ export default function ProviderApp() {
             </Route>
 
             <Route exact path="/deals">
-                <DealProvider>
+                <DealProviderProvider>
                     <Deal/>
-                </DealProvider>
+                </DealProviderProvider>
             </Route>
 
             <Route exact path="/proposals">
