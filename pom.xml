@@ -25,6 +25,7 @@
         <module>auth-service</module>
         <module>gateway-service</module>
         <module>deal-batch</module>
+        <module>mail-service</module>
     </modules>
 
 </project>
