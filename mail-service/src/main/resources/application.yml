@@ -1,0 +1,22 @@
+server:
+  port: 8085
+
+mail:
+  address: 'testmailforotus@mail.ru'
+spring:
+  data:
+    mongodb:
+      database: mail-log
+      host: localhost
+      port: 27017
+  mail:
+    host: smtp.mail.ru
+    port: 465
+    username: 'testmailforotus@mail.ru'
+    password: '1221kewff4zx9N!Q#'
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true

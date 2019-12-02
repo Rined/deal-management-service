@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "gateway-service"
+
+jwt:
+  secret: "incorrect"
+
+zuul:
+  routes:
+    auth-service:
+      path: /auth/**
+      url: http://localhost:8081
+    proposal:
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /proposals/**
+      url: http://localhost:8082
+    template:
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /templates/**
+      url: http://localhost:8083
+    deal:
+      sensitiveHeaders: Cookie, Set-Cookie, Authorization
+      path: /deals/**
+      url: http://localhost:8084
+
+logging:
+  file: 'logs/@project.artifactId@/log.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
+  level:
+    root: info
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    logfile:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'

@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      database: deal-service
+      host: localhost
+      port: 27017
+
+batch:
+  directoryPath: 'file:persist/*.json'
+  chunk: 10
