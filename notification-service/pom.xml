@@ -39,5 +39,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>notification-service</finalName>
+    </build>
 
 </project>

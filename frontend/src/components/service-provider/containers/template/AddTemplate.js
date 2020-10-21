@@ -9,12 +9,10 @@ import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
 import request from "./../../../request/request";
+import {generateId} from "./../../../utils/Utils"
+import {defaultSnack} from "./../../../utils/DefaultSnack"
 
 const CURRENT_ACTION = 'add';
 const columns = [
@@ -27,17 +25,31 @@ export default function AddTemplate(props) {
     const setAction = useActionSetter();
     let mdEditor = null;
 
+    const [disable, setDisable] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [positive, setPositive] = React.useState(false);
     const [state, setState] = useState({
+        id: generateId(),
         name: "",
         fields: [],
         format: ""
     });
 
-    const save = () => {
+    const disableControl = () => {
         setLoading(true);
+        setDisable(true);
+    };
+
+    const enableControl = (isCorrect) => {
+        setPositive(isCorrect);
+        setLoading(false);
+        setOpen(true);
+        setDisable(false);
+    };
+
+    const save = () => {
+        disableControl();
         const options = {
             method: 'post',
             headers: {
@@ -48,19 +60,11 @@ export default function AddTemplate(props) {
         };
         request(`/templates/api/templates`, options)
             .then((response) => {
-                setTimeout(() => {
-                    setPositive(true);
-                    setLoading(false);
-                    setOpen(true);
-                }, 500);
+                setTimeout(() => enableControl(true), 500);
                 console.log(response.status);
             })
             .catch((error) => {
-                setTimeout(() => {
-                    setPositive(false);
-                    setLoading(false);
-                    setOpen(true);
-                }, 500);
+                setTimeout(() => enableControl(false), 500);
                 console.log(error);
             });
     };
@@ -142,48 +146,12 @@ export default function AddTemplate(props) {
         return mdParser.render(text);
     };
 
-    const snackNotification = () => {
-        return (
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={open}
-                onClose={handleClose}
-                autoHideDuration={3000}>
-                {
-                    positive
-                        ? <SnackbarContent
-                            style={{backgroundColor: 'rgb(67, 160, 71)'}}
-                            aria-describedby="client-snackbar"
-                            message={
-                                <span id="client-snackbar" style={{
-                                    backgroundColor: 'rgb(67, 160, 71)',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}>
-                            <CheckCircleIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Template created successfully! </span>}/>
-                        : <SnackbarContent
-                            style={{backgroundColor: 'rgb(211, 47, 47)'}}
-                            aria-describedby="client-snackbar"
-                            message={
-                                <span id="client-snackbar"
-                                      style={{backgroundColor: 'rgb(211, 47, 47)', display: 'flex', alignItems: 'center'}}>
-                            <ErrorIcon style={{fontSize: 20, opacity: 0.9, marginRight: 5}}/>
-                            Create template error!</span>}/>
-                }
-            </Snackbar>
-        )
-    };
-
     if (!state)
         return <React.Fragment/>;
 
     return (
         <React.Fragment>
-            {snackNotification()}
+            {defaultSnack(open, handleClose, positive, 'Template created successfully!', 'Create template error!')}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
@@ -193,10 +161,16 @@ export default function AddTemplate(props) {
                     </div>
                     <Grid style={{width: 120}} item>
                         <Grid container direction="row" justify="space-between">
-                            <Fab onClick={() => handleBack()} color="primary" aria-label="add">
+                            <Fab onClick={() => handleBack()}
+                                 style={{backgroundColor: disable ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
+                                 aria-label="add">
                                 <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                             </Fab>
-                            <Fab onClick={() => save()} style={{backgroundColor: 'rgb(67, 160, 71)'}} aria-label="add">
+                            <Fab onClick={() => save()} disabled={disable}
+                                 style={{
+                                     backgroundColor: disable ? 'rgb(119, 136, 153)' :
+                                         'rgb(67, 160, 71)'
+                                 }} aria-label="add">
                                 <SaveIcon style={{color: 'white'}}/>
                             </Fab>
                         </Grid>
@@ -227,7 +201,7 @@ export default function AddTemplate(props) {
                                 setTimeout(() => {
                                     resolve();
                                     updateStateOnAdd(newData);
-                                }, 600);
+                                }, 300);
                             }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise(resolve => {
@@ -236,14 +210,14 @@ export default function AddTemplate(props) {
                                         resolve();
                                         updateStateOnUpdate(newData, oldData);
                                     }
-                                }, 600);
+                                }, 300);
                             }),
                         onRowDelete: oldData =>
                             new Promise(resolve => {
                                 setTimeout(() => {
                                     resolve();
                                     updateStateOnRemove(oldData);
-                                }, 600);
+                                }, 300);
                             }),
                     }}
                 />
