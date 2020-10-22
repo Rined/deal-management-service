@@ -4,8 +4,8 @@ import EditTemplate from "./EditTemplate"
 import {useAction} from "./../../../contexts/TemplateContext";
 import ListTemplates from "./ListTemplates";
 import ViewTemplate from "./ViewTemplate";
-import AddTemplate from "./AddTemplate";
 import {useAuth} from "../../../contexts/AuthContext";
+import AddTemplateContainer from "./AddTemplateContainer";
 
 //https://www.npmjs.com/package/react-markdown-editor-lite
 const TITLE = 'Templates';
@@ -32,7 +32,7 @@ function getActionContent(activeAction, auth) {
         case 'view':
             return <ViewTemplate auth={auth} param={activeAction}/>;
         case 'add':
-            return <AddTemplate auth={auth} />;
+            return <AddTemplateContainer auth={auth} />;
         default:
             throw new Error('Unknown action');
     }

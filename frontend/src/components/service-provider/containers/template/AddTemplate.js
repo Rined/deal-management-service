@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import request from "./../../../request/request";
 import {generateId} from "./../../../utils/Utils"
-import {defaultSnack} from "./../../../utils/DefaultSnack"
+import {DefaultSnack} from "./../../../utils/DefaultSnack"
 
 const CURRENT_ACTION = 'add';
 const columns = [
@@ -20,15 +20,13 @@ const columns = [
     {title: 'Description', field: 'description'}
 ];
 export default function AddTemplate(props) {
-    const token = props.auth.jwt;
     const mdParser = new MarkdownIt();
     const setAction = useActionSetter();
     let mdEditor = null;
 
-    const [disable, setDisable] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [positive, setPositive] = React.useState(false);
+
     const [state, setState] = useState({
         id: generateId(),
         name: "",
@@ -37,15 +35,13 @@ export default function AddTemplate(props) {
     });
 
     const disableControl = () => {
-        setLoading(true);
-        setDisable(true);
+        props.setProcessRequest(true);
     };
 
     const enableControl = (isCorrect) => {
         setPositive(isCorrect);
-        setLoading(false);
+        props.setProcessRequest(false);
         setOpen(true);
-        setDisable(false);
     };
 
     const save = () => {
@@ -54,7 +50,7 @@ export default function AddTemplate(props) {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': props.auth.jwt
             },
             body: JSON.stringify(state)
         };
@@ -151,45 +147,43 @@ export default function AddTemplate(props) {
 
     return (
         <React.Fragment>
-            {defaultSnack(open, handleClose, positive, 'Template created successfully!', 'Create template error!')}
+            <DefaultSnack positiveText={'Template created successfully!'} negativeText={'Create template error!'}
+                          handleCloseFunction={handleClose}
+                          positive={positive}
+                          isOpen={open}/>
+            {/*{defaultSnack(open, handleClose, positive, 'Template created successfully!', 'Create template error!')}*/}
             <div style={{boxSizing: 'border-box', padding: 20, width: "100%"}}>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
-                        <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>Create
-                            template </Typography>
-                        {loading && <CircularProgress size={30} style={{color: 'rgb(67, 160, 71)'}}/>}
+                        <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>
+                            Create template
+                        </Typography>
+                        {props.loading && <CircularProgress size={30} style={{color: 'rgb(67, 160, 71)'}}/>}
                     </div>
                     <Grid style={{width: 120}} item>
                         <Grid container direction="row" justify="space-between">
                             <Fab onClick={() => handleBack()}
-                                 style={{backgroundColor: disable ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
+                                 style={{backgroundColor: props.disable ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
                                  aria-label="add">
                                 <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                             </Fab>
-                            <Fab onClick={() => save()} disabled={disable}
-                                 style={{
-                                     backgroundColor: disable ? 'rgb(119, 136, 153)' :
-                                         'rgb(67, 160, 71)'
-                                 }} aria-label="add">
+                            <Fab onClick={() => save()} disabled={props.disable}
+                                 style={{backgroundColor: props.disable ? 'rgb(119, 136, 153)' : 'rgb(67, 160, 71)'}}
+                                 aria-label="add">
                                 <SaveIcon style={{color: 'white'}}/>
                             </Fab>
                         </Grid>
                     </Grid>
                 </Grid>
-                <TextField
-                    id="standard-basic"
-                    label="Template name"
-                    margin="normal"
-                    defaultValue={state.name}
-                    style={{width: 300}}
-                    onChange={(event) => setTitleState(event.target.value)}/>
+                <TextField id="standard-basic" label="Template name" margin="normal"
+                           defaultValue={state.name} style={{width: 300}}
+                           onChange={(event) => setTitleState(event.target.value)}/>
                 <div style={{height: "500px"}}>
                     <MdEditor
                         ref={node => setMdEditor(node)}
                         value={state.format}
                         renderHTML={(text) => customHtmlRender(text)}
-                        onChange={updateStateOnMdEdit}
-                    />
+                        onChange={updateStateOnMdEdit}/>
                 </div>
                 <MaterialTable
                     title="Template fields"

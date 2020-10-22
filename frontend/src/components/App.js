@@ -13,43 +13,50 @@ import ConsumerApp from "./service-consumer/ConsumerApp"
 import ProviderMenu from "./service-provider/ProviderMenu"
 import ConsumerMenu from "./service-consumer/ConumerMenu"
 import SignUp from "./SignUp";
+import {createStore} from "redux";
+import {Provider} from 'react-redux';
+import rootReducer from './../store/reducers'
+
+const store = createStore(rootReducer);
 
 export default function App() {
     const classes = useStyles();
     const auth = useAuth();
 
     return (
-        <div className={classes.root}>
-            <TitleProvider>
-                <BrowserRouter>
-                    {
-                        auth ?
-                            <React.Fragment>
-                                <OpenMenuProvider>
-                                    <AppTitleHeader/>
-                                    <Menu>
-                                        {auth.isConsumer() ? <ConsumerMenu/> : null}
-                                        {auth.isProvider() ? <ProviderMenu/> : null}
-                                    </Menu>
-                                </OpenMenuProvider>
-                                <AppSwitcher>
-                                    {auth.isConsumer() ? <ConsumerApp/> : null}
-                                    {auth.isProvider() ? <ProviderApp/> : null}
-                                </AppSwitcher>
-                            </React.Fragment>
-                            : <React.Fragment>
-                                <Switch>
-                                    <Route exact path="/signup">
-                                        <SignUp/>
-                                    </Route>
-                                    <Route path="*">
-                                        <SignIn/>
-                                    </Route>
-                                </Switch>
-                            </React.Fragment>
-                    }
-                </BrowserRouter>
-            </TitleProvider>
-        </div>
+        <Provider store={store}>
+            <div className={classes.root}>
+                <TitleProvider>
+                    <BrowserRouter>
+                        {
+                            auth ?
+                                <React.Fragment>
+                                    <OpenMenuProvider>
+                                        <AppTitleHeader/>
+                                        <Menu>
+                                            {auth.isConsumer() ? <ConsumerMenu/> : null}
+                                            {auth.isProvider() ? <ProviderMenu/> : null}
+                                        </Menu>
+                                    </OpenMenuProvider>
+                                    <AppSwitcher>
+                                        {auth.isConsumer() ? <ConsumerApp/> : null}
+                                        {auth.isProvider() ? <ProviderApp/> : null}
+                                    </AppSwitcher>
+                                </React.Fragment>
+                                : <React.Fragment>
+                                    <Switch>
+                                        <Route exact path="/signup">
+                                            <SignUp/>
+                                        </Route>
+                                        <Route path="*">
+                                            <SignIn/>
+                                        </Route>
+                                    </Switch>
+                                </React.Fragment>
+                        }
+                    </BrowserRouter>
+                </TitleProvider>
+            </div>
+        </Provider>
     )
 }

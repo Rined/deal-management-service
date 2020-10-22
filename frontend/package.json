@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --config webpack.dev.config.js",
     "build": "webpack"
   },
-  "author": "Rined",
+  "author": "Anton Petrov",
   "dependencies": {
     "@material-ui/core": "4.1.2",
     "@material-ui/icons": "4.2.1",
@@ -21,8 +21,10 @@
     "react-dom": "^16.2.0",
     "react-html-parser": "^2.0.2",
     "react-markdown-editor-lite": "^0.4.5",
+    "react-redux": "^7.2.1",
     "react-router-dom": "latest",
     "react-scripts": "^3.2.0",
+    "redux": "^4.0.5",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
