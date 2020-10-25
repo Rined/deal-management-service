@@ -14,6 +14,7 @@ export default function ProviderApp() {
             <Route exact path="/">
                 <ProviderDashboard/>
             </Route>
+
             <Route exact path="/templates">
                 <TemplateProvider>
                     <Template/>

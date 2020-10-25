@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -7,21 +7,22 @@ import {useActionSetter} from "../../../contexts/TemplateContext";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import request from "./../../../request/request"
-import {DefaultSnack} from "../../../utils/DefaultSnack";
-import {MdElement} from "../../../elements/MdElement";
+import request from "./../../../request/request";
+import {DefaultSnack} from "./../../../utils/DefaultSnack"
 import {Table} from "../../../elements/Table";
+import {MdElement} from "../../../elements/MdElement";
 
-const CURRENT_ACTION = 'edit';
-export default function EditTemplate(props) {
+const CURRENT_ACTION = 'add';
+export default function MutableTemplate(props) {
     const setAction = useActionSetter();
 
-    const [state, setState] = useState();
     const [properties, setProperties] = React.useState({
         process: false,
         open: false,
         positive: false
     });
+
+    const [state, setState] = useState(props.state);
 
     const enableControl = (isCorrect) => {
         setProperties(prevProperties => {
@@ -60,7 +61,6 @@ export default function EditTemplate(props) {
         });
     };
 
-
     const handleClose = () => {
         setProperties(prevProperties => {
             return {
@@ -70,14 +70,6 @@ export default function EditTemplate(props) {
         });
     };
 
-    useEffect(() => {
-        const options = {
-            headers: {'Authorization': props.auth.jwt}
-        };
-        request(`/templates/api/templates/${props.param.id}`, options)
-            .then(response => setState(response.json));
-    }, []);
-
     const save = () => {
         setProperties(prevProperties => {
             return {
@@ -86,21 +78,22 @@ export default function EditTemplate(props) {
             }
         });
         const options = {
-            method: 'put',
+            method: 'post',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': props.auth.jwt
             },
             body: JSON.stringify(state)
         };
-        request(`/templates/api/templates/${props.param.id}`, options)
+        request(`/templates/api/templates`, options)
             .then((response) => {
                 setTimeout(() => enableControl(true), 500);
                 console.log(response.status);
-            }).catch((error) => {
-            setTimeout(() => enableControl(false), 500);
-            console.log(error);
-        });
+            })
+            .catch((error) => {
+                setTimeout(() => enableControl(false), 500);
+                console.log(error);
+            });
     };
 
     if (!state)
@@ -108,8 +101,8 @@ export default function EditTemplate(props) {
 
     return (
         <React.Fragment>
-            <DefaultSnack positiveText={'Template edited successfully!'}
-                          negativeText={'Edit template error!'}
+            <DefaultSnack positiveText={'Template created successfully!'}
+                          negativeText={'Create template error!'}
                           handleCloseFunction={handleClose}
                           positive={properties.positive}
                           isOpen={properties.open}/>
@@ -117,7 +110,7 @@ export default function EditTemplate(props) {
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
                         <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>
-                            Edit template
+                            Create template
                         </Typography>
                         {properties.process && <CircularProgress size={30} style={{color: 'rgb(67, 160, 71)'}}/>}
                     </div>
@@ -136,8 +129,8 @@ export default function EditTemplate(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <TextField id="standard-basic" label="Template name" margin="normal" style={{width: 300}}
-                           defaultValue={state.name}
+                <TextField id="standard-basic" label="Template name" margin="normal"
+                           defaultValue={state.name} style={{width: 300}}
                            onChange={(event) => setTitleState(event.target.value)}/>
                 <div style={{height: "500px"}}>
                     <MdElement stateCallback={updateFormat}
