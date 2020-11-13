@@ -11,6 +11,7 @@ import java.util.Objects;
 
 @SuppressWarnings("NullableProblems")
 public class ProviderArgumentResolver implements HandlerMethodArgumentResolver {
+    private final static String DEFAULT_MESSAGE = "User is not authorized!";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -23,9 +24,9 @@ public class ProviderArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
         return new ProviderDto(
-                Objects.requireNonNull(webRequest.getHeader("userId")),
-                Objects.requireNonNull(webRequest.getHeader("username")),
-                Objects.requireNonNull(webRequest.getHeader("userEmail"))
+                Objects.requireNonNull(webRequest.getHeader("X-UserId"), DEFAULT_MESSAGE),
+                Objects.requireNonNull(webRequest.getHeader("X-Username"), DEFAULT_MESSAGE),
+                Objects.requireNonNull(webRequest.getHeader("X-UserEmail"), DEFAULT_MESSAGE)
         );
     }
 }

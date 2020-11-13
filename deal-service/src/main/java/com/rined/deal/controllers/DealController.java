@@ -18,7 +18,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @Api(value = "/api", description = "Операции с сделками")
 public class DealController {
@@ -103,8 +102,7 @@ public class DealController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/deals/provider/{dealId}/done")
     public Deal providerDoneDeal(@PathVariable("dealId") String dealId,
-                                   @ApiIgnore @Provider ProviderDto providerDto) {
+                                 @ApiIgnore @Provider ProviderDto providerDto) {
         return stateService.doneProvider(dealId, providerDto);
     }
-
 }

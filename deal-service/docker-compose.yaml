@@ -1,0 +1,25 @@
+services:
+  app:
+    image: dms-deal-img
+    container_name: dms-deal-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 8084
+    ports:
+      - 8084:8084
+    environment:
+      - mongo.db=dms-deal
+      - mongo.user=admin
+      - mongo.password=admin
+    depends_on:
+      - mongo-deal-db
+  mongo-deal-db:
+    image: mongo:latest
+    container_name: dms-mogno-deal-db
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: dms-deal
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin

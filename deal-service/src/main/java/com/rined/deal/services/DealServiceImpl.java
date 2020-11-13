@@ -29,27 +29,22 @@ public class DealServiceImpl implements DealService {
     @Override
     @HystrixCommand(commandKey = "dealCreation", fallbackMethod = "persistDeal")
     public void createDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        Deal deal = converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto);
-        repository.save(deal);
+        repository.save(converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto));
     }
 
+    @SuppressWarnings("unused")
     public void persistDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
         try {
             Deal deal = converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto);
             ObjectMapper objectMapper = new ObjectMapper();
             String persistFolder = properties.getPersistPath();
-            String fileName = String.format("%s/%s.json",
-                    persistFolder,
-                    deal.getDealInfo().getProposalId()
-            );
+            String fileName = String.format("%s/%s.json", persistFolder, deal.getDealInfo().getProposalId());
             File file = new File(persistFolder);
-            if (!file.mkdirs()) {
+            if (!file.exists() && !file.mkdirs())
                 throw new RuntimeException("Persist problem!");
-            }
             objectMapper.writeValue(new File(fileName), deal);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Persist problem!");
+            throw new RuntimeException("Persist problem!", e);
         }
     }
 
@@ -76,9 +71,7 @@ public class DealServiceImpl implements DealService {
     public Deal getConsumerDealById(String dealId, ConsumerDto consumerDto) {
         return repository.findByIdAndConsumerId(dealId, consumerDto.getId()).orElseThrow(
                 () -> new NotFoundException("Deal with id %s for consumer %s not found!",
-                        dealId, consumerDto.getUsername()
-                )
-        );
+                        dealId, consumerDto.getUsername()));
     }
 
     @Override
@@ -88,9 +81,7 @@ public class DealServiceImpl implements DealService {
     public Deal getProviderDealById(String dealId, ProviderDto providerDto) {
         return repository.findByIdAndProviderId(dealId, providerDto.getId()).orElseThrow(
                 () -> new NotFoundException("Deal with id %s for provider %s not found!",
-                        dealId, providerDto.getUsername()
-                )
-        );
+                        dealId, providerDto.getUsername()));
     }
 
 }

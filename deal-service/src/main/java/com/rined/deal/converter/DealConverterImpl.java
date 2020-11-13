@@ -21,15 +21,8 @@ public class DealConverterImpl implements DealConverter {
 
     @Override
     public Deal convertRequestDtoAndConsumerDtoToDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        return new Deal(
-                dealDto.getProviderId(),
-                consumerDto.getId(),
-                new DealInfo(
-                        dealDto.getProposalId(),
-                        dealDto.getProposalTitle(),
-                        dealDto.getDealSubject(),
-                        Collections.emptyList()
-                ),
+        return new Deal(dealDto.getProviderId(), consumerDto.getId(), new DealInfo(dealDto.getProposalId(),
+                dealDto.getProposalTitle(), dealDto.getDealSubject(), Collections.emptyList()),
                 DealState.PROVIDER_ACCEPT
         );
     }

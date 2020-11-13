@@ -4,8 +4,8 @@ ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
-ADD deal-service/pom.xml $PROJECT_DIR
-ADD deal-service/src/ $PROJECT_DIR/src
+ADD pom.xml $PROJECT_DIR
+ADD src/ $PROJECT_DIR/src
 RUN mvn package -DskipTests
 
 FROM openjdk:8-jdk-alpine
