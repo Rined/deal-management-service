@@ -1,0 +1,3 @@
+id;username;password;email;role
+d02f75bd-16ec-422c-a7dc-837d26b9b525;provider;$2a$10$x/NSvc9HncE56GVKvACbN.bKhJbQphBDJhfByiUDtgDhD5dQjKf7G;antoxa-ac@list.ru;PROVIDER
+988ad4f0-af46-4841-a7e3-cb5767b4f863;consumer;$2a$10$gVuSVfNT5.7q.fFUVf4kXegro59mIihfKtFbbAktdQ3YPie.f4QmW;antoxa-ac@list.ru;CONSUMER

@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-users-data
+      author: rined
+      context: dms
+      runOnChange: true
+      loadUpdateData:
+        columns:
+          - column:
+              name: id
+              type: STRING
+          - column:
+              name: username
+              type: STRING
+          - column:
+              name: password
+              type: STRING
+          - column:
+              name: email
+              type: STRING
+          - column:
+              name: role
+              type: STRING
+        primaryKey: id
+        file: 001-initial/users.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: users

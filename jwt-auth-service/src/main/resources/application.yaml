@@ -1,0 +1,54 @@
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://pg-auth-db:${pg.port}/${pg.db}
+    username: ${pg.user}
+    password: ${pg.password}
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+server:
+  port: 8081
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
+
+logging:
+  file:
+    name: 'logs/@project.artifactId@/log.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
+  level:
+    root: info
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+      show-details: never
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      exposure:
+        include: '*'

@@ -1,0 +1,26 @@
+services:
+  app:
+    image: dms-auth-img
+    container_name: dms-auth-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    environment:
+      - pg.port=5432
+      - pg.db=dms-auth
+      - pg.user=admin
+      - pg.password=admin
+    depends_on:
+      - pg-auth-db
+  pg-auth-db:
+    image: postgres
+    container_name: dms-auth-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: dms-auth
