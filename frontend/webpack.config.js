@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -9,9 +10,8 @@ module.exports = {
         filename: 'bundle.min.js',
         libraryTarget: 'umd'
     },
-
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components|build)/,
@@ -24,6 +24,16 @@ module.exports = {
             }
         ]
     },
+    optimization: {
+        minimizer: [new UglifyJsPlugin({
+            uglifyOptions: {
+                output: {
+                    // true for `ascii_only`
+                    ascii_only: true
+                },
+            },
+        })]
+    },
 
     plugins: [
         new webpack.DefinePlugin({
@@ -31,14 +41,14 @@ module.exports = {
                 NODE_ENV: JSON.stringify("production")
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
-            output: {
-                comments: false,
-            },
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false,
+        //     },
+        //     output: {
+        //         comments: false,
+        //     },
+        // }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'public/index.html'

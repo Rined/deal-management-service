@@ -4,9 +4,8 @@ export default class Authentication {
         this.jwt = jwt;
         this.userName = payload.sub;
         this.userId = payload.userId;
-        this.userRoles = payload.roles;
+        this.userRole = payload.role;
         this.userEmail = payload.email;
-        localStorage.setItem('token', jwt);
     }
 
     get name() {
@@ -17,8 +16,8 @@ export default class Authentication {
         return this.userId;
     }
 
-    get roles() {
-        return this.userRoles;
+    get role() {
+        return this.userRole;
     }
 
     get email() {
@@ -26,12 +25,11 @@ export default class Authentication {
     }
 
     isConsumer() {
-        return this.userRoles.includes('CONSUMER');
+        return this.userRole === 'CONSUMER';
     }
 
     isProvider() {
-        return this.userRoles.includes('PROVIDER');
+        return this.userRole === 'PROVIDER';
     }
-
 }
 

@@ -7,12 +7,10 @@ import {useActionSetter} from "../../../contexts/TemplateContext";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import request from "./../../../request/request";
 import {DefaultSnack} from "./../../../utils/DefaultSnack"
 import {Table} from "../../../elements/Table";
 import {MdElement} from "../../../elements/MdElement";
 
-const CURRENT_ACTION = 'add';
 export default function MutableTemplate(props) {
     const setAction = useActionSetter();
 
@@ -57,7 +55,7 @@ export default function MutableTemplate(props) {
     const handleBack = () => {
         setAction({
             action: 'list',
-            previousAction: CURRENT_ACTION
+            previousAction: props.currentAction
         });
     };
 
@@ -77,15 +75,7 @@ export default function MutableTemplate(props) {
                 process: true
             }
         });
-        const options = {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': props.auth.jwt
-            },
-            body: JSON.stringify(state)
-        };
-        request(`/templates/api/templates`, options)
+        props.saveRequest(state)
             .then((response) => {
                 setTimeout(() => enableControl(true), 500);
                 console.log(response.status);
@@ -96,13 +86,10 @@ export default function MutableTemplate(props) {
             });
     };
 
-    if (!state)
-        return <React.Fragment/>;
-
     return (
         <React.Fragment>
-            <DefaultSnack positiveText={'Template created successfully!'}
-                          negativeText={'Create template error!'}
+            <DefaultSnack positiveText={props.fabPositiveText}
+                          negativeText={props.fabNegativeText}
                           handleCloseFunction={handleClose}
                           positive={properties.positive}
                           isOpen={properties.open}/>
@@ -110,7 +97,7 @@ export default function MutableTemplate(props) {
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <div>
                         <Typography component="h1" display="inline" variant="h4" color="inherit" noWrap>
-                            Create template
+                            {props.title}
                         </Typography>
                         {properties.process && <CircularProgress size={30} style={{color: 'rgb(67, 160, 71)'}}/>}
                     </div>

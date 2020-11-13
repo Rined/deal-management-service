@@ -19,12 +19,15 @@ module.exports = {
         host: 'localhost',
         open: true,
         proxy: {
-            '/api': 'http://127.0.0.1:8080'
+            '/test': {
+                target: 'http://127.0.0.1:8080',
+                pathRewrite: {'^/test' : ''}
+            }
         }
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components|build)/,

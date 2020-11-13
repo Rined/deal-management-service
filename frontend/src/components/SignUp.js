@@ -13,67 +13,123 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {makeStyles} from '@material-ui/core/styles';
 import request from "./request/request"
+import {Validator, Validation} from "./utils/Validation";
 
 export default function SignUp() {
     const classes = useStyles();
 
-    const [role, setRole] = useState('PROVIDER');
-    const [globalError, setGlobalError] = useState('');
-    const [showComplete, setComplete] = useState(false);
-    const [errorTextUsername, setErrorTextUsername] = useState('');
-    const [errorTextPassword, setErrorTextPassword] = useState('');
-    const [errorTextEmail, setErrorTextEmail] = useState('');
+    const [validation, setValidationError] = useState({
+        globalError: '',
+        errorTextUsername: '',
+        errorTextPassword: '',
+        errorTextEmail: '',
+        showComplete: false
+    });
+
     const [credential, setCredential] = useState({
         user: '',
         password: '',
-        email: ''
+        email: '',
+        role: 'PROVIDER'
     });
 
+
+    const setGlobalError = (globalError) => {
+        setValidationError({
+            ...validation,
+            globalError
+        });
+    };
+
+    const setErrorTextUsername = (errorTextUsername) => {
+        setValidationError({
+            ...validation,
+            errorTextUsername,
+            showComplete: false
+        });
+    };
+
+    const setErrorTextPassword = (errorTextPassword) => {
+        setValidationError({
+            ...validation,
+            errorTextPassword,
+            showComplete: false
+        });
+    };
+
+    const setErrorTextEmail = (errorTextEmail) => {
+        setValidationError({
+            ...validation,
+            errorTextEmail,
+            showComplete: false
+        });
+    };
+
+    const setComplete = (showComplete) => {
+        setValidationError({
+            ...validation,
+            showComplete
+        });
+    };
+
+    const validator = new Validator(
+        {
+            user: new Validation(credential.user, setErrorTextUsername, 'Username is mandatory'),
+            password: new Validation(credential.password, setErrorTextPassword, 'Password is mandatory'),
+            email: new Validation(credential.email, setErrorTextEmail, 'Email is mandatory')
+        },
+        setGlobalError
+    );
+
     const loginHandler = (event) => {
-        setComplete(false);
         event.preventDefault();
-        setGlobalError('');
-        if (validate(credential.user, credential.password, credential.email)) {
-            credential.roles = [role];
-            const json = JSON.stringify(credential);
-            console.log(credential);
-            console.log(json);
+        validator.clear(); // todo не удаляется globalError
+        setComplete(false);
+        if (validator.validate()) {
             const options = {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
-                body: json
+                body: JSON.stringify(credential)
             };
             request('/auth/registration', options)
-                .then(response => {
-                    if (response.ok)
-                        setComplete(true);
-                })
-                .catch(response => {
-                    setGlobalError(response.json.description);
-                });
+                .then(response => { response.ok && setComplete(true)})
+                .catch(response => {validator.showError(response.json.description)});
         }
     };
 
-    const validate = (username, password, email) => {
-        let isValid = true;
-        isValid &= checkField(username, setErrorTextUsername, 'Username is mandatory');
-        isValid &= checkField(password, setErrorTextPassword, 'Password is mandatory');
-        isValid &= checkField(email, setErrorTextEmail, 'Email is mandatory');
-        return isValid;
+    let usernameOnChange = (event) => {
+        const user = event.target.value;
+        validator.validations.user.clear();
+        setCredential({
+            ...credential,
+            user
+        });
     };
 
-    const checkField = (val, showError, errorText) => {
-        if (val.length === 0) {
-            showError(errorText);
-            return false;
-        }
-        return true;
+    let passwordOnChange = (event) => {
+        const password = event.target.value;
+        validator.validations.password.clear();
+        setCredential({
+            ...credential,
+            password
+        });
     };
 
-    const clear = (text, clearFunc) => {
-        if (text.length !== 0) {
-            clearFunc('');
-        }
+    let emailOnChange = (event) => {
+        const email = event.target.value;
+        validator.validations.email.clear();
+        setCredential({
+            ...credential,
+            email
+        })
+    };
+
+    let roleOnChange = (event) => {
+        const role = event.target.value;
+        setCredential({
+            ...credential,
+            role
+        });
     };
 
     return (
@@ -84,105 +140,42 @@ export default function SignUp() {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon/>
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
+                    <Typography component="h1" variant="h5">Sign up</Typography>
                     <form className={classes.form} noValidate>
-                        <TextField
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            label="Username"
-                            error={errorTextUsername.length !== 0}
-                            helperText={errorTextUsername}
-                            defaultValue={credential.user}
-                            onChange={(event) => {
-                                const eventValue = event.target.value;
-                                clear(errorTextUsername, setErrorTextUsername);
-                                setCredential(curState => {
-                                    curState.user = eventValue;
-                                    return curState;
-                                })
-                            }}
-                            autoFocus/>
-                        <TextField
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            label="Email"
-                            error={errorTextEmail.length !== 0}
-                            helperText={errorTextEmail}
-                            defaultValue={credential.email}
-                            onChange={(event) => {
-                                const eventValue = event.target.value;
-                                clear(errorTextEmail, setErrorTextEmail);
-                                setCredential(curState => {
-                                    curState.email = eventValue;
-                                    return curState;
-                                })
-                            }}/>
-                        <TextField
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            label="Password"
-                            type="password"
-                            error={errorTextPassword.length !== 0}
-                            helperText={errorTextPassword}
-                            defaultValue={credential.password}
-                            onChange={(event) => {
-                                const eventValue = event.target.value;
-                                clear(errorTextPassword, setErrorTextPassword);
-                                setCredential(curState => {
-                                    curState.password = eventValue;
-                                    return curState;
-                                })
-                            }}
-                            autoComplete="current-password"/>
+                        <TextField required variant="outlined" margin="normal" fullWidth label="Username"
+                                   error={validation.errorTextUsername.length !== 0}
+                                   helperText={validation.errorTextUsername}
+                                   onChange={usernameOnChange}
+                                   autoFocus/>
+                        <TextField required variant="outlined" margin="normal" fullWidth label="Email"
+                                   error={validation.errorTextEmail.length !== 0}
+                                   helperText={validation.errorTextEmail}
+                                   defaultValue={credential.email}
+                                   onChange={emailOnChange}/>
+                        <TextField required variant="outlined" margin="normal" fullWidth label="Password"
+                                   type="password"
+                                   error={validation.errorTextPassword.length !== 0}
+                                   helperText={validation.errorTextPassword} defaultValue={credential.password}
+                                   onChange={passwordOnChange}/>
                         <Grid container justify="center">
-                            <RadioGroup aria-label="role"
-                                        name="role"
-                                        value={role}
-                                        onChange={(event) => {
-                                            const eventValue = event.target.value;
-                                            clear(errorTextPassword, setErrorTextPassword);
-                                            setRole(eventValue);
-                                        }}
+                            <RadioGroup aria-label="role" name="role"
+                                        value={credential.role}
+                                        onChange={roleOnChange}
                                         row>
-                                <FormControlLabel
-                                    value="PROVIDER"
-                                    control={<Radio/>}
-                                    label="Provider"
-                                    labelPlacement="end"
-                                />
-                                <FormControlLabel
-                                    value="CONSUMER"
-                                    control={<Radio/>}
-                                    label="Consumer"
-                                    labelPlacement="end"
-                                />
+                                <FormControlLabel value="PROVIDER" control={<Radio/>} label="Provider"
+                                                  labelPlacement="end"/>
+                                <FormControlLabel value="CONSUMER" label="Consumer" control={<Radio/>}
+                                                  labelPlacement="end"/>
                             </RadioGroup>
                         </Grid>
                         {
-                            (globalError && globalError.length !== 0)
-                                ? <div style={{color: 'red'}}>{globalError}</div>
-                                : ''
+                            (validation.globalError &&
+                                (<div style={{color: 'red'}}>{validation.globalError}</div>))
                         }
-                        {
-                            showComplete
-                                ? <div style={{color: 'green'}}>Registration successfully completed</div>
-                                : ''
-                        }
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={loginHandler}>
+                        {validation.showComplete &&
+                        (<div style={{color: 'green'}}>Registration successfully completed</div>)}
+                        <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}
+                                onClick={loginHandler}>
                             Sign Up
                         </Button>
                         <Grid container>

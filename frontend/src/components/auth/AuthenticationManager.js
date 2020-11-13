@@ -1,14 +1,21 @@
 import Authentication from "./Authentication";
 
+let logoutCallback;
 export let authentication;
 
 export const getAuthentication = () => {
     return authentication;
 };
 
+export const setLogoutCallback = (clearAuthentication) => {
+    logoutCallback = clearAuthentication;
+};
+
 export const logout = () => {
     authentication = null;
     localStorage.removeItem('token');
+    if(logoutCallback)
+        logoutCallback();
 };
 
 const hasToken = () => {
@@ -24,6 +31,8 @@ export const authenticate = (token) => {
     const payload = token.split('.')[1];
     const payloadJson = window.atob(payload);
     authentication = new Authentication(JSON.parse(payloadJson), token);
+    localStorage.setItem('token', token);
+    return authentication;
 };
 
 if (hasToken()) {

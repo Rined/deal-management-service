@@ -54,7 +54,9 @@ export default function ListProposal(props) {
                                             </div>
                                         </CardContent>
                                         <CardActions>
-                                            <Button size="small" onClick={() => openViewProposal(proposal.id)}>Learn More</Button>
+                                            <Button size="small" onClick={() => openViewProposal(proposal.id)}>
+                                                Learn More
+                                            </Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>

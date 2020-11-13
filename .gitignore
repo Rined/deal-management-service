@@ -12,3 +12,6 @@ logs
 **/output
 **/package-lock.json
 **/persist
+**/build/
+**/gradle/
+**/.gradle/

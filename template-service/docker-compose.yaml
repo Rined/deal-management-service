@@ -1,0 +1,25 @@
+services:
+  app:
+    image: dms-template-img
+    container_name: dms-template-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 8083
+    ports:
+      - 8083:8083
+    environment:
+      - mongo.db=dms-template
+      - mongo.user=admin
+      - mongo.password=admin
+    depends_on:
+      - mongo-template-db
+  mongo-template-db:
+    image: mongo:latest
+    container_name: dms-mogno-template-db
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: dms-template
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin

@@ -22,7 +22,7 @@
         <module>template-service</module>
         <module>deal-service</module>
         <module>proposal-service</module>
-        <module>auth-service</module>
+        <module>jwt-auth-service</module>
         <module>gateway-service</module>
         <module>deal-batch</module>
         <module>mail-service</module>

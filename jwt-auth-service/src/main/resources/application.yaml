@@ -1,3 +1,10 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
+
 spring:
   jpa:
     open-in-view: false
@@ -12,13 +19,6 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-
-server:
-  port: 8081
-  error:
-    include-message: always
-  servlet:
-    context-path: /api/v1
 
 logging:
   file:
@@ -49,6 +49,6 @@ management:
   endpoints:
     enabled-by-default: false
     web:
-      base-path: /
+      base-path: /statistic
       exposure:
         include: '*'

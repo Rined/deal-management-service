@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {getAuthentication} from "../auth/AuthenticationManager";
+import {getAuthentication, setLogoutCallback} from "../auth/AuthenticationManager";
 
 const AuthContext = React.createContext('');
 
 export const AuthProvider = ({children}) => {
     const [auth, setAuth] = useState(getAuthentication());
+    setLogoutCallback(() => setAuth(null));
     return <AuthContext.Provider value={{auth, setAuth}}>{children}</AuthContext.Provider>
 };
 

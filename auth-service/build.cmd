@@ -1,0 +1,1 @@
+docker build -t rined/dms-auth:v1 .

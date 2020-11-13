@@ -1,19 +1,24 @@
 server:
   port: 8083
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
 
 spring:
   data:
     mongodb:
-      database: template-service
-      host: localhost
+      username: ${mongo.user}
+      password: ${mongo.password}
+      database: ${mongo.db}
+      authentication-database: admin
+      host: mongo-template-db
       port: 27017
-#      port: 27017
-#      host: template-mongo-container
-#      database: template-service
 #      uri: mongodb://localhost
 
 logging:
-  file: 'logs/@project.artifactId@/log.log'
+  file:
+    name: 'logs/@project.artifactId@/log.log'
   pattern:
     file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
   level:
@@ -21,6 +26,15 @@ logging:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
+    export:
+      prometheus:
+        enabled: true
   endpoint:
     metrics:
       enabled: true

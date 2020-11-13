@@ -16,9 +16,9 @@ public interface TemplateService {
 
     void deleteById(String templateId, ProviderDto providerDto);
 
-    void createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto);
+    Template createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto);
 
-    void updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto);
+    Template updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto);
 
     List<TemplateBrief> getAllBriefTemplates(ProviderDto providerDto);
 }

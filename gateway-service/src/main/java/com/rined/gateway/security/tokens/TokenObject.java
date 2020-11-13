@@ -15,6 +15,6 @@ public class TokenObject {
     private String userId;
     private String username;
     private String email;
-    private List<Role> roles;
+    private Role role;
     private Date expire;
 }

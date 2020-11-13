@@ -9,27 +9,59 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {authenticate, getAuthentication} from "./auth/AuthenticationManager";
+import {authenticate} from "./auth/AuthenticationManager";
 import {useAuthSetter} from "./contexts/AuthContext";
 import request from "./request/request"
+import {Validator, Validation} from "./utils/Validation";
 
 export default function SignIn() {
     const classes = useStyles();
     const setAuth = useAuthSetter();
 
-    const [globalError, setGlobalError] = useState('');
-    const [errorTextUsername, setErrorTextUsername] = useState('');
-    const [errorTextPassword, setErrorTextPassword] = useState('');
+    const [validation, setValidationError] = useState({
+        globalError: '',
+        errorTextUsername: '',
+        errorTextPassword: ''
+    });
+
     const [credential, setCredential] = useState({
         user: '',
         password: ''
     });
 
+    const setGlobalError = (globalError) => {
+        setValidationError({
+            ...validation,
+            globalError
+        });
+    };
+
+    const setErrorTextUsername = (errorTextUsername) => {
+        setValidationError({
+            ...validation,
+            errorTextUsername
+        });
+    };
+
+    const setErrorTextPassword = (errorTextPassword) => {
+        setValidationError({
+            ...validation,
+            errorTextPassword
+        });
+    };
+
+    const validator = new Validator(
+        {
+            user: new Validation(credential.user, setErrorTextUsername, 'Username is mandatory'),
+            password: new Validation(credential.password, setErrorTextPassword, 'Password is mandatory')
+        },
+        setGlobalError
+    );
+
     const loginHandler = (event) => {
         event.preventDefault();
-        setGlobalError('');
-        console.log(credential);
-        if (validate(credential.user, credential.password)) {
+        validator.clear();
+        if (validator.validate()) {
             const options = {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
@@ -37,35 +69,29 @@ export default function SignIn() {
             };
             request('/auth/login', options)
                 .then(
-                    (response) => {
-                        authenticate(response.json.token);
-                        setAuth(getAuthentication());
-                    },
-                    (response) => {
-                        setGlobalError(response.json.description);
-                    }
+                    (response) => setAuth(authenticate(response.json.token)),
+                    (response) => validator.showError(response.json.description)
                 );
         }
     };
-    const validate = (username, password) => {
-        let isValid = true;
-        if (username.length === 0) {
-            setErrorTextUsername('Username is mandatory');
-            isValid = false;
-        }
-        if (password.length === 0) {
-            setErrorTextPassword('Password is mandatory');
-            isValid = false;
-        }
-        return isValid;
+
+    const usernameOnChange = (event) => {
+        const eventValue = event.target.value;
+        validator.validations.user.clear();
+        setCredential(curState => {
+            curState.user = eventValue;
+            return curState;
+        })
     };
 
-    const clear = (text, clearFunc) => {
-        if (text.length !== 0) {
-            clearFunc('');
-        }
+    const passwordOnChange = (event) => {
+        const eventValue = event.target.value;
+        validator.validations.password.clear();
+        setCredential(curState => {
+            curState.password = eventValue;
+            return curState;
+        })
     };
-
 
     return (
         <React.Fragment>
@@ -75,59 +101,25 @@ export default function SignIn() {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon/>
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
+                    <Typography component="h1" variant="h5">Sign in</Typography>
                     <form className={classes.form} noValidate>
-                        <TextField
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            label="Username"
-                            error={errorTextUsername.length !== 0}
-                            helperText={errorTextUsername}
-                            defaultValue={credential.user}
-                            onChange={(event) => {
-                                const eventValue = event.target.value;
-                                clear(errorTextUsername, setErrorTextUsername);
-                                setCredential(curState => {
-                                    curState.user = eventValue;
-                                    return curState;
-                                })
-                            }}
-                            autoFocus/>
-                        <TextField
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            label="Password"
-                            type="password"
-                            error={errorTextPassword.length !== 0}
-                            helperText={errorTextPassword}
-                            defaultValue={credential.password}
-                            onChange={(event) => {
-                                const eventValue = event.target.value;
-                                clear(errorTextPassword, setErrorTextPassword);
-                                setCredential(curState => {
-                                    curState.password = eventValue;
-                                    return curState;
-                                })
-                            }}
-                            autoComplete="current-password"/>
+                        <TextField required variant="outlined" margin="normal" fullWidth label="Username"
+                                   error={validation.errorTextUsername.length !== 0}
+                                   helperText={validation.errorTextUsername}
+                                   onChange={usernameOnChange}
+                                   autoFocus/>
+                        <TextField required variant="outlined" margin="normal" fullWidth label="Password"
+                                   type="password" error={validation.errorTextPassword.length !== 0}
+                                   helperText={validation.errorTextPassword}
+                                   onChange={passwordOnChange}
+                        />
                         {
-                            (globalError && globalError.length !== 0)
-                                ? <div style={{color: 'red'}}>{globalError}</div>
-                                : ''
+                            (validation.globalError && validation.globalError.length !== 0) &&
+                            (<div style={{color: 'red'}}>{validation.globalError}</div>)
+
                         }
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={loginHandler}>
+                        <Button type="submit" fullWidth variant="contained" color="primary"
+                                className={classes.submit} onClick={loginHandler}>
                             Sign In
                         </Button>
                         <Grid container>

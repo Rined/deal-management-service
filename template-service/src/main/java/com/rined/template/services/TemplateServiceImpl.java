@@ -35,19 +35,19 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public void createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto) {
+    public Template createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto) {
         Template template = converter.requestDtoToBean(templateDto, providerDto);
-        repository.save(template);
+        return repository.save(template);
     }
 
     @Override
-    public void updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto) {
+    public Template updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto) {
         Template template = repository.findByIdAndProviderId(templateId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", templateId));
         template.setFields(templateDto.getFields());
         template.setFormat(templateDto.getFormat());
         template.setTemplateName(templateDto.getTemplateName());
-        repository.save(template);
+        return repository.save(template);
     }
 
     @Override

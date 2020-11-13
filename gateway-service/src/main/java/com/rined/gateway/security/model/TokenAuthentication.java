@@ -20,8 +20,8 @@ public final class TokenAuthentication extends AbstractAuthenticationToken {
 
     public TokenAuthentication(String token,
                                User principal,
-                               Collection<? extends GrantedAuthority> authorities) {
-        super(authorities);
+                               GrantedAuthority authority) {
+        super(Collections.singletonList(authority));
         this.token = token;
         this.principal = principal;
         setAuthenticated(true);

@@ -55,8 +55,7 @@ export default function ViewTemplate(props) {
                     <MaterialTable
                         title="Template fields"
                         data={state.fields}
-                        columns={[{title: 'Field', field: 'name'}, {title: 'Description', field: 'description'}]}
-                    />
+                        columns={[{title: 'Field', field: 'name'}, {title: 'Description', field: 'description'}]}/>
                     : <React.Fragment/>
             }
         </div>

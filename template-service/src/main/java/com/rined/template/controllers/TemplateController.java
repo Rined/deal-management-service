@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @Api(value = "/api", description = "Операции с шаблонами поставщика")
 public class TemplateController {
@@ -51,17 +50,17 @@ public class TemplateController {
 
     @PutMapping("/templates/{templateId}")
     @ApiOperation(value = "Изменить шаблон поставщика по id")
-    public void updateProviderTemplate(@PathVariable("templateId") String templateId,
-                                       @Valid @RequestBody TemplateRequestDto templateDto,
-                                       @ApiIgnore @Provider ProviderDto providerDto) {
-        service.updateTemplate(templateId, templateDto, providerDto);
+    public Template updateProviderTemplate(@PathVariable("templateId") String templateId,
+                                           @Valid @RequestBody TemplateRequestDto templateDto,
+                                           @ApiIgnore @Provider ProviderDto providerDto) {
+        return service.updateTemplate(templateId, templateDto, providerDto);
     }
 
     @PostMapping("/templates")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать шаблон поставщика")
-    public void createProviderTemplate(@Valid @RequestBody TemplateRequestDto templateDto,
-                                       @ApiIgnore @Provider ProviderDto providerDto) {
-        service.createTemplate(templateDto, providerDto);
+    public Template createProviderTemplate(@Valid @RequestBody TemplateRequestDto templateDto,
+                                           @ApiIgnore @Provider ProviderDto providerDto) {
+        return service.createTemplate(templateDto, providerDto);
     }
 }

@@ -34,7 +34,7 @@ public class JWTCheckTokenService implements TokenService {
                     .expire(body.getExpiration())
                     .userId(body.get("userId", String.class))
                     .email(body.get("email", String.class))
-                    .roles(conversionToRole(body.get("roles", List.class)))
+                    .role(Role.valueOf(body.get("role", String.class)))
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +54,7 @@ public class JWTCheckTokenService implements TokenService {
                 new User(tokenObject.getUserId(),
                         tokenObject.getUsername(),
                         tokenObject.getEmail()),
-                tokenObject.getRoles()
+                tokenObject.getRole()
         );
     }
 

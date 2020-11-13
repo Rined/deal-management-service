@@ -22,6 +22,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import request from "./../../../request/request"
+import {useAuthSetter} from "../../../contexts/AuthContext";
 
 const CURRENT_ACTION = 'list';
 export default function ListTemplates(props) {
@@ -31,6 +32,12 @@ export default function ListTemplates(props) {
     const [dialogState, setDialogState] = React.useState({open: false});
     const [openSnack, setOpenSnack] = React.useState(false);
     const [positiveSnack, setPositiveSnack] = React.useState(false);
+
+    const authSetter = useAuthSetter();
+
+    const clearAuth = () => {
+        authSetter(null);
+    };
 
 
     const openEditTemplate = (id) => {
