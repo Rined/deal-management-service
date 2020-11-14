@@ -50,8 +50,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "auth-chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{- define "postgresql.fullname" -}}
-{{- "pg-auth-db" }}
-{{- end -}}
-

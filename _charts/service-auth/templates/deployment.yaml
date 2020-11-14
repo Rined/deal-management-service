@@ -23,18 +23,9 @@ spec:
           image: "{{ .Values.image }}"
           ports:
             - name: web
-              containerPort: 8000
+              containerPort: 8081
               protocol: TCP              
           env:
-            - name: redis.password
-              valueFrom:
-                secretKeyRef:
-                  name: auth-secret
-                  key: REDIS_PASSWORD
-            - name: redis.host
-              value: {{ .Values.redis.fullnameOverride }}-master
-            - name: redis.port
-              value: {{ .Values.redis.redisPort | quote  }}
             - name: pg.password
               valueFrom:
                 secretKeyRef:
@@ -55,15 +46,20 @@ spec:
                 configMapKeyRef:
                   name: auth-config
                   key: PG_DB                  
+            - name: pg.host
+              valueFrom:
+                configMapKeyRef:
+                  name: auth-config
+                  key: PG_HOST                  
           livenessProbe:
               httpGet:
                 port: web
-                path: /health
+                path: /api/v1/statistic/health
               initialDelaySeconds: 60
               periodSeconds: 15
           readinessProbe:
               httpGet:
                 port: web
-                path: /health
+                path: /api/v1/statistic/health
               initialDelaySeconds: 5
               periodSeconds: 3                  

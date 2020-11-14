@@ -5,57 +5,61 @@ metadata:
   labels:
     {{- include "service-proposal.labels" . | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-{{- end }}
+  strategy:
+    type: {{ .Values.updateType }}    
   selector:
     matchLabels:
       {{- include "service-proposal.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
       labels:
         {{- include "service-proposal.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}           
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "service-proposal.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image }}"
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
+            - name: web
+              containerPort: 8082
+              protocol: TCP              
+          env:
+            - name: mongo.host
+              valueFrom:
+                configMapKeyRef:
+                  name: proposal-config
+                  key: MONGO_HOST  
+            - name: mongo.port
+              valueFrom:
+                configMapKeyRef:
+                  name: proposal-config
+                  key: MONGO_PORT          
+            - name: mongo.db
+              valueFrom:
+                configMapKeyRef:
+                  name: proposal-config
+                  key: MONGO_DB                
+            - name: mongo.user
+              valueFrom:
+                configMapKeyRef:
+                  name: proposal-config
+                  key: MONGO_USER                  
+            - name: mongo.password
+              valueFrom:
+                secretKeyRef:
+                  name: proposal-secret
+                  key: MONGO_PASSWORD                  
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
+              httpGet:
+                port: web
+                path: /api/v1/statistic/health
+              initialDelaySeconds: 60
+              periodSeconds: 15
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+              httpGet:
+                port: web
+                path: /api/v1/statistic/health
+              initialDelaySeconds: 5
+              periodSeconds: 3   

@@ -13,6 +13,9 @@ services:
       - mongo.db=dms-template
       - mongo.user=admin
       - mongo.password=admin
+      - mongo.auth.db=admin
+      - mongo.host=mongo-template-db
+      - mongo.port=27017
     depends_on:
       - mongo-template-db
   mongo-template-db:

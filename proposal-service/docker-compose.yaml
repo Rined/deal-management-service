@@ -13,6 +13,7 @@ services:
       - mongo.db=dms-proposal
       - mongo.user=admin
       - mongo.password=admin
+      - mongo.host=mongo-proposal-db
     depends_on:
       - mongo-proposal-db
   mongo-proposal-db:

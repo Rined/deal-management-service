@@ -13,6 +13,8 @@ services:
       - mongo.db=dms-deal
       - mongo.user=admin
       - mongo.password=admin
+      - mongo.host=mongo-deal-db
+      - mongo.port=27017
     depends_on:
       - mongo-deal-db
   mongo-deal-db:

@@ -27,7 +27,6 @@
         <module>deal-batch</module>
         <module>mail-service</module>
         <module>notification-service</module>
-        <module>user-service</module>
     </modules>
 
 </project>

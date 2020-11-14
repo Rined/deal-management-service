@@ -27,8 +27,8 @@ public class DealController {
     @PostMapping("/deals")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать сделку. Потребитель создает сделку.")
-    public void createProviderTemplate(@Valid @RequestBody DealRequestDto dealDto,
-                                       @ApiIgnore @Consumer ConsumerDto consumerDto) {
+    public void createDeal(@Valid @RequestBody DealRequestDto dealDto,
+                           @ApiIgnore @Consumer ConsumerDto consumerDto) {
         service.createDeal(dealDto, consumerDto);
     }
 

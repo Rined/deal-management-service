@@ -13,7 +13,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://pg-auth-db:${pg.port}/${pg.db}
+    url: jdbc:postgresql://${pg.host}:${pg.port}/${pg.db}
     username: ${pg.user}
     password: ${pg.password}
   liquibase:

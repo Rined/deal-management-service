@@ -6,6 +6,7 @@ data:
   PG_DB: {{ .Values.postgresql.postgresqlDatabase | quote }}
   PG_PORT: {{ .Values.postgresql.service.port | quote }}  
   PG_USER: {{ .Values.postgresql.postgresqlUsername | quote }}
+  PG_HOST: {{ .Values.postgresql.fullnameOverride | quote }}
   
 ---
 
@@ -15,5 +16,4 @@ metadata:
   name: auth-secret
 type: Opaque
 data:
-  PG_PASSWORD: {{ .Values.postgresql.postgresqlPassword  | b64enc | quote }}  
-  REDIS_PASSWORD: {{ .Values.redis.password  | b64enc | quote }}  
+  PG_PASSWORD: {{ .Values.postgresql.postgresqlPassword  | b64enc | quote }}    
