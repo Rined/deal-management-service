@@ -1,17 +1,17 @@
 package com.rined.proposal.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ErrorDto {
 
     @JsonProperty("reason")
-    private String reason;
+    private final String reason;
 
     @JsonProperty("description")
-    private String description;
+    private final String description;
 
 }

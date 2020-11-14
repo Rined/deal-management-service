@@ -1,0 +1,25 @@
+services:
+  app:
+    image: dms-proposal-img
+    container_name: dms-proposal-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 8082
+    ports:
+      - 8082:8082
+    environment:
+      - mongo.db=dms-proposal
+      - mongo.user=admin
+      - mongo.password=admin
+    depends_on:
+      - mongo-proposal-db
+  mongo-proposal-db:
+    image: mongo:latest
+    container_name: dms-mogno-proposal-db
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: dms-proposal
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin

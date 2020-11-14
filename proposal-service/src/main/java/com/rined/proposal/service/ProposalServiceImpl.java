@@ -42,18 +42,18 @@ public class ProposalServiceImpl implements ProposalService {
     }
 
     @Override
-    public void createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto) {
+    public Proposal createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto) {
         Proposal proposal = converter.requestDtoToBean(proposalDto, providerDto);
-        repository.save(proposal);
+        return repository.save(proposal);
     }
 
     @Override
-    public void updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto) {
+    public Proposal updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto) {
         Proposal proposal = repository.findByIdAndProviderId(proposalId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", proposalId));
         proposal.setProposalName(proposalDto.getProposalName());
         proposal.setFields(proposalDto.getFields());
-        repository.save(proposal);
+        return repository.save(proposal);
     }
 
     @Override

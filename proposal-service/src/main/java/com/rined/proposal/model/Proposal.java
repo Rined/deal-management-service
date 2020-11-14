@@ -42,12 +42,6 @@ public class Proposal {
     @JsonView(Views.Consumer.class)
     private String providerId;
 
-    public Proposal(String proposalName, List<ProposalField> fields, String templateFormat) {
-        this.proposalName = proposalName;
-        this.fields = fields;
-        this.templateFormat = templateFormat;
-    }
-
     public Proposal(String proposalName, List<ProposalField> fields, String templateFormat, String providerId) {
         this.proposalName = proposalName;
         this.fields = fields;

@@ -1,11 +1,11 @@
 package com.rined.proposal.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.rined.proposal.model.Proposal;
+import com.rined.proposal.model.ProposalBrief;
 import com.rined.proposal.model.dto.ProposalRequestDto;
 import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
 import com.rined.proposal.model.dto.ProviderDto;
-import com.rined.proposal.model.Proposal;
-import com.rined.proposal.model.ProposalBrief;
 import com.rined.proposal.model.dto.Views;
 import com.rined.proposal.resolver.Provider;
 import com.rined.proposal.service.ProposalConsumerService;
@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @Api(value = "/api", description = "Операции с предложениями")
 public class ProposalController {
@@ -71,17 +70,17 @@ public class ProposalController {
 
     @PutMapping("/proposals/{proposalId}")
     @ApiOperation(value = "Изменить предложение поставщика по id")
-    public void updateProviderProposal(@PathVariable("proposalId") String proposalId,
-                                       @Valid @RequestBody ProposalRequestUpdateDto proposalDto,
-                                       @ApiIgnore @Provider ProviderDto providerDto) {
-        service.updateProposal(proposalId, proposalDto, providerDto);
+    public Proposal updateProviderProposal(@PathVariable("proposalId") String proposalId,
+                                           @Valid @RequestBody ProposalRequestUpdateDto proposalDto,
+                                           @ApiIgnore @Provider ProviderDto providerDto) {
+        return service.updateProposal(proposalId, proposalDto, providerDto);
     }
 
     @PostMapping("/proposals")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать предложение поставщика")
-    public void createProviderProposal(@Valid @RequestBody ProposalRequestDto proposalDto,
-                                       @ApiIgnore @Provider ProviderDto providerDto) {
-        service.createProposal(proposalDto, providerDto);
+    public Proposal createProviderProposal(@Valid @RequestBody ProposalRequestDto proposalDto,
+                                           @ApiIgnore @Provider ProviderDto providerDto) {
+        return service.createProposal(proposalDto, providerDto);
     }
 }

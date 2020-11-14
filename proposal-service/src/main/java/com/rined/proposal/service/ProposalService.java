@@ -18,9 +18,9 @@ public interface ProposalService {
 
     void deleteById(String proposalId, ProviderDto providerDto);
 
-    void createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto);
+    Proposal createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto);
 
-    void updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto);
+    Proposal updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto);
 
     List<ProposalBrief> getAllBriefProposals(ProviderDto providerDto);
 
