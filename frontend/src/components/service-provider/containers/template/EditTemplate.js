@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import request from "./../../../request/request"
+import request, {TEMPLATE_PATH} from "./../../../request/request"
 import MutableTemplate from "./MutableTemplate";
 
 const CURRENT_ACTION = 'edit';
@@ -8,9 +8,9 @@ export default function EditTemplate(props) {
 
     useEffect(() => {
         const options = {
-            headers: {'Authorization': props.auth.jwt}
+            headers: {'Authorization': 'Bearer ' +props.auth.jwt}
         };
-        request(`/templates/api/templates/${props.param.id}`, options)
+        request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)
             .then(response => setEditState(response.json));
     }, []);
 
@@ -19,11 +19,11 @@ export default function EditTemplate(props) {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': props.auth.jwt
+                'Authorization': 'Bearer ' +props.auth.jwt
             },
             body: JSON.stringify(foreignState)
         };
-        return request(`/templates/api/templates/${props.param.id}`, options)
+        return request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)
     };
 
     if(!editState){

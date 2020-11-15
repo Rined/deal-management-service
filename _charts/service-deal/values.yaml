@@ -1,6 +1,7 @@
 replicaCount: 2
 updateType: RollingUpdate
 host: arch.project
+fullnameOverride: deal-service
 
 image: rined/dms-deal:v1
 

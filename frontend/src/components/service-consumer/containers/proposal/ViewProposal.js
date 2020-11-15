@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useActionSetter} from "./../../../contexts/ProposalConsumerContext";
-import request from "./../../../request/request"
+import request, {DEAL_PATH, PROPOSAL_PATH} from "./../../../request/request"
 import MarkdownIt from "markdown-it";
 import ReactHtmlParser from 'react-html-parser';
 import Paper from '@material-ui/core/Paper';
@@ -27,10 +27,10 @@ export default function ViewProposal(props) {
         const proposalId = props.param.id;
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request(`/proposals/api/proposals/consumer/${proposalId}`, options)
+        request(PROPOSAL_PATH, `/proposals/consumer/${proposalId}`, options)
             .then(response => {
                 let data = response.json;
                 console.log(data);
@@ -56,11 +56,11 @@ export default function ViewProposal(props) {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
             body: JSON.stringify(state)
         };
-        request(`/deals/api/deals`, options)
+        request(DEAL_PATH, `/deals`, options)
             .then((response) => {
                 setPositive(true);
                 setOpen(true);

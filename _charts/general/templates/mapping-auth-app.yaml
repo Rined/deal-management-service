@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name:  dms-auth-app-mapping
+spec:
+  prefix: /auth/api/v1
+  service: auth-service:9000
+  rewrite: "/api/v1"

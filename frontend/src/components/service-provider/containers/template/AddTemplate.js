@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import request from "./../../../request/request";
+import request, {TEMPLATE_PATH} from "./../../../request/request";
 import {generateId} from "../../../utils/Utils"
 import MutableTemplate from "./MutableTemplate";
 
@@ -18,11 +18,11 @@ export default function AddTemplate(props) {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': props.auth.jwt
+                'Authorization': 'Bearer ' +props.auth.jwt
             },
             body: JSON.stringify(foreignState)
         };
-        return request(`/templates/api/templates`, options);
+        return request(TEMPLATE_PATH, `/templates`, options);
     };
 
     return (

@@ -8,9 +8,6 @@ version: 0.0.1
 appVersion: 0.0.1
 
 dependencies:
-  - name: prometheus-operator
-    version: 9.x.x
-    repository: https://kubernetes-charts.storage.googleapis.com
-  - name: prometheus-postgres-exporter
-    version: 1.3.0
-    repository: https://kubernetes-charts.storage.googleapis.com
+  - name: ambassador
+    version: 6.x.x
+    repository: https://getambassador.io

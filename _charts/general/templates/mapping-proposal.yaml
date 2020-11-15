@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name:  dms-deal-proposal-mapping
+spec:
+  prefix: /proposal/api/v1
+  service: proposal-service:9002
+  rewrite: "/api/v1"  

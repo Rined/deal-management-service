@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ReactHtmlParser from "react-html-parser";
 import Paper from '@material-ui/core/Paper';
 import {makeStyles} from "@material-ui/core/styles";
-import request from "./../../../request/request";
+import request, {PROPOSAL_PATH} from "./../../../request/request";
 
 const CURRENT_ACTION = 'edit';
 const columns = [
@@ -39,10 +39,10 @@ export default function EditProposal(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request(`/proposals/api/proposals/${proposalId}`, options)
+        request(PROPOSAL_PATH, `/proposals/${proposalId}`, options)
             .then(response => {
                 const proposal = response.json;
                 if (proposal.fields) {
@@ -64,11 +64,11 @@ export default function EditProposal(props) {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
             body: JSON.stringify(proposalDto)
         };
-        request(`/proposals/api/proposals/${proposalId}`, options)
+        request(PROPOSAL_PATH, `/proposals/${proposalId}`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);

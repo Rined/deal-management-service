@@ -21,7 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-import request from "./../../../request/request"
+import request, {TEMPLATE_PATH} from "./../../../request/request"
 import {useAuthSetter} from "../../../contexts/AuthContext";
 
 const CURRENT_ACTION = 'list';
@@ -91,10 +91,10 @@ export default function ListTemplates(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request('/templates/api/templates/brief', options)
+        request(TEMPLATE_PATH, '/templates/brief', options)
             .then(response => setTemplates(response.json))
             .catch(response => {
                 console.log('!!!', response);
@@ -109,10 +109,10 @@ export default function ListTemplates(props) {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
         };
-        request(`/templates/api/templates/${templateId}`, options)
+        request(TEMPLATE_PATH, `/templates/${templateId}`, options)
             .then((response) => {
                 setPositiveSnack(true);
                 removeTemplateById(templateId);

@@ -1,7 +1,12 @@
 import React from 'react';
 import {logout} from "../auth/AuthenticationManager";
 
-const origin = "";
+const API_VERSION = '/api/v1';
+
+export const AUTH_PATH = '/auth';
+export const DEAL_PATH = '/deal';
+export const PROPOSAL_PATH = '/proposal';
+export const TEMPLATE_PATH = '/template';
 
 function parseJSON(response) {
     return response.text().then((text) =>
@@ -20,12 +25,12 @@ function parseJSON(response) {
 }
 
 const isForbidden = (response) => {
-    return response.status === 403;
+    return response.status === 403 || response.status === 401;
 };
 
-export default function request(url, options) {
+export default function request(service, url, options) {
     return new Promise((resolve, reject) => {
-        fetch(`${origin}${url}`, options)
+        fetch(`${service}${API_VERSION}${url}`, options)
             .then(parseJSON)
             .then((response) => {
                 if (response.ok)

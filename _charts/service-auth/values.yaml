@@ -1,8 +1,9 @@
 replicaCount: 1
 updateType: RollingUpdate
 host: arch.project
+fullnameOverride: auth-service
 
-image: rined/dms-jwt-auth:v1
+image: rined/dms-jwt-auth:v3
 
 service:
   type: NodePort

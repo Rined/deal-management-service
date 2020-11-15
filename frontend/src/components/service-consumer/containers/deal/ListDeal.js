@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import request from "../../../request/request";
+import request, {DEAL_PATH} from "../../../request/request";
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -16,10 +16,10 @@ export default function ListDeal(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request('/deals/api/deals/consumer/brief', options)
+        request(DEAL_PATH, '/deals/consumer/brief', options)
             .then(response => {
                 setDeals(response.json);
                 console.log(response.json);

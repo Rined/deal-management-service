@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class JWTTokenService implements TokenService {
     @Override
     public String transform(User user) {
         return Jwts.builder()
+                .setHeaderParam("kid", "dms-key-id")
                 .setId(UUID.randomUUID().toString())
                 .setSubject(user.getUsername())
                 .setExpiration(generateExpireTime())

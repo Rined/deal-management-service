@@ -9,7 +9,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import {useActionSetter} from "../../../contexts/ProposalContext";
-import request from "./../../../request/request"
+import request, {PROPOSAL_PATH} from "./../../../request/request"
 
 const CURRENT_ACTION = 'view';
 const columns = [
@@ -27,10 +27,10 @@ export default function ViewProposal(props) {
         const proposalId = props.param.id;
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request(`/proposals/api/proposals/${proposalId}`, options)
+        request(PROPOSAL_PATH, `/proposals/${proposalId}`, options)
             .then(response => setState(response.json));
     }, []);
 

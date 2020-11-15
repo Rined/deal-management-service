@@ -1,0 +1,7 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name:  dms-ui-app-mapping
+spec:
+  prefix: /
+  service: ui-service:9001

@@ -13,7 +13,7 @@
 
     <groupId>com.rined</groupId>
     <artifactId>jwt-auth-service</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <description>Authentication service</description>
 
     <properties>

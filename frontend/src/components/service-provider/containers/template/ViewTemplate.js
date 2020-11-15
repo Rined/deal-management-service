@@ -6,7 +6,7 @@ import {useActionSetter} from "../../../contexts/TemplateContext";
 import MaterialTable from 'material-table';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import request from "./../../../request/request";
+import request, {TEMPLATE_PATH} from "./../../../request/request";
 import PaperMdRender from "../../../elements/PaperMdRender";
 
 const CURRENT_ACTION = 'view';
@@ -18,10 +18,10 @@ export default function ViewTemplate(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': props.auth.jwt
+                'Authorization': 'Bearer ' +props.auth.jwt
             }
         };
-        request(`/templates/api/templates/${props.param.id}`, options)
+        request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)
             .then(response => setState(response.json));
     }, []);
 

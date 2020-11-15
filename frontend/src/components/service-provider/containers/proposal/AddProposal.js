@@ -17,7 +17,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import request from "./../../../request/request"
+import request, {PROPOSAL_PATH, TEMPLATE_PATH} from "./../../../request/request"
 
 const CURRENT_ACTION = 'add';
 const columns = [
@@ -44,10 +44,10 @@ export default function AddProposal(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request('/templates/api/templates/brief', options)
+        request(TEMPLATE_PATH, '/templates/brief', options)
             .then(response => {
                 console.log(response);
                 setTemplates(response.json);
@@ -63,11 +63,11 @@ export default function AddProposal(props) {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
             body: JSON.stringify(proposalDto)
         };
-        request(`/proposals/api/proposals`, options)
+        request(PROPOSAL_PATH, `/proposals`, options)
             .then((response) => {
                 setTimeout(() => {
                     setPositive(true);
@@ -102,10 +102,10 @@ export default function AddProposal(props) {
         const templateId = event.target.value;
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request(`/templates/api/templates/${templateId}`, options)
+        request(TEMPLATE_PATH, `/templates/${templateId}`, options)
             .then(response => {
                 const backendTemplate = response.json;
                 const fields = backendTemplate.fields;

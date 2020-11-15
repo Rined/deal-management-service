@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import request from "../../../request/request";
+import request, {PROPOSAL_PATH} from "../../../request/request";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -24,10 +24,10 @@ export default function ListProposal(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request('/proposals/api/proposals/consumer/brief', options)
+        request(PROPOSAL_PATH, '/proposals/consumer/brief', options)
             .then(response => setProposals(response.json));
     }, []);
 

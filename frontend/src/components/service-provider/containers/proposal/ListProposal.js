@@ -21,7 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-import request from "./../../../request/request"
+import request, {PROPOSAL_PATH} from "./../../../request/request"
 
 
 const CURRENT_ACTION = 'list';
@@ -84,10 +84,10 @@ export default function ListProposal(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request('/proposals/api/proposals/brief', options)
+        request(PROPOSAL_PATH, '/proposals/brief', options)
             .then(response => setProposals(response.json));
     }, []);
 
@@ -99,10 +99,10 @@ export default function ListProposal(props) {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
         };
-        request(`/proposals/api/proposals/${proposalId}`, options).then((response) => {
+        request(PROPOSAL_PATH, `/proposals/${proposalId}`, options).then((response) => {
             setPositiveSnack(true);
             removeProposalById(proposalId);
             setOpenSnack(true);

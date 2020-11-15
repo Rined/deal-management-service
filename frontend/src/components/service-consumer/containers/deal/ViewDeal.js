@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useActionSetter} from "./../../../contexts/DealConsumerContext";
-import request from "./../../../request/request"
+import request, {DEAL_PATH} from "./../../../request/request"
 import ReactHtmlParser from 'react-html-parser';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -66,10 +66,10 @@ export default function ViewDeal(props) {
         const dealId = props.param.id;
         const options = {
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             }
         };
-        request(`/deals/api/deals/${role}/${dealId}`, options)
+        request(DEAL_PATH, `/deals/${role}/${dealId}`, options)
             .then(response => {
                 let data = response.json;
                 console.log(data);
@@ -93,10 +93,10 @@ export default function ViewDeal(props) {
         const options = {
             method: 'post',
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
         };
-        request(`/deals/api/deals/${role}/${props.param.id}/decline`, options)
+        request(DEAL_PATH, `/deals/${role}/${props.param.id}/decline`, options)
             .then((response) => {
                 console.log(response);
                 setPositive(true);
@@ -114,10 +114,10 @@ export default function ViewDeal(props) {
         const options = {
             method: 'post',
             headers: {
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
         };
-        request(`/deals/api/deals/${role}/${props.param.id}/accept`, options)
+        request(DEAL_PATH, `/deals/${role}/${props.param.id}/accept`, options)
             .then((response) => {
                 console.log(response);
                 setPositive(true);
@@ -149,11 +149,11 @@ export default function ViewDeal(props) {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': 'Bearer ' +token
             },
             body: JSON.stringify(table)
         };
-        request(`/deals/api/deals/${role}/${props.param.id}/request`, options)
+        request(DEAL_PATH, `/deals/${role}/${props.param.id}/request`, options)
             .then((response) => {
                 console.log(response);
                 setPositive(true);

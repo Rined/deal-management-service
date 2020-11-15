@@ -11,7 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {authenticate} from "./auth/AuthenticationManager";
 import {useAuthSetter} from "./contexts/AuthContext";
-import request from "./request/request"
+import request, {AUTH_PATH} from "./request/request"
 import {Validator, Validation} from "./utils/Validation";
 
 export default function SignIn() {
@@ -67,7 +67,7 @@ export default function SignIn() {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(credential)
             };
-            request('/auth/login', options)
+            request(AUTH_PATH, '/login', options)
                 .then(
                     (response) => setAuth(authenticate(response.json.token)),
                     (response) => validator.showError(response.json.description)
