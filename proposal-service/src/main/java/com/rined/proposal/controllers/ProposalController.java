@@ -2,11 +2,10 @@ package com.rined.proposal.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.rined.proposal.model.Proposal;
-import com.rined.proposal.model.ProposalBrief;
-import com.rined.proposal.model.dto.ProposalRequestDto;
-import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
-import com.rined.proposal.model.dto.ProviderDto;
-import com.rined.proposal.model.dto.Views;
+import com.rined.proposal.model.ProposalBriefForConsumer;
+import com.rined.proposal.model.ProposalBriefForProvider;
+import com.rined.proposal.model.dto.*;
+import com.rined.proposal.resolver.Consumer;
 import com.rined.proposal.resolver.Provider;
 import com.rined.proposal.service.ProposalConsumerService;
 import com.rined.proposal.service.ProposalService;
@@ -36,20 +35,20 @@ public class ProposalController {
 
     @GetMapping("/proposals/consumer/brief")
     @ApiOperation(value = "Получить все сокращенные предложения для потребителя")
-    public List<ProposalBrief> getAllBriefProposals() {
-        return consumerService.getBriefProposals();
+    public List<ProposalBriefForConsumer> getAllBriefProposals(@ApiIgnore @Consumer ConsumerDto consumerDto) {
+        return consumerService.getBriefProposals(consumerDto);
     }
 
-    @JsonView(Views.Consumer.class)
     @GetMapping("/proposals/consumer/{proposalId}")
     @ApiOperation(value = "Получить предложение поставщика по id для потребителя")
-    public Proposal getProposal(@PathVariable("proposalId") String proposalId) {
-        return service.getProposalById(proposalId);
+    public ProposalForConsumer getProposal(@PathVariable("proposalId") String proposalId,
+                                           @ApiIgnore @Consumer ConsumerDto consumerDto) {
+        return service.getProposalById(consumerDto, proposalId);
     }
 
     @GetMapping("/proposals/brief")
     @ApiOperation(value = "Получить сокращенные предложения поставщика")
-    public List<ProposalBrief> getAllBriefProviderProposals(@ApiIgnore @Provider ProviderDto providerDto) {
+    public List<ProposalBriefForProvider> getAllBriefProviderProposals(@ApiIgnore @Provider ProviderDto providerDto) {
         return service.getAllBriefProposals(providerDto);
     }
 
@@ -79,7 +78,7 @@ public class ProposalController {
     @PostMapping("/proposals")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать предложение поставщика")
-    public Proposal createProviderProposal(@Valid @RequestBody ProposalRequestDto proposalDto,
+    public Proposal createProviderProposal(@Valid @RequestBody ProposalCreateRequestDto proposalDto,
                                            @ApiIgnore @Provider ProviderDto providerDto) {
         return service.createProposal(proposalDto, providerDto);
     }

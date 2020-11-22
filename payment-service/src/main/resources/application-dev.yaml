@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/balance
+    username: postgres
+    password: password

@@ -1,9 +1,9 @@
-replicaCount: 2
+replicaCount: 1
 updateType: RollingUpdate
-host: arch.project
+host: arch.homework
 fullnameOverride: deal-service
 
-image: rined/dms-deal:v1
+image: rined/dms-deal:v6
 
 service:
   type: NodePort

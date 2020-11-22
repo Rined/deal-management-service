@@ -28,6 +28,11 @@ public class Proposal {
     @JsonView(Views.Provider.class)
     private String proposalName;
 
+    @Field("price")
+    @JsonProperty("price")
+    @JsonView(Views.Provider.class)
+    private Long price;
+
     @Field("fields")
     @JsonProperty("fields")
     @JsonView(Views.Provider.class)

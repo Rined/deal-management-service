@@ -13,8 +13,10 @@ public enum DealState {
     // в процессе выполнения
     IN_WORK(DONE),
 
+    PAYMENT(IN_WORK),
+
     // согласовано - здесь становится доступна инфа о поставщике и потребителе
-    CONSUMER_PROVIDE_INFO(IN_WORK),
+    CONSUMER_PROVIDE_INFO(PAYMENT),
 
     // ожидается заполнение информации от потребителя и поставщика
     PROVIDER_REQUEST_INFO(CONSUMER_PROVIDE_INFO),
@@ -24,7 +26,6 @@ public enum DealState {
 
     // провайдер согласился на сделку
     PROVIDER_ACCEPT(CONSUMER_ACCEPT);
-
 
     private final DealState nextState;
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useActionSetter} from "./../../../contexts/ProposalConsumerContext";
+import {useActionSetter} from "../../../contexts/ProposalConsumerContext";
 import request, {DEAL_PATH, PROPOSAL_PATH} from "./../../../request/request"
 import MarkdownIt from "markdown-it";
 import ReactHtmlParser from 'react-html-parser';
@@ -10,7 +10,9 @@ import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {generateId} from "../../../utils/Utils"
 import ErrorIcon from '@material-ui/icons/Error';
+import CardContent from "@material-ui/core/CardContent";
 
 const CURRENT_ACTION = 'view';
 export default function ViewProposal(props) {
@@ -18,7 +20,15 @@ export default function ViewProposal(props) {
 
     const token = props.auth.jwt;
     const setAction = useActionSetter();
-    const [state, setState] = useState();
+    const [state, setState] = useState({
+        id: generateId(),
+        proposalId: '',
+        proposalTitle: '',
+        dealSubject: '',
+        providerId: '',
+        price: 0
+    });
+    const [allowOperation, setAllowOperation] = React.useState(true);
 
     const [positive, setPositive] = React.useState(false);
     const [open, setOpen] = React.useState(false);
@@ -27,7 +37,7 @@ export default function ViewProposal(props) {
         const proposalId = props.param.id;
         const options = {
             headers: {
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             }
         };
         request(PROPOSAL_PATH, `/proposals/consumer/${proposalId}`, options)
@@ -35,11 +45,16 @@ export default function ViewProposal(props) {
                 let data = response.json;
                 console.log(data);
                 const htmlText = customHtmlRender(data.format, data.fields);
-                setState({
-                    proposalId: data.id,
-                    proposalTitle: data.name,
-                    dealSubject: htmlText,
-                    providerId: data.providerId
+                setState(prevState => {
+                    return {
+                        ...prevState,
+                        proposalId: data.id,
+                        proposalTitle: data.name,
+                        dealSubject: htmlText,
+                        providerId: data.providerId,
+                        price: data.price,
+                        user: data.user
+                    };
                 });
             });
     }, []);
@@ -52,11 +67,12 @@ export default function ViewProposal(props) {
     };
 
     const handleDeal = () => {
+        setAllowOperation(false);
         const options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify(state)
         };
@@ -67,6 +83,7 @@ export default function ViewProposal(props) {
                 console.log(response);
             })
             .catch((error) => {
+                setAllowOperation(true);
                 setPositive(false);
                 setOpen(true);
             });
@@ -150,7 +167,22 @@ export default function ViewProposal(props) {
                         </Typography>
                     </div>
                     }
+                    {state && state.user && (
+                        <div>
+                            <Typography color="textSecondary">
+                                {state.user.company + ' ' + state.user.city}
+                            </Typography>
+                            <Typography variant="body2" component="p">
+                                {state.user.firstName + ' ' + state.user.lastName}
+                            </Typography>
+                        </div>
+                    )}
                 </Grid>
+                <div>
+                    <Typography component="h4" display="inline" variant="h6">
+                        {state.price}$
+                    </Typography>
+                </div>
                 {
                     state && state.dealSubject ?
                         <Paper style={{padding: 7, marginTop: 10, marginBottom: 10}}>
@@ -162,6 +194,7 @@ export default function ViewProposal(props) {
                     <Button style={{marginRight: 10}}
                             variant="contained"
                             size="large"
+                            disabled={!allowOperation}
                             onClick={() => handleDeal()}
                             color="primary">
                         DEAL

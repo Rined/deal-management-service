@@ -7,6 +7,8 @@ export const AUTH_PATH = '/auth';
 export const DEAL_PATH = '/deal';
 export const PROPOSAL_PATH = '/proposal';
 export const TEMPLATE_PATH = '/template';
+export const USER_PATH = '/users';
+export const PAYMENT_PATH = '/payment';
 
 function parseJSON(response) {
     return response.text().then((text) =>

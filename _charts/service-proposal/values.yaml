@@ -1,9 +1,9 @@
-replicaCount: 2
+replicaCount: 1
 updateType: RollingUpdate
-host: arch.project
+host: arch.homework
 fullnameOverride: proposal-service
 
-image: rined/dms-proposal:v1
+image: rined/dms-proposal:v16
 
 service:
   type: NodePort

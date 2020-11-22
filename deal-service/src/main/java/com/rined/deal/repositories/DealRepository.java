@@ -14,6 +14,8 @@ public interface DealRepository extends MongoRepository<Deal, String>, DealRepos
 
     Optional<Deal> findByIdAndProviderId(String id, String consumerId);
 
+    boolean existsByIdAndConsumerIdAndProviderId(String id, String consumerId, String providerId);
+
     boolean existsByIdAndConsumerId(String id, String consumerId);
 
     boolean existsByIdAndProviderId(String id, String providerId);

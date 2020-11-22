@@ -4,7 +4,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import {useActionSetter} from "./../../../contexts/TemplateContext";
+import {useActionSetter} from "../../../contexts/TemplateContext";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -22,7 +22,6 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import request, {TEMPLATE_PATH} from "./../../../request/request"
-import {useAuthSetter} from "../../../contexts/AuthContext";
 
 const CURRENT_ACTION = 'list';
 export default function ListTemplates(props) {
@@ -32,13 +31,6 @@ export default function ListTemplates(props) {
     const [dialogState, setDialogState] = React.useState({open: false});
     const [openSnack, setOpenSnack] = React.useState(false);
     const [positiveSnack, setPositiveSnack] = React.useState(false);
-
-    const authSetter = useAuthSetter();
-
-    const clearAuth = () => {
-        authSetter(null);
-    };
-
 
     const openEditTemplate = (id) => {
         setAction({
@@ -91,7 +83,7 @@ export default function ListTemplates(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             }
         };
         request(TEMPLATE_PATH, '/templates/brief', options)
@@ -109,7 +101,7 @@ export default function ListTemplates(props) {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             },
         };
         request(TEMPLATE_PATH, `/templates/${templateId}`, options)

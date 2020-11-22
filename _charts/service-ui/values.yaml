@@ -1,9 +1,9 @@
 replicaCount: 1
 updateType: RollingUpdate
-host: arch.project
+host: arch.homework
 fullnameOverride: ui-service
 
-image: rined/dms-frontend:v3
+image: rined/dms-frontend:v34
 
 service:
   type: NodePort

@@ -10,10 +10,15 @@ services:
     ports:
       - 8082:8082
     environment:
+      - x_template_service_prefix=/template
+      - x_template_service_port=80
+      - x_template_service_host=arch.homework
+      - spring_profiles_active=dev
       - mongo.db=dms-proposal
       - mongo.user=admin
       - mongo.password=admin
       - mongo.host=mongo-proposal-db
+      - mongo.port=27017
     depends_on:
       - mongo-proposal-db
   mongo-proposal-db:

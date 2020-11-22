@@ -27,9 +27,9 @@ public class DealController {
     @PostMapping("/deals")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать сделку. Потребитель создает сделку.")
-    public void createDeal(@Valid @RequestBody DealRequestDto dealDto,
+    public Deal createDeal(@Valid @RequestBody DealCreateRequestDto dealDto,
                            @ApiIgnore @Consumer ConsumerDto consumerDto) {
-        service.createDeal(dealDto, consumerDto);
+        return service.createDeal(dealDto, consumerDto);
     }
 
     @GetMapping("/deals/consumer/brief")
@@ -77,6 +77,13 @@ public class DealController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/deals/consumer/{dealId}/pay")
+    public Deal consumerPayDeal(@PathVariable("dealId") String dealId,
+                                @ApiIgnore @Consumer ConsumerDto consumerDto) {
+        return stateService.payDeal(dealId, consumerDto);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/deals/provider/{dealId}/decline")
     public Deal providerDeclineDeal(@PathVariable("dealId") String dealId,
                                     @ApiIgnore @Provider ProviderDto providerDto) {
@@ -89,7 +96,6 @@ public class DealController {
                                    @ApiIgnore @Provider ProviderDto providerDto) {
         return stateService.acceptProvider(dealId, providerDto);
     }
-
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/deals/provider/{dealId}/request")

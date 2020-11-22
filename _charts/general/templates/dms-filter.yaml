@@ -16,3 +16,11 @@ spec:
     path: "/proposal/api/v1/*"
     filters:
     - name: "jwt-filter"
+  - host: "*"
+    path: "/users/api/v1/*"
+    filters:
+    - name: "jwt-filter"
+  - host: "*"
+    path: "/payment/api/v1/*"
+    filters:
+    - name: "jwt-filter"        

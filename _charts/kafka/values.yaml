@@ -1,0 +1,10 @@
+host: arch.homework
+
+kafka:
+  fullnameOverride: general-kafka
+  replicaCount: 1
+  service:
+    type: NodePort
+    nodePorts:
+      client: "32123"
+        

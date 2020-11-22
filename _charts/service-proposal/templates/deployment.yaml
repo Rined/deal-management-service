@@ -50,7 +50,15 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: proposal-secret
-                  key: MONGO_PASSWORD                  
+                  key: MONGO_PASSWORD
+            - name: x_template_service_host
+              value: "template-service"
+            - name: x_template_service_port
+              value: "9003"         
+            - name: x_user_service_host
+              value: "user-service"
+            - name: x_user_service_port
+              value: "9000"                       
           livenessProbe:
               httpGet:
                 port: web

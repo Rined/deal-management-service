@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useActionSetter} from "./../../../contexts/DealConsumerContext";
+import {useActionSetter} from "../../../contexts/DealConsumerContext";
 import request, {DEAL_PATH} from "./../../../request/request"
 import ReactHtmlParser from 'react-html-parser';
 import Paper from '@material-ui/core/Paper';
@@ -29,6 +29,7 @@ export default function ViewDeal(props) {
         'Wait consumer accept',
         'Wait provider info request',
         'Wait consumer provide info',
+        'Money transfer',
         'In work',
         'Done'
     ];
@@ -51,8 +52,10 @@ export default function ViewDeal(props) {
                 return 2;
             case 'CONSUMER_PROVIDE_INFO':
                 return 3;
-            case 'IN_WORK':
+            case 'PAYMENT':
                 return 4;
+            case 'IN_WORK':
+                return 5;
             case 'DONE':
                 return 6;
         }
@@ -102,6 +105,28 @@ export default function ViewDeal(props) {
                 setPositive(true);
                 setOpen(true);
                 setDeal(response.json);
+            })
+            .catch((error) => {
+                setPositive(false);
+                setOpen(true);
+                console.log(error);
+            });
+    };
+
+    const handlePay = () => {
+        const options = {
+            method: 'post',
+            headers: {
+                'Authorization': 'Bearer ' +token
+            },
+        };
+        request(DEAL_PATH, `/deals/${role}/${props.param.id}/pay`, options)
+            .then((response) => {
+                console.log(response);
+                setPositive(true);
+                setOpen(true);
+                setDeal(response.json);
+                setActiveStep(getStepNumber(response.json.state));
             })
             .catch((error) => {
                 setPositive(false);
@@ -173,9 +198,12 @@ export default function ViewDeal(props) {
             case 'DECLINE':
                 return state !== 'DONE'
                     && state !== 'PROVIDER_DECLINE'
+                    && state !== 'IN_WORK'
                     && state !== 'CONSUMER_DECLINE';
             case 'ACCEPT':
                 return state === 'CONSUMER_ACCEPT';
+            case 'PAY':
+                return state === 'PAYMENT';
             case 'SEND':
                 return state === 'CONSUMER_PROVIDE_INFO';
 
@@ -201,6 +229,16 @@ export default function ViewDeal(props) {
                             variant="contained"
                             size="large"
                             onClick={() => handleAccept()}
+                            color="primary">
+                        ACCEPT
+                    </Button>
+                }
+                {
+                    needButton('PAY', state) &&
+                    <Button style={{margin: 10}}
+                            variant="contained"
+                            size="large"
+                            onClick={() => handlePay()}
                             color="primary">
                         ACCEPT
                     </Button>
@@ -279,20 +317,23 @@ export default function ViewDeal(props) {
         return true;
     };
 
+    // todo сюда добавить сообщение о том, что платеж не прошёл
     const currentStateStatus = () => {
         switch (getStepNumber(deal.state)) {
             case 0:
-                return 'Please wait while provider accept deal';
+                return 'Wait while provider accept deal';
             case 1:
-                return 'Please accept with deal';
+                return 'Accept with deal';
             case 2:
-                return 'Please wait while provider request necessary information for deal';
+                return 'Wait while provider request necessary information for deal';
             case 3:
-                return 'Please provide information for deal';
+                return 'Provide information for deal';
             case 4:
-                return 'Deal in work';
+                return 'Pay the bill';
             case 5:
+                return 'Deal in work';
             case 6:
+            case 7:
                 return 'Done';
             default:
                 return 'DECLINE';
@@ -336,6 +377,12 @@ export default function ViewDeal(props) {
                     deal && deal.state &&
                     <Typography variant="subtitle1" gutterBottom>
                         Status: {currentStateStatus()}
+                    </Typography>
+                }
+                {
+                    deal && deal.price &&
+                    <Typography component="h4" display="inline" variant="h6">
+                        {deal.price}$
                     </Typography>
                 }
                 {

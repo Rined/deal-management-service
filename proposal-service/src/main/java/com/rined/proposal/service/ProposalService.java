@@ -1,16 +1,14 @@
 package com.rined.proposal.service;
 
-import com.rined.proposal.model.dto.ProposalRequestDto;
-import com.rined.proposal.model.dto.ProposalRequestUpdateDto;
-import com.rined.proposal.model.dto.ProviderDto;
 import com.rined.proposal.model.Proposal;
-import com.rined.proposal.model.ProposalBrief;
+import com.rined.proposal.model.ProposalBriefForProvider;
+import com.rined.proposal.model.dto.*;
 
 import java.util.List;
 
 public interface ProposalService {
 
-    Proposal getProposalById(String proposalId);
+    ProposalForConsumer getProposalById(ConsumerDto consumerDto, String proposalId);
 
     List<Proposal> getAllProposals(ProviderDto providerDto);
 
@@ -18,10 +16,10 @@ public interface ProposalService {
 
     void deleteById(String proposalId, ProviderDto providerDto);
 
-    Proposal createProposal(ProposalRequestDto proposalDto, ProviderDto providerDto);
+    Proposal createProposal(ProposalCreateRequestDto proposalDto, ProviderDto providerDto);
 
     Proposal updateProposal(String proposalId, ProposalRequestUpdateDto proposalDto, ProviderDto providerDto);
 
-    List<ProposalBrief> getAllBriefProposals(ProviderDto providerDto);
+    List<ProposalBriefForProvider> getAllBriefProposals(ProviderDto providerDto);
 
 }

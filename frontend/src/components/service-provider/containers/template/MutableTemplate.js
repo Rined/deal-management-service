@@ -7,7 +7,7 @@ import {useActionSetter} from "../../../contexts/TemplateContext";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {DefaultSnack} from "./../../../utils/DefaultSnack"
+import {DefaultSnack} from "../../../utils/DefaultSnack"
 import {Table} from "../../../elements/Table";
 import {MdElement} from "../../../elements/MdElement";
 
@@ -17,7 +17,9 @@ export default function MutableTemplate(props) {
     const [properties, setProperties] = React.useState({
         process: false,
         open: false,
-        positive: false
+        positive: false,
+        allowMultiOperation: props.multiOperation,
+        operationDone: false
     });
 
     const [state, setState] = useState(props.state);
@@ -28,7 +30,8 @@ export default function MutableTemplate(props) {
                 ...prevProperties,
                 positive: isCorrect,
                 open: true,
-                process: false
+                process: false,
+                operationDone: isCorrect
             }
         });
     };
@@ -104,12 +107,15 @@ export default function MutableTemplate(props) {
                     <Grid style={{width: 120}} item>
                         <Grid container direction="row" justify="space-between">
                             <Fab onClick={() => handleBack()}
+                                 disabled={properties.process}
                                  style={{backgroundColor: properties.process ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
                                  aria-label="add">
                                 <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                             </Fab>
-                            <Fab onClick={() => save()} disabled={properties.process}
-                                 style={{backgroundColor: properties.process ? 'rgb(119, 136, 153)' : 'rgb(67, 160, 71)'}}
+                            <Fab onClick={() => save()}
+                                 disabled={properties.process || (properties.allowMultiOperation ? false : properties.operationDone)}
+                                 style={{backgroundColor: (properties.process || (properties.allowMultiOperation ? false : properties.operationDone))
+                                         ? 'rgb(119, 136, 153)' : 'rgb(67, 160, 71)'}}
                                  aria-label="add">
                                 <SaveIcon style={{color: 'white'}}/>
                             </Fab>

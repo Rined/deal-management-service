@@ -1,11 +1,12 @@
 package com.rined.proposal.service;
 
-import com.rined.proposal.model.ProposalBrief;
+import com.rined.proposal.model.ProposalBriefForConsumer;
+import com.rined.proposal.model.dto.ConsumerDto;
 
 import java.util.List;
 
 public interface ProposalConsumerService {
 
-    List<ProposalBrief> getBriefProposals();
+    List<ProposalBriefForConsumer> getBriefProposals(ConsumerDto consumerDto);
 
 }

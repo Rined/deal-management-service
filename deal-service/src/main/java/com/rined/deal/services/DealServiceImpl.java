@@ -1,22 +1,20 @@
 package com.rined.deal.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.rined.deal.converter.DealConverter;
+import com.rined.deal.exception.AlreadyExistsException;
 import com.rined.deal.exception.NotFoundException;
 import com.rined.deal.model.Deal;
 import com.rined.deal.model.DealBrief;
 import com.rined.deal.model.dto.ConsumerDto;
-import com.rined.deal.model.dto.DealRequestDto;
+import com.rined.deal.model.dto.DealCreateRequestDto;
 import com.rined.deal.model.dto.ProviderDto;
 import com.rined.deal.properties.AppProperties;
 import com.rined.deal.repositories.DealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -27,25 +25,12 @@ public class DealServiceImpl implements DealService {
     private final AppProperties properties;
 
     @Override
-    @HystrixCommand(commandKey = "dealCreation", fallbackMethod = "persistDeal")
-    public void createDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        repository.save(converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto));
-    }
-
-    @SuppressWarnings("unused")
-    public void persistDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        try {
-            Deal deal = converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto);
-            ObjectMapper objectMapper = new ObjectMapper();
-            String persistFolder = properties.getPersistPath();
-            String fileName = String.format("%s/%s.json", persistFolder, deal.getDealInfo().getProposalId());
-            File file = new File(persistFolder);
-            if (!file.exists() && !file.mkdirs())
-                throw new RuntimeException("Persist problem!");
-            objectMapper.writeValue(new File(fileName), deal);
-        } catch (IOException e) {
-            throw new RuntimeException("Persist problem!", e);
+    public Deal createDeal(DealCreateRequestDto dealDto, ConsumerDto consumerDto) {
+        Deal deal = converter.convertRequestDtoAndConsumerDtoToDeal(dealDto, consumerDto);
+        if (repository.existsByIdAndConsumerIdAndProviderId(deal.getId(), deal.getConsumerId(), deal.getProviderId())) {
+            throw new AlreadyExistsException("Deal already exists!");
         }
+        return repository.save(deal);
     }
 
     @Override

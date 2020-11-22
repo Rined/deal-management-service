@@ -1,5 +1,6 @@
 package com.rined.proposal.config;
 
+import com.rined.proposal.resolver.ConsumerArgumentResolver;
 import com.rined.proposal.resolver.ProviderArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,5 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new ProviderArgumentResolver());
+        resolvers.add(new ConsumerArgumentResolver());
     }
 }

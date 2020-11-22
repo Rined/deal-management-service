@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.math.BigDecimal;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +31,10 @@ public class Deal {
     @Setter
     @Field("state")
     private DealState state;
+
+    @Setter
+    @Field("price")
+    private BigDecimal price;
 
     public Deal(String providerId, String consumerId, DealInfo dealInfo, DealState state) {
         this.providerId = providerId;

@@ -1,9 +1,9 @@
-replicaCount: 2
+replicaCount: 1
 updateType: RollingUpdate
-host: arch.project
+host: arch.homework
 fullnameOverride: template-service
 
-image: rined/dms-template:v2
+image: rined/dms-template:v3
 
 service:
   type: NodePort

@@ -43,14 +43,16 @@ export default function AppTitleHeader() {
                     {title}
                 </Typography>
 
-                <Typography component="h6" variant="h6" color="inherit" noWrap>
+                <Typography component={Link} to="/me" variant="h6" color="inherit" noWrap>
                     {authentication.name}
                 </Typography>
-                <IconButton component={Link} to="/notification" color="inherit">
-                    <Badge badgeContent={5} color="secondary">
-                        <NotificationsIcon/>
-                    </Badge>
-                </IconButton>
+
+                {/*<IconButton component={Link} to="/notification" color="inherit">*/}
+                {/*    <Badge badgeContent={5} color="secondary">*/}
+                {/*        <NotificationsIcon/>*/}
+                {/*    </Badge>*/}
+                {/*</IconButton>*/}
+
                 <IconButton onClick={() => {logout(); authenticationSetter(null);}} color="inherit">
                     <MeetingRoomIcon/>
                 </IconButton>

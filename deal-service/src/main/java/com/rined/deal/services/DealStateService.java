@@ -21,4 +21,6 @@ public interface DealStateService {
     Deal requestInfoConsumer(String dealId, ConsumerDto consumerDto, DealConsumerRequestInfoDto dealConsumerRequestInfoDto);
 
     Deal doneProvider(String dealId, ProviderDto providerDto);
+
+    Deal payDeal(String dealId, ConsumerDto consumerDto);
 }

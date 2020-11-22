@@ -10,6 +10,7 @@ services:
     ports:
       - 8083:8083
     environment:
+      - spring_profiles_active=dev
       - mongo.db=dms-template
       - mongo.user=admin
       - mongo.password=admin

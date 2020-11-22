@@ -1,11 +1,13 @@
 package com.rined.template.services;
 
-import com.rined.template.model.dto.TemplateRequestDto;
-import com.rined.template.model.dto.ProviderDto;
 import com.rined.template.converter.TemplateConverter;
+import com.rined.template.exception.AlreadyExistsException;
 import com.rined.template.exception.NotFoundException;
 import com.rined.template.model.Template;
 import com.rined.template.model.TemplateBrief;
+import com.rined.template.model.dto.ProviderDto;
+import com.rined.template.model.dto.TemplateCreateRequestDto;
+import com.rined.template.model.dto.TemplateRequestDto;
 import com.rined.template.repositories.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,15 +37,18 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public Template createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto) {
-        Template template = converter.requestDtoToBean(templateDto, providerDto);
+    public Template createTemplate(TemplateCreateRequestDto templateDto, ProviderDto providerDto) {
+        Template template = converter.requestCreateDtoToBean(templateDto, providerDto);
+        if (repository.existsByIdAndProviderId(template.getId(), template.getProviderId())) {
+            throw new AlreadyExistsException("Template already exists!");
+        }
         return repository.save(template);
     }
 
     @Override
     public Template updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto) {
         Template template = repository.findByIdAndProviderId(templateId, providerDto.getId())
-                .orElseThrow(() -> new NotFoundException("Proposal with id %s not found!", templateId));
+                .orElseThrow(() -> new NotFoundException("Template with id %s not found!", templateId));
         template.setFields(templateDto.getFields());
         template.setFormat(templateDto.getFormat());
         template.setTemplateName(templateDto.getTemplateName());

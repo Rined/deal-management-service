@@ -57,7 +57,9 @@ public class DealStateServiceImpl implements DealStateService {
         List<FieldInfo> info = converter.convertProviderRequestInfo(dealRequestInfoDto);
         DealInfo dealInfo = deal.getDealInfo();
         dealInfo.setInfo(info);
-        deal.setState(CONSUMER_PROVIDE_INFO);
+        deal.setState((dealRequestInfoDto.getFields() == null || dealRequestInfoDto.getFields().size() == 0)
+                ? PAYMENT
+                : CONSUMER_PROVIDE_INFO);
         return repository.save(deal);
     }
 
@@ -68,7 +70,7 @@ public class DealStateServiceImpl implements DealStateService {
     public Deal requestInfoConsumer(String dealId, ConsumerDto consumerDto, DealConsumerRequestInfoDto requestInfo) {
         Deal deal = repository.findByIdAndConsumerId(dealId, consumerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
-        if (isInvalidStateChange(deal.getState(), IN_WORK)) {
+        if (isInvalidStateChange(deal.getState(), PAYMENT)) {
             throw new InvalidStateChange("Invalid state change");
         }
         List<FieldInfo> info = converter.convertConsumerRequestInfo(requestInfo);
@@ -77,7 +79,7 @@ public class DealStateServiceImpl implements DealStateService {
             throw new ValidationException("Bad request for deal %s", dealId);
         }
         dealInfo.setInfo(info);
-        deal.setState(IN_WORK);
+        deal.setState(PAYMENT);
         return repository.save(deal);
     }
 
@@ -103,6 +105,12 @@ public class DealStateServiceImpl implements DealStateService {
     })
     public Deal doneProvider(String dealId, ProviderDto providerDto) {
         return changeProviderState(dealId, providerDto.getId(), DONE);
+    }
+
+    @Override
+    public Deal payDeal(String dealId, ConsumerDto consumerDto) {
+        // todo there
+        return changeConsumerState(dealId, consumerDto.getId(), IN_WORK);
     }
 
     private boolean validateDealInfo(List<FieldInfo> prevInfo, List<FieldInfo> newInfo) {
@@ -145,6 +153,7 @@ public class DealStateServiceImpl implements DealStateService {
             case PROVIDER_DECLINE:
                 return currentState == DONE
                         || currentState == CONSUMER_DECLINE
+                        || currentState == IN_WORK
                         || currentState == PROVIDER_DECLINE;
             default:
                 return currentState.getNextState() != newState;

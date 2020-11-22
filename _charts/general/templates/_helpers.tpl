@@ -61,3 +61,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{- define "postgresql.fullname" -}}
+{{- "pg-db" }}
+{{- end -}}
+
+{{- define "prometheus-postgres-exporter.fullname" -}}
+{{- "pg-exporter" }}
+{{- end -}}

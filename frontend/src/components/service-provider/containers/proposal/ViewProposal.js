@@ -82,12 +82,21 @@ export default function ViewProposal(props) {
                     <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                 </Fab>
             </Grid>
+            <div>
             <TextField
                 id="standard-basic"
                 label="Proposal name"
                 margin="normal"
                 value={state.name}
                 style={{width: 300}}/>
+            </div>
+            <div>
+                <TextField id="standard-number"
+                           style={{width: 300}}
+                           label="Price"
+                           value={state.price}
+                           type="number"/>
+            </div>
             {
                 state.format ?
                     <Paper style={{padding: 7}}>

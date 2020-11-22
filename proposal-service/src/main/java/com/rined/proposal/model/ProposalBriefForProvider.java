@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProposalBrief {
+public class ProposalBriefForProvider {
 
     @JsonProperty("id")
     private String id;

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "payment-service.fullname" . }}
+  labels:
+    {{- include "payment-service.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.updateType }}
+  selector:
+    matchLabels:
+      {{- include "payment-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata: 
+      labels:
+        {{- include "payment-service.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}        
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}"
+          ports:
+            - name: web
+              containerPort: 8091
+              protocol: TCP              
+          env:
+            - name: pg.password
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secret
+                  key: PG_PASSWORD
+            - name: pg.user
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: PG_USER
+            - name: pg.port
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: PG_PORT
+            - name: pg.db
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: PG_DB                  
+            - name: pg.host
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-config
+                  key: PG_HOST                  
+          livenessProbe:
+              httpGet:
+                port: web
+                path: /api/v1/statistic/health
+              initialDelaySeconds: 60
+              periodSeconds: 15
+          readinessProbe:
+              httpGet:
+                port: web
+                path: /api/v1/statistic/health
+              initialDelaySeconds: 5
+              periodSeconds: 3                  

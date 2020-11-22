@@ -11,3 +11,12 @@ dependencies:
   - name: ambassador
     version: 6.x.x
     repository: https://getambassador.io
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+  - name: prometheus-operator
+    version: 9.x.x
+    repository: https://kubernetes-charts.storage.googleapis.com
+  - name: prometheus-postgres-exporter
+    version: 1.3.0
+    repository: https://kubernetes-charts.storage.googleapis.com

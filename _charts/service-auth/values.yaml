@@ -1,6 +1,6 @@
 replicaCount: 1
 updateType: RollingUpdate
-host: arch.project
+host: arch.homework
 fullnameOverride: auth-service
 
 image: rined/dms-jwt-auth:v3
@@ -10,9 +10,9 @@ service:
   port: 9000
 
 postgresql:
-  fullnameOverride: dms-auth-db
+  fullnameOverride: pg-db
   postgresqlUsername: rined
   postgresqlPassword: password
-  postgresqlDatabase: otus_crud_app
+  postgresqlDatabase: otus_auth_app
   service:
     port: "5432"

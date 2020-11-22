@@ -1,0 +1,35 @@
+server:
+  port: 8091
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+      show-details: never
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'
+
+spring:
+  profiles:
+    active: prod

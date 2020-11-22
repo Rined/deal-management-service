@@ -17,6 +17,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {generateId} from "../../../utils/Utils"
 import request, {PROPOSAL_PATH, TEMPLATE_PATH} from "./../../../request/request"
 
 const CURRENT_ACTION = 'add';
@@ -34,19 +35,24 @@ export default function AddProposal(props) {
     const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
 
+    const [multiOperation, setMultiOperation] = React.useState({
+        allow: false,
+        done: false
+    });
+
     const [templates, setTemplates] = useState();
-    const [proposal, setProposal] = useState({
-        name: "",
+    const [proposalView, setProposalView] = useState({
+        id: generateId(),
+        templateId: '',
+        name: '',
+        price: 0,
         fields: [],
         template: {}
     });
 
+
     useEffect(() => {
-        const options = {
-            headers: {
-                'Authorization': 'Bearer ' +token
-            }
-        };
+        const options = {headers: {'Authorization': 'Bearer ' + token}};
         request(TEMPLATE_PATH, '/templates/brief', options)
             .then(response => {
                 console.log(response);
@@ -54,16 +60,32 @@ export default function AddProposal(props) {
             });
     }, []);
 
+    const getProposal = () => {
+        return {
+            id: proposalView.id,
+            templateId: proposalView.templateId,
+            name: proposalView.name,
+            price: proposalView.price,
+            fields: proposalView.fields.map(field => {
+                return {
+                    name: field.name,
+                    value: field.value
+                }
+            })
+        }
+    };
+
     const save = () => {
         setLoading(true);
-        const proposalDto = JSON.parse(JSON.stringify(proposal));
-        proposalDto.format = proposal.template.format;
-        delete proposalDto.template;
+        const proposalDto = getProposal();
+        // const proposalDto = JSON.parse(JSON.stringify(proposalView));
+        // proposalDto.format = proposalView.template.format;
+        // delete proposalDto.template;
         const options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify(proposalDto)
         };
@@ -73,6 +95,12 @@ export default function AddProposal(props) {
                     setPositive(true);
                     setLoading(false);
                     setOpen(true);
+                    setMultiOperation(prevState => {
+                        return {
+                            ...prevState,
+                            done: true
+                        }
+                    });
                 }, 500);
                 console.log(response.status);
             })
@@ -84,7 +112,7 @@ export default function AddProposal(props) {
                 }, 500);
                 console.log(error);
             });
-        console.log(proposal);
+        console.log(proposalView);
     };
 
     const handleClose = () => {
@@ -100,26 +128,26 @@ export default function AddProposal(props) {
 
     const handleChange = event => {
         const templateId = event.target.value;
-        const options = {
-            headers: {
-                'Authorization': 'Bearer ' +token
-            }
-        };
+        const options = {headers: {'Authorization': 'Bearer ' + token}};
         request(TEMPLATE_PATH, `/templates/${templateId}`, options)
             .then(response => {
                 const backendTemplate = response.json;
                 const fields = backendTemplate.fields;
                 delete backendTemplate.fields;
-                setProposal({
-                    name: "",
-                    fields: fields,
-                    template: backendTemplate
+                setProposalView(prevState => {
+                    return {
+                        ...prevState,
+                        templateId: templateId,
+                        name: "",
+                        fields: fields,
+                        template: backendTemplate
+                    }
                 })
             });
     };
 
     const updateStateOnUpdate = (newData, oldData) => {
-        setProposal(prevState => {
+        setProposalView(prevState => {
             const fields = [...prevState.fields];
             fields[fields.indexOf(oldData)] = newData;
             return {...prevState, fields};
@@ -127,8 +155,15 @@ export default function AddProposal(props) {
     };
 
     const setTitleState = (text) => {
-        setProposal(curState => {
+        setProposalView(curState => {
             curState.name = text;
+            return curState;
+        });
+    };
+
+    const setPrice = (price) => {
+        setProposalView(curState => {
+            curState.price = price;
             return curState;
         });
     };
@@ -139,7 +174,7 @@ export default function AddProposal(props) {
         const codeQuote = "```";
         let templateArr = text.match(/\${.+}/g) || [];
         templateArr.forEach(function (item) {
-            const data = proposal.fields;
+            const data = proposalView.fields;
             if (data) {
                 const replaceObject = data.find(dataItem => dataItem.name === item.substring(2, item.length - 1));
                 let replacer;
@@ -208,10 +243,19 @@ export default function AddProposal(props) {
                     </div>
                     <Grid style={{width: 120}} item>
                         <Grid container direction="row" justify="space-between">
-                            <Fab onClick={() => handleBack()} color="primary" aria-label="add">
+                            <Fab onClick={() => handleBack()}
+                                 disabled={loading}
+                                 style={{backgroundColor: loading ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
+                                 aria-label="add">
                                 <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                             </Fab>
-                            <Fab onClick={() => save()} style={{backgroundColor: 'rgb(67, 160, 71)'}} aria-label="add">
+                            <Fab onClick={() => save()}
+                                 disabled={loading || (multiOperation.allow ? false : multiOperation.done)}
+                                 style={{
+                                     backgroundColor: (loading || (multiOperation.allow ? false : multiOperation.done))
+                                         ? 'rgb(119, 136, 153)' : 'rgb(67, 160, 71)'
+                                 }}
+                                 aria-label="add">
                                 <SaveIcon style={{color: 'white'}}/>
                             </Fab>
                         </Grid>
@@ -222,7 +266,7 @@ export default function AddProposal(props) {
                     select
                     label="Template"
                     style={{width: 500}}
-                    value={proposal.template.id ? proposal.template.id : {}}
+                    value={proposalView.template.id ? proposalView.template.id : {}}
                     onChange={handleChange}
                     helperText="Please select template"
                     margin="normal"
@@ -237,23 +281,32 @@ export default function AddProposal(props) {
 
                 <div style={{width: "100%"}}>
                     {
-                        proposal.template && proposal.template.id &&
+                        proposalView.template && proposalView.template.id &&
                         <React.Fragment>
-                            <TextField
-                                autoComplete="off"
-                                id="standard-basic"
-                                label="Proposal name"
-                                margin="normal"
-                                defaultValue={proposal.name}
-                                style={{width: 300}}
-                                onChange={(event) => setTitleState(event.target.value)}/>
+                            <div>
+                                <TextField
+                                    autoComplete="off"
+                                    id="standard-basic"
+                                    label="Proposal name"
+                                    margin="normal"
+                                    defaultValue={proposalView.name}
+                                    style={{width: 300}}
+                                    onChange={(event) => setTitleState(event.target.value)}/>
+                            </div>
+                            <div>
+                                <TextField id="standard-number"
+                                           style={{width: 300}}
+                                           label="Price"
+                                           type="number"
+                                           onChange={(event) => setPrice(event.target.value)}/>
+                            </div>
                             <Paper style={{padding: 7}} className={classes.test}>
-                                {ReactHtmlParser(customHtmlRender(proposal.template.format))}
+                                {ReactHtmlParser(customHtmlRender(proposalView.template.format))}
                             </Paper>
                             <MaterialTable
                                 title="Fill proposal fields"
                                 columns={columns}
-                                data={proposal.fields}
+                                data={proposalView.fields}
                                 editable={{
                                     onRowUpdate: (newData, oldData) =>
                                         new Promise(resolve => {

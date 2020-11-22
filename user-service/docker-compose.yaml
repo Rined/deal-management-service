@@ -1,0 +1,27 @@
+services:
+  app:
+    image: dms-user-img
+    container_name: dms-user-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 9005
+    ports:
+      - 9005:9005
+    environment:
+      - pg.port=5432
+      - pg.db=dms-user-info
+      - pg.user=admin
+      - pg.password=admin
+      - pg.host=pg-auth-db
+    depends_on:
+      - pg-auth-db
+  pg-auth-db:
+    image: postgres
+    container_name: dms-auth-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: dms-user-info

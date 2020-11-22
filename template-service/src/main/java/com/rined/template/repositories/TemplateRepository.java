@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface TemplateRepository extends MongoRepository<Template, String>, TemplateRepositoryCustom {
 
+    boolean existsByIdAndProviderId(String id, String providerId);
+
     @Query(value = "{'providerId': :#{#providerId}}", fields = "{_id : 1, name : 1}")
     List<TemplateBrief> getAllBriefTemplates(@Param("providerId") String providerId);
 

@@ -35,11 +35,10 @@ export default function EditProposal(props) {
     const [open, setOpen] = React.useState(false);
     const [positive, setPositive] = React.useState(false);
 
-
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             }
         };
         request(PROPOSAL_PATH, `/proposals/${proposalId}`, options)
@@ -64,7 +63,7 @@ export default function EditProposal(props) {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +token
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify(proposalDto)
         };
@@ -139,6 +138,13 @@ export default function EditProposal(props) {
         return mdParser.render(text);
     };
 
+    const setPrice = (price) => {
+        setState(curState => {
+            curState.price = price;
+            return curState;
+        });
+    };
+
     const snackNotification = () => {
         return (
             <Snackbar
@@ -190,22 +196,38 @@ export default function EditProposal(props) {
                     </div>
                     <Grid style={{width: 120}} item>
                         <Grid container direction="row" justify="space-between">
-                            <Fab onClick={() => handleBack()} color="primary" aria-label="add">
+                            <Fab onClick={() => handleBack()}
+                                 disabled={loading}
+                                 style={{backgroundColor: loading ? 'rgb(119, 136, 153)' : 'rgb(63, 81, 181)'}}
+                                 aria-label="add">
                                 <ArrowBackIosIcon style={{color: 'white', paddingLeft: 10}}/>
                             </Fab>
-                            <Fab onClick={() => save()} style={{backgroundColor: 'rgb(67, 160, 71)'}} aria-label="add">
+                            <Fab onClick={() => save()}
+                                 disabled={loading}
+                                 style={{backgroundColor: loading ? 'rgb(119, 136, 153)' : 'rgb(67, 160, 71)'}}
+                                 aria-label="add">
                                 <SaveIcon style={{color: 'white'}}/>
                             </Fab>
                         </Grid>
                     </Grid>
                 </Grid>
-                <TextField
-                    id="standard-basic"
-                    label="Proposal name"
-                    margin="normal"
-                    defaultValue={state.name}
-                    style={{width: 300}}
-                    onChange={(event) => setTitleState(event.target.value)}/>
+                <div>
+                    <TextField
+                        id="standard-basic"
+                        label="Proposal name"
+                        margin="normal"
+                        defaultValue={state.name}
+                        style={{width: 300}}
+                        onChange={(event) => setTitleState(event.target.value)}/>
+                </div>
+                <div>
+                    <TextField id="standard-number"
+                               style={{width: 300}}
+                               label="Price"
+                               type="number"
+                               defaultValue={state.price}
+                               onChange={(event) => setPrice(event.target.value)}/>
+                </div>
                 <Paper style={{padding: 7}} className={classes.test}>
                     {ReactHtmlParser(customHtmlRender(state.format))}
                 </Paper>

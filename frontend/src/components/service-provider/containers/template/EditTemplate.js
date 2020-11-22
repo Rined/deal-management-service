@@ -8,7 +8,7 @@ export default function EditTemplate(props) {
 
     useEffect(() => {
         const options = {
-            headers: {'Authorization': 'Bearer ' +props.auth.jwt}
+            headers: {'Authorization': 'Bearer ' + props.auth.jwt}
         };
         request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)
             .then(response => setEditState(response.json));
@@ -19,14 +19,14 @@ export default function EditTemplate(props) {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +props.auth.jwt
+                'Authorization': 'Bearer ' + props.auth.jwt
             },
             body: JSON.stringify(foreignState)
         };
         return request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)
     };
 
-    if(!editState){
+    if (!editState) {
         return <React.Fragment/>;
     }
 
@@ -36,6 +36,7 @@ export default function EditTemplate(props) {
                          fabPositiveText="Template edited successfully!"
                          fabNegativeText="Edit template error!"
                          state={editState}
+                         multiOperation={true}
                          saveRequest={saveRequest}/>
     );
 }

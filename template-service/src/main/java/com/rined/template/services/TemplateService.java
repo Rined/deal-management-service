@@ -1,6 +1,7 @@
 package com.rined.template.services;
 
 
+import com.rined.template.model.dto.TemplateCreateRequestDto;
 import com.rined.template.model.dto.TemplateRequestDto;
 import com.rined.template.model.dto.ProviderDto;
 import com.rined.template.model.Template;
@@ -16,7 +17,7 @@ public interface TemplateService {
 
     void deleteById(String templateId, ProviderDto providerDto);
 
-    Template createTemplate(TemplateRequestDto templateDto, ProviderDto providerDto);
+    Template createTemplate(TemplateCreateRequestDto templateDto, ProviderDto providerDto);
 
     Template updateTemplate(String templateId, TemplateRequestDto templateDto, ProviderDto providerDto);
 

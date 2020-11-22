@@ -19,9 +19,36 @@ module.exports = {
         host: 'localhost',
         open: true,
         proxy: {
-            '/test': {
-                target: 'http://127.0.0.1:8080',
-                pathRewrite: {'^/test' : ''}
+            // '/deal':'http://arch.project',
+            // '/proposal':'http://arch.project',
+            // '/auth':'http://arch.project',
+            // '/templates':'http://arch.project',
+            '/deal': {
+                target: 'http://arch.homework',
+                secure: false,
+                changeOrigin: true
+                // pathRewrite: {'^/deal' : ''}
+            },
+            '/proposal': {
+                target: 'http://arch.homework',
+                secure: false,
+                changeOrigin: true,
+                // pathRewrite: {'^/proposal' : ''}
+            },
+            '/template': {
+                target: 'http://arch.homework',
+                secure: false,
+                changeOrigin: true
+            },
+            '/auth': {
+                target: 'http://arch.homework',
+                secure: false,
+                changeOrigin: true
+            },
+            '/users': {
+                target: 'http://arch.homework',
+                secure: false,
+                changeOrigin: true
             }
         }
     },

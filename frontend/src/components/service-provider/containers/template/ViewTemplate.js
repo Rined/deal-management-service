@@ -18,7 +18,7 @@ export default function ViewTemplate(props) {
     useEffect(() => {
         const options = {
             headers: {
-                'Authorization': 'Bearer ' +props.auth.jwt
+                'Authorization': 'Bearer ' + props.auth.jwt
             }
         };
         request(TEMPLATE_PATH, `/templates/${props.param.id}`, options)

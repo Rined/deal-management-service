@@ -1,0 +1,69 @@
+server:
+  port: 8084
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
+
+spring:
+  data:
+    mongodb:
+      username: ${mongo.user}
+      password: ${mongo.password}
+      database: ${mongo.db}
+      host: ${mongo.host}
+      port: ${mongo.port}
+
+logging:
+  file:
+    name: 'logs/@project.artifactId@/log.log'
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n'
+  level:
+    root: info
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+hystrix:
+  command:
+    dealCreation:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1500
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    logfile:
+      enabled: true
+    env:
+      enabled: true
+    deal-statistic:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'
+
+info:
+  app:
+    name: @project.artifactId@
+    description: @project.description@
+    version: @project.version@

@@ -1,7 +1,7 @@
 package com.rined.proposal.exception;
 
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends CustomMessageRuntimeException {
     public NotFoundException(String template, Object... args) {
-        super(String.format(template, args));
+        super(template, args);
     }
 }

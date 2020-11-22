@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTitleSetter} from "../../../contexts/TitleContext";
-import {useAction} from "./../../../contexts/ProposalContext";
+import {useAction} from "../../../contexts/ProposalContext";
 import EditProposal from "./EditProposal"
 import ListProposal from "./ListProposal";
 import ViewProposal from "./ViewProposal";

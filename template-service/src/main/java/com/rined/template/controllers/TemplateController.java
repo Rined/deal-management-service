@@ -2,6 +2,7 @@ package com.rined.template.controllers;
 
 import com.rined.template.model.Template;
 import com.rined.template.model.TemplateBrief;
+import com.rined.template.model.dto.TemplateCreateRequestDto;
 import com.rined.template.model.dto.TemplateRequestDto;
 import com.rined.template.model.dto.ProviderDto;
 import com.rined.template.resolver.Provider;
@@ -59,7 +60,7 @@ public class TemplateController {
     @PostMapping("/templates")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Создать шаблон поставщика")
-    public Template createProviderTemplate(@Valid @RequestBody TemplateRequestDto templateDto,
+    public Template createProviderTemplate(@Valid @RequestBody TemplateCreateRequestDto templateDto,
                                            @ApiIgnore @Provider ProviderDto providerDto) {
         return service.createTemplate(templateDto, providerDto);
     }

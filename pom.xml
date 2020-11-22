@@ -27,6 +27,9 @@
         <module>deal-batch</module>
         <module>mail-service</module>
         <module>notification-service</module>
+        <module>user-service</module>
+        <module>saga-orchestrator</module>
+        <module>payment-service</module>
     </modules>
 
 </project>

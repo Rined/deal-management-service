@@ -13,14 +13,14 @@ export default function AddTemplate(props) {
         format: ""
     });
 
-    const saveRequest = (foreignState) => {
+    const saveRequest = (completedState) => {
         const options = {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' +props.auth.jwt
+                'Authorization': 'Bearer ' + props.auth.jwt
             },
-            body: JSON.stringify(foreignState)
+            body: JSON.stringify(completedState)
         };
         return request(TEMPLATE_PATH, `/templates`, options);
     };
@@ -31,6 +31,7 @@ export default function AddTemplate(props) {
                          fabPositiveText="Template created successfully!"
                          fabNegativeText="Create template error!"
                          state={addState}
+                         multiOperation={false}
                          saveRequest={saveRequest}/>
     );
 }

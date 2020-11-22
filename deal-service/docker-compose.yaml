@@ -10,6 +10,7 @@ services:
     ports:
       - 8084:8084
     environment:
+      - spring_profiles_active=dev
       - mongo.db=dms-deal
       - mongo.user=admin
       - mongo.password=admin

@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${pg.host}:${pg.port}/${pg.db}
+    username: ${pg.user}
+    password: ${pg.password}
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: false

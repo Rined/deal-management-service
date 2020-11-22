@@ -6,7 +6,7 @@ import com.rined.deal.model.DealState;
 import com.rined.deal.model.FieldInfo;
 import com.rined.deal.model.dto.ConsumerDto;
 import com.rined.deal.model.dto.DealConsumerRequestInfoDto;
-import com.rined.deal.model.dto.DealRequestDto;
+import com.rined.deal.model.dto.DealCreateRequestDto;
 import com.rined.deal.model.dto.DealRequestInfoDto;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,11 @@ import java.util.stream.Collectors;
 public class DealConverterImpl implements DealConverter {
 
     @Override
-    public Deal convertRequestDtoAndConsumerDtoToDeal(DealRequestDto dealDto, ConsumerDto consumerDto) {
-        return new Deal(dealDto.getProviderId(), consumerDto.getId(), new DealInfo(dealDto.getProposalId(),
-                dealDto.getProposalTitle(), dealDto.getDealSubject(), Collections.emptyList()),
-                DealState.PROVIDER_ACCEPT
+    public Deal convertRequestDtoAndConsumerDtoToDeal(DealCreateRequestDto dealDto, ConsumerDto consumerDto) {
+        return new Deal(dealDto.getId(), dealDto.getProviderId(), consumerDto.getId(),
+                new DealInfo(dealDto.getProposalId(), dealDto.getProposalTitle(), dealDto.getDealSubject(), Collections.emptyList()),
+                DealState.PROVIDER_ACCEPT,
+                dealDto.getPrice()
         );
     }
 
