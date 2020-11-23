@@ -3,7 +3,7 @@ updateType: RollingUpdate
 host: arch.homework
 fullnameOverride: payment-service
 
-image: rined/dms-payment:v1
+image: rined/dms-payment:v8
 
 service:
   type: NodePort
@@ -13,6 +13,6 @@ postgresql:
   fullnameOverride: pg-db
   postgresqlUsername: rined
   postgresqlPassword: password
-  postgresqlDatabase: otus_payment_app
+  postgresqlDatabase: otus_app
   service:
     port: "5432"

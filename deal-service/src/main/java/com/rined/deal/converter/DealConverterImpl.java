@@ -1,9 +1,6 @@
 package com.rined.deal.converter;
 
-import com.rined.deal.model.Deal;
-import com.rined.deal.model.DealInfo;
-import com.rined.deal.model.DealState;
-import com.rined.deal.model.FieldInfo;
+import com.rined.deal.model.*;
 import com.rined.deal.model.dto.ConsumerDto;
 import com.rined.deal.model.dto.DealConsumerRequestInfoDto;
 import com.rined.deal.model.dto.DealCreateRequestDto;
@@ -51,5 +48,22 @@ public class DealConverterImpl implements DealConverter {
                         fieldDto.getDescription(),
                         fieldDto.getValue()
                 )).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AbortedDeal> convertDealToAborted(List<Deal> deals, String exceptId) {
+        return deals.stream().filter(deal -> !deal.getId().equals(exceptId))
+                .map(deal -> new AbortedDeal(deal.getId(), deal.getProviderId(), deal.getConsumerId(),
+                        deal.getDealInfo(), deal.getState(), deal.getPrice()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Deal> convertAbortedToDeal(List<AbortedDeal> abortedDeals) {
+        return abortedDeals.stream()
+                .map(abortedDeal -> new Deal(abortedDeal.getId(), abortedDeal.getProviderId(),
+                        abortedDeal.getConsumerId(), abortedDeal.getDealInfo(), abortedDeal.getState(),
+                        abortedDeal.getPrice()))
+                .collect(Collectors.toList());
     }
 }

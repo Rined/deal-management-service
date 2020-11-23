@@ -1,5 +1,6 @@
 package com.rined.deal.converter;
 
+import com.rined.deal.model.AbortedDeal;
 import com.rined.deal.model.Deal;
 import com.rined.deal.model.FieldInfo;
 import com.rined.deal.model.dto.ConsumerDto;
@@ -16,5 +17,9 @@ public interface DealConverter {
     List<FieldInfo> convertProviderRequestInfo(DealRequestInfoDto dealRequestInfoDto);
 
     List<FieldInfo> convertConsumerRequestInfo(DealConsumerRequestInfoDto dealConsumerRequestInfoDto);
+
+    List<AbortedDeal> convertDealToAborted(List<Deal> deals, String exceptId);
+
+    List<Deal> convertAbortedToDeal(List<AbortedDeal> abortedDeals);
 
 }

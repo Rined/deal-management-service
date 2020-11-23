@@ -7,13 +7,17 @@ public enum DealState {
     // потребитель отказался
     CONSUMER_DECLINE(null),
 
+    PROCESS_ERROR(null),
+
     // сделка выполнена
     DONE(null),
 
     // в процессе выполнения
     IN_WORK(DONE),
 
-    PAYMENT(IN_WORK),
+    PAYMENT_VERIFICATION(IN_WORK),
+
+    PAYMENT(PAYMENT_VERIFICATION),
 
     // согласовано - здесь становится доступна инфа о поставщике и потребителе
     CONSUMER_PROVIDE_INFO(PAYMENT),

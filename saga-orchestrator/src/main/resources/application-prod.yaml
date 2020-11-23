@@ -4,8 +4,42 @@ spring:
     username: ${pg.user}
     password: ${pg.password}
   jpa:
-    generate-ddl: false
-    show-sql: true
+    generate-ddl: true
+    show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     open-in-view: false
+
+server:
+  port: 8080
+  error:
+    include-message: always
+  servlet:
+    context-path: /api/v1
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+      show-details: never
+      status:
+        order: FATAL,DOWN,OUT_OF_SERVICE,UNKNOWN,OK,UP
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /statistic
+      exposure:
+        include: '*'

@@ -3,7 +3,7 @@ updateType: RollingUpdate
 host: arch.homework
 fullnameOverride: ui-service
 
-image: rined/dms-frontend:v34
+image: rined/dms-frontend:v37
 
 service:
   type: NodePort

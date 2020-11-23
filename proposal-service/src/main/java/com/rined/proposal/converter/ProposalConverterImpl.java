@@ -1,5 +1,6 @@
 package com.rined.proposal.converter;
 
+import com.rined.proposal.model.AbortedProposal;
 import com.rined.proposal.model.Proposal;
 import com.rined.proposal.model.ProposalField;
 import com.rined.proposal.model.dto.*;
@@ -38,6 +39,18 @@ public class ProposalConverterImpl implements ProposalConverter {
                 proposal.getProviderId(),
                 userDto
         );
+    }
+
+    @Override
+    public AbortedProposal convertProposalToAborted(Proposal proposal) {
+        return new AbortedProposal(proposal.getId(), proposal.getProposalName(), proposal.getPrice(),
+                proposal.getFields(), proposal.getTemplateFormat(), proposal.getProviderId());
+    }
+
+    @Override
+    public Proposal convertAbortedToProposal(AbortedProposal abortedProposal) {
+        return new Proposal(abortedProposal.getId(), abortedProposal.getProposalName(), abortedProposal.getPrice(),
+                abortedProposal.getFields(), abortedProposal.getTemplateFormat(), abortedProposal.getProviderId());
     }
 
     private List<ProposalField> merge(List<ProposalDtoField> proposalFields, List<TemplateField> templateFields) {

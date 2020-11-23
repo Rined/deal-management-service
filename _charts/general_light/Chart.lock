@@ -1,0 +1,9 @@
+dependencies:
+- name: ambassador
+  repository: https://getambassador.io
+  version: 6.x.x
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.10.14
+digest: sha256:f50ab75ebc30d997afe3de76a6bf18c05513f29ffd69bdc33f435e0fd48d1795
+generated: "2020-11-23T10:04:47.8483943+03:00"

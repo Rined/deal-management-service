@@ -3,6 +3,7 @@ package com.rined.payment.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@ToString
 @Entity(name = "Account")
 @Table(name = "accounts")
 @NoArgsConstructor

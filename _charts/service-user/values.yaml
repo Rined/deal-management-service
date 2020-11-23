@@ -13,6 +13,6 @@ postgresql:
   fullnameOverride: pg-db
   postgresqlUsername: rined
   postgresqlPassword: password
-  postgresqlDatabase: otus_user_app
+  postgresqlDatabase: otus_app
   service:
     port: "5432"

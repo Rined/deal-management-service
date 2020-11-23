@@ -1,0 +1,29 @@
+host: arch.homework
+
+ambassador:
+  fullnameOverride: general-ambassador
+  replicaCount: 1
+  service:
+    type: NodePort
+    ports:
+      - name: http
+        port: 80
+        targetPort: 8080
+      - name: https
+        port: 443
+        targetPort: 8443
+    externalTrafficPolicy:
+  enableAES: true
+  redis:
+    create: true
+  authService:
+    create: true
+  rateLimit:
+    create: false
+
+postgresql:  
+  postgresqlUsername: rined
+  postgresqlPassword: password
+  postgresqlDatabase: otus_app
+  service:
+    port: "5432"

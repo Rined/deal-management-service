@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import {List, ListItem, ListItemText} from '@material-ui/core';
-import {useActionSetter} from "./../../../contexts/DealConsumerContext";
+import {useActionSetter} from "../../../contexts/DealConsumerContext";
 
 const CURRENT_ACTION = 'list';
 export default function ListDeal(props) {

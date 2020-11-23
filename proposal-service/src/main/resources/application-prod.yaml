@@ -13,7 +13,18 @@ spring:
       database: ${mongo.db}
       host: ${mongo.host}
       port: ${mongo.port}
-
+  kafka:
+    bootstrap-servers: ${kafka_bootstrap_servers:general-kafka:9092}
+    consumer:
+      group-id: proposal_consumer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: proposal_service
+    producer:
+      client-id: proposal_service
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 2
 logging:
   file:
     name: 'logs/@project.artifactId@/log.log'

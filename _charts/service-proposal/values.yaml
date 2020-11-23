@@ -3,7 +3,7 @@ updateType: RollingUpdate
 host: arch.homework
 fullnameOverride: proposal-service
 
-image: rined/dms-proposal:v16
+image: rined/dms-proposal:v17
 
 service:
   type: NodePort

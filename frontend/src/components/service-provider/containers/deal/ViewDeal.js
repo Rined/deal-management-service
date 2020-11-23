@@ -30,6 +30,7 @@ export default function ViewDeal(props) {
         'Wait provider info request',
         'Wait consumer provide info',
         'Money transfer',
+        'Payment verification',
         'In work',
         'Done'
     ];
@@ -56,10 +57,16 @@ export default function ViewDeal(props) {
                 return 3;
             case 'PAYMENT':
                 return 4;
-            case 'IN_WORK':
+            case 'PAYMENT_VERIFICATION':
                 return 5;
-            case 'DONE':
+            case 'IN_WORK':
                 return 6;
+            case 'DONE':
+                return 7;
+            case 'PROCESS_ERROR':
+                return 11;
+            case 'DECLINE':
+                return 12;
         }
     };
 
@@ -194,6 +201,8 @@ export default function ViewDeal(props) {
             case 'DECLINE':
                 return state !== 'DONE'
                     && state !== 'IN_WORK'
+                    && state !== 'PAYMENT_VERIFICATION'
+                    && state !== 'PROCESS_ERROR'
                     && state !== 'PROVIDER_DECLINE'
                     && state !== 'CONSUMER_DECLINE';
             case 'ACCEPT':
@@ -326,13 +335,22 @@ export default function ViewDeal(props) {
             case 4:
                 return 'Wait consumer payment';
             case 5:
-                return 'Deal in work';
+                return 'Wait payment verification';
             case 6:
+                return 'Deal in work';
             case 7:
+            case 8:
                 return 'DONE';
+            case 11:
+                return 'Payment error!';
             default:
                 return 'DECLINE';
         }
+    };
+
+    const isCorrect = () => {
+        let step = getStepNumber(deal.state);
+        return step < 10;
     };
 
     return (
@@ -356,7 +374,7 @@ export default function ViewDeal(props) {
                     }
                 </Grid>
                 {
-                    deal && currentStateStatus() !== 'DECLINE' &&
+                    deal && isCorrect() &&
                     <Stepper activeStep={activeStep} alternativeLabel>
                         {steps.map(label => (
                             <Step key={label}>
@@ -369,10 +387,15 @@ export default function ViewDeal(props) {
                     Deal info:
                 </Typography>
                 {
-                    deal && deal.state &&
-                    <Typography variant="subtitle1" gutterBottom>
-                        Status: {currentStateStatus()}
-                    </Typography>
+                    deal && deal.state && (
+                        isCorrect()
+                            ? <Typography variant="subtitle1" gutterBottom>
+                                Status: {currentStateStatus()}
+                            </Typography>
+                            : <Typography variant="subtitle1" gutterBottom style={{color: "#c92828"}}>
+                                Status: {currentStateStatus()}
+                            </Typography>
+                    )
                 }
                 {
                     deal && deal.price &&

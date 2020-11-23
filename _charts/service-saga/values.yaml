@@ -1,18 +1,18 @@
 replicaCount: 1
 updateType: RollingUpdate
 host: arch.homework
-fullnameOverride: user-service
+fullnameOverride: saga-service
 
-image: rined/dms-user:v8
+image: rined/dms-saga:v3
 
 service:
   type: NodePort
-  port: 9000
+  port: 9999
 
 postgresql:
-  fullnameOverride: dms-user-db
+  fullnameOverride: pg-db
   postgresqlUsername: rined
   postgresqlPassword: password
-  postgresqlDatabase: otus_crud_app
+  postgresqlDatabase: otus_app
   service:
     port: "5432"

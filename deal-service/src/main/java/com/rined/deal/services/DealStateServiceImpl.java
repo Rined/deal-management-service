@@ -27,6 +27,8 @@ import static com.rined.deal.model.DealState.*;
 public class DealStateServiceImpl implements DealStateService {
     private final DealRepository repository;
     private final DealConverter converter;
+    private final StateChangeChecker checker;
+    private final DealTransactionalOutbox transactionalOutbox;
 
     @Override
     @HystrixCommand(commandProperties = {
@@ -51,7 +53,7 @@ public class DealStateServiceImpl implements DealStateService {
     public Deal requestInfoProvider(String dealId, ProviderDto providerDto, DealRequestInfoDto dealRequestInfoDto) {
         Deal deal = repository.findByIdAndProviderId(dealId, providerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
-        if (isInvalidStateChange(deal.getState(), CONSUMER_PROVIDE_INFO)) {
+        if (checker.isInvalidStateChange(deal.getState(), CONSUMER_PROVIDE_INFO)) {
             throw new InvalidStateChange("Invalid state change");
         }
         List<FieldInfo> info = converter.convertProviderRequestInfo(dealRequestInfoDto);
@@ -70,7 +72,7 @@ public class DealStateServiceImpl implements DealStateService {
     public Deal requestInfoConsumer(String dealId, ConsumerDto consumerDto, DealConsumerRequestInfoDto requestInfo) {
         Deal deal = repository.findByIdAndConsumerId(dealId, consumerDto.getId())
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
-        if (isInvalidStateChange(deal.getState(), PAYMENT)) {
+        if (checker.isInvalidStateChange(deal.getState(), PAYMENT)) {
             throw new InvalidStateChange("Invalid state change");
         }
         List<FieldInfo> info = converter.convertConsumerRequestInfo(requestInfo);
@@ -109,8 +111,7 @@ public class DealStateServiceImpl implements DealStateService {
 
     @Override
     public Deal payDeal(String dealId, ConsumerDto consumerDto) {
-        // todo there
-        return changeConsumerState(dealId, consumerDto.getId(), IN_WORK);
+        return transactionalOutbox.persistDeal(dealId, consumerDto.getId(), PAYMENT_VERIFICATION);
     }
 
     private boolean validateDealInfo(List<FieldInfo> prevInfo, List<FieldInfo> newInfo) {
@@ -130,7 +131,7 @@ public class DealStateServiceImpl implements DealStateService {
     private Deal changeConsumerState(String dealId, String consumerId, DealState newState) {
         Deal deal = repository.findByIdAndConsumerId(dealId, consumerId)
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
-        if (isInvalidStateChange(deal.getState(), newState)) {
+        if (checker.isInvalidStateChange(deal.getState(), newState)) {
             throw new InvalidStateChange("Invalid state change");
         }
         deal.setState(newState);
@@ -140,23 +141,10 @@ public class DealStateServiceImpl implements DealStateService {
     private Deal changeProviderState(String dealId, String providerId, DealState newState) {
         Deal deal = repository.findByIdAndProviderId(dealId, providerId)
                 .orElseThrow(() -> new NotFoundException("Deal with id % not found", dealId));
-        if (isInvalidStateChange(deal.getState(), newState)) {
+        if (checker.isInvalidStateChange(deal.getState(), newState)) {
             throw new InvalidStateChange("Invalid state change");
         }
         deal.setState(newState);
         return repository.save(deal);
-    }
-
-    private boolean isInvalidStateChange(DealState currentState, DealState newState) {
-        switch (newState) {
-            case CONSUMER_DECLINE:
-            case PROVIDER_DECLINE:
-                return currentState == DONE
-                        || currentState == CONSUMER_DECLINE
-                        || currentState == IN_WORK
-                        || currentState == PROVIDER_DECLINE;
-            default:
-                return currentState.getNextState() != newState;
-        }
     }
 }

@@ -1,3 +1,15 @@
 spring:
+  kafka:
+    bootstrap-servers: ${kafka_bootstrap_servers:general-kafka:9092}
+    consumer:
+      group-id: saga_consumer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: saga_service
+    producer:
+      client-id: saga_service
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 2
   profiles:
-    active: dev
+    active: prod

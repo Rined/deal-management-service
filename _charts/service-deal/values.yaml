@@ -3,7 +3,7 @@ updateType: RollingUpdate
 host: arch.homework
 fullnameOverride: deal-service
 
-image: rined/dms-deal:v6
+image: rined/dms-deal:v9
 
 service:
   type: NodePort

@@ -6,9 +6,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DealRepository extends MongoRepository<Deal, String>, DealRepositoryCustom {
+
+    List<Deal> findAllByDealInfo_ProposalId(String proposalId);
+
+    void removeAllByDealInfo_ProposalIdAndIdNot(String proposalId, String id);
 
     Optional<Deal> findByIdAndConsumerId(String id, String consumerId);
 

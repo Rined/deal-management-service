@@ -29,27 +29,27 @@ spec:
             - name: pg.password
               valueFrom:
                 secretKeyRef:
-                  name: auth-secret
+                  name: user-secret
                   key: PG_PASSWORD
             - name: pg.user
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: user-config
                   key: PG_USER
             - name: pg.port
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: user-config
                   key: PG_PORT
             - name: pg.db
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: user-config
                   key: PG_DB                  
             - name: pg.host
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: user-config
                   key: PG_HOST                  
           livenessProbe:
               httpGet:

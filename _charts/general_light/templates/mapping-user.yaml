@@ -1,0 +1,8 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name:  dms-user-mapping
+spec:
+  prefix: /users/api/v1
+  service: user-service:9000
+  rewrite: "/api/v1"  

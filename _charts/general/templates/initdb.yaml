@@ -51,5 +51,6 @@ spec:
               create database otus_auth_app;
               create database otus_payment_app;
               create database otus_user_app;              
+              create database otus_saga_app;              
             EOF
   backoffLimit: 0

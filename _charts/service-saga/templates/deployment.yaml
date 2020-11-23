@@ -1,55 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "user-service.fullname" . }}
+  name: {{ include "saga-service.fullname" . }}
   labels:
-    {{- include "user-service.labels" . | nindent 4 }}
+    {{- include "saga-service.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
     type: {{ .Values.updateType }}
   selector:
     matchLabels:
-      {{- include "user-service.selectorLabels" . | nindent 6 }}
+      {{- include "saga-service.selectorLabels" . | nindent 6 }}
   template:
     metadata: 
       labels:
-        {{- include "user-service.selectorLabels" . | nindent 8 }}
+        {{- include "saga-service.selectorLabels" . | nindent 8 }}          
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}        
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}            
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image }}"
           ports:
             - name: web
-              containerPort: 9005
-              protocol: TCP              
+              containerPort: 8080
+              protocol: TCP            
           env:
             - name: pg.password
               valueFrom:
                 secretKeyRef:
-                  name: auth-secret
+                  name: saga-secret
                   key: PG_PASSWORD
             - name: pg.user
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: saga-config
                   key: PG_USER
             - name: pg.port
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: saga-config
                   key: PG_PORT
             - name: pg.db
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: saga-config
                   key: PG_DB                  
             - name: pg.host
               valueFrom:
                 configMapKeyRef:
-                  name: auth-config
+                  name: saga-config
                   key: PG_HOST                  
           livenessProbe:
               httpGet:
@@ -62,4 +62,4 @@ spec:
                 port: web
                 path: /api/v1/statistic/health
               initialDelaySeconds: 5
-              periodSeconds: 3                  
+              periodSeconds: 3                           
